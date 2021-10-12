@@ -22,8 +22,11 @@ namespace Domain.Repositories
         {
             EntityEntry<Produto> response = default;
 
-            if (!_context.Produto.Select(x => x.Id).Contains(produto.Id))
-                response = _context.Produto.Add(produto);
+            await Task.Run(() =>
+            {
+                if (!_context.Produto.Select(x => x.Id).Contains(produto.Id))
+                    response = _context.Produto.Add(produto);
+            });            
 
             return response?.Entity;
         }
@@ -40,9 +43,23 @@ namespace Domain.Repositories
 
         public async Task<IEnumerable<Produto>> Pesquisar(string campo, string conteudo)
         {
-            var foundProducts = from i in _context.Produto
-                                where EF.Functions.Like((campo.Equals("Nome") ? i.Nome : i.Preco.ToString()), $"%{conteudo.Trim()}%")
-                                select i;
+            IQueryable<Produto> foundProducts = default;
+
+            await Task.Run(() =>
+            {
+                foundProducts = campo switch
+                {
+                    string field when field.Equals("Nome") => from i in _context.Produto.AsNoTracking()
+                                                                    where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
+                                                                    select i,
+
+                    string field when field.Equals("Preco") => from i in _context.Produto.AsNoTracking()
+                                                                     where EF.Functions.Like(i.Preco, $"%{conteudo.Trim()}%")
+                                                                     select i,
+
+                    _ => null
+                };                
+            });
 
             return foundProducts.Where(x => x != null).AsEnumerable();
         }
@@ -51,12 +68,13 @@ namespace Domain.Repositories
         {
             var productToRemove = await _context.Produto.AsNoTracking().Where(x => x.Id.Equals(Id)).FirstOrDefaultAsync();
 
-            _context.Produto.Remove(productToRemove);
+            if (productToRemove != null)
+                _context.Produto.Remove(productToRemove);
         }
 
         public async Task Remove(List<Produto> produtos)
         {
-            _context.Produto.RemoveRange(produtos);            
+            await Task.Run(() => _context.Produto.RemoveRange(produtos));
         }
 
         public async Task Save()
@@ -66,7 +84,12 @@ namespace Domain.Repositories
 
         public async Task Update(Produto produto)
         {
-            _context.Produto.Update(produto);
+            var entry = _context.Produto.FirstOrDefault(e => e.Id == produto.Id);
+
+            if (entry != null)
+            {
+                await Task.Run(() => _context.Entry(entry).CurrentValues.SetValues(produto));
+            }            
         }
     }
 }

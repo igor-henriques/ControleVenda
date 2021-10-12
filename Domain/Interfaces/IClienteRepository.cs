@@ -10,7 +10,9 @@ namespace Domain.Interfaces
         Task<Cliente> Get(int Id);
         Task<Cliente> Add(Cliente cliente);
         Task Remove(int Id);
+        Task Remove(List<Cliente> clientes);
         Task Update(Cliente cliente);
         Task Save();
+        Task<IEnumerable<Cliente>> Pesquisar(string campo, string conteudo);
     }
 }

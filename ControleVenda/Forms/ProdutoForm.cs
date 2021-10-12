@@ -61,7 +61,7 @@ namespace ControleVenda.Forms
             return new Produto
             {
                 Nome = tbNome.Text.Trim(),
-                Preco = decimal.Parse(tbPrice.Text.Replace("R$", default).Trim())
+                Preco = decimal.Parse(tbPrice.Text.Length > 0 ? tbPrice.Text.Replace("R$", default).Trim() : "0")
             };
         }
         private async Task LoadGrid()
@@ -119,12 +119,6 @@ namespace ControleVenda.Forms
 
         private async void btnEdit_Click(object sender, EventArgs e)
         {
-            if (!CheckTextbox())
-            {
-                MessageBox.Show("Há campos vazios", "Salvar Produto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             var selectedProduct = GetSelectedProducts().FirstOrDefault();
 
             if (selectedProduct is null)
@@ -146,16 +140,15 @@ namespace ControleVenda.Forms
             }
             else
             {
-                var updatingProduct = new Produto()
+                selectedProduct = selectedProduct with
                 {
-                    Id = selectedProduct.Id,
                     Nome = tbNome.Text,
                     Preco = decimal.Parse(tbPrice.Text.Replace("R$", default).Trim())
                 };
 
                 using (new ControlManager(this.Controls))
                 {
-                    await _produtoContext.Update(updatingProduct);
+                    await _produtoContext.Update(selectedProduct);
                     await _produtoContext.Save();
 
                     await LoadGrid();
@@ -179,7 +172,7 @@ namespace ControleVenda.Forms
                 return;
             }
 
-            if (MessageBox.Show($"Tem certeza que deseja excluir os {dgvProdutos.SelectedRows.Count} produtos?", "Excluindo Produtos...", MessageBoxButtons.YesNo, MessageBoxIcon.Question).Equals(DialogResult.Yes))
+            if (MessageBox.Show($"Tem certeza que deseja excluir os {dgvProdutos.SelectedRows.Count} produtos?", "Excluir Produto", MessageBoxButtons.YesNo, MessageBoxIcon.Question).Equals(DialogResult.Yes))
             {
                 var selectedProducts = GetSelectedProducts();
 
@@ -222,13 +215,9 @@ namespace ControleVenda.Forms
                 {
                     var resultados = await _produtoContext.Pesquisar(rbNome.Checked ? "Nome" : "Preco", tbPesquisa.Text);
 
-                    if (resultados?.Count() > 0)
-                    {
-                        dgvProdutos.DataSource = null;
-                        dgvProdutos.DataSource = resultados.ToList();
-                        dgvProdutos.Rows[dgvProdutos.Rows.Count - 1].Selected = true;
-                        FormatColumns();
-                    }
+                    dgvProdutos.DataSource = resultados.ToList();
+
+                    FormatColumns();
                 }
                 else
                 {
@@ -241,7 +230,7 @@ namespace ControleVenda.Forms
         {
             if (string.IsNullOrEmpty(tbNome.Text.Trim()) | string.IsNullOrEmpty(tbPrice.Text.Trim()))
                 return false;
-            
+
             return true;
         }
 
@@ -257,6 +246,16 @@ namespace ControleVenda.Forms
                 btnSalvar.PerformClick();
             else if (e.KeyCode.Equals(Keys.Enter)! && btnSalvar.Enabled)
                 btnEditar.PerformClick();
+        }
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                pbBack_Click(null, null);
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }

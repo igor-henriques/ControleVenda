@@ -122,10 +122,18 @@ namespace Infra.Helpers
             }            
 
             return default;
-        }
-        public static T GetRequiredService<T>(this IServiceProvider _services)
+        }                
+        public static T Clone<T>(this T original)
         {
-            return (T)_services.GetService(typeof(T));
+            T newObject = (T)Activator.CreateInstance(original.GetType());
+
+            foreach (var originalProp in original.GetType().GetProperties())
+            {
+                originalProp.SetValue(newObject, originalProp.GetValue(original));
+            }
+
+            return newObject;
         }
+        public static T GetRequiredService<T>(this IServiceProvider _services) => (T)_services.GetService(typeof(T));
     }
 }

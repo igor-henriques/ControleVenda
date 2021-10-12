@@ -19,8 +19,7 @@ namespace ControleVenda.Utility
         {
             foreach (Control control in form)
             {
-                if (control.Name != "tbSearch")
-                    control.Enabled = false;
+                control.Enabled = false;
             }
         }
 

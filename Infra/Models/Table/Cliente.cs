@@ -6,7 +6,8 @@ namespace Infra.Models.Table
     {
         [Key]
         public int Id { get; init; }
-        public int Identificador { get; init; }
+        [MaxLength(10)]
+        public string Identificador { get; init; }
         [MaxLength(50)]
         public string Nome { get; init; }
         public ushort NumeroCurso { get; init; }
