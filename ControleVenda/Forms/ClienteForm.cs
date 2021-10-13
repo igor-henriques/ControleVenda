@@ -69,15 +69,21 @@ namespace ControleVenda.Forms
         {
             if (!CheckTextbox())
             {
-                MessageBox.Show("Há campos vazios", "Salvar Produto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Há campos vazios", "Salvar Cliente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var produto = BuildCliente();
+            var cliente = BuildCliente();
+
+            if (await _clienteContext.Get(cliente.Identificador) is not null)
+            {
+                MessageBox.Show("Já existe registro com esse Identificador", "Salvar Cliente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             using (new ControlManager(this.Controls))
             {
-                await _clienteContext.Add(produto);
+                await _clienteContext.Add(cliente);
                 await _clienteContext.Save();
 
                 await LoadGrid();

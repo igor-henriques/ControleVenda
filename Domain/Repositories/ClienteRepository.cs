@@ -35,9 +35,9 @@ namespace Domain.Repositories
             return await _context.Cliente.FindAsync(Id);
         }
 
-        public async Task<Cliente> Get(string Nome)
+        public async Task<Cliente> Get(string Identificador)
         {
-            return await _context.Cliente.Where(x => x.Nome.Equals(Nome)).FirstOrDefaultAsync();
+            return await _context.Cliente.Where(x => x.Identificador.Equals(Identificador)).FirstOrDefaultAsync();
         }
 
         public async Task<List<Cliente>> GetClientes()

@@ -46,6 +46,12 @@ namespace ControleVenda.Forms
 
             var produto = BuildProduct();
 
+            if (await _produtoContext.Get(produto.Nome) is not null)
+            {
+                MessageBox.Show("Já existe registro com esse nome", "Salvar Produto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             using (new ControlManager(this.Controls))
             {
                 await _produtoContext.Add(produto);
@@ -114,7 +120,7 @@ namespace ControleVenda.Forms
         private void Clear()
         {
             tbNome.Clear();
-            tbPrice.Clear();
+            tbPrice.Text = 0.ToString("c");
         }
 
         private async void btnEdit_Click(object sender, EventArgs e)

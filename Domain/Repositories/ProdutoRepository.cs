@@ -30,9 +30,9 @@ namespace Domain.Repositories
             return await _context.Produto.FindAsync(Id);
         }
 
-        public Task<Produto> Get(string nome)
+        public async Task<Produto> Get(string nome)
         {
-            throw new NotImplementedException();
+            return await _context.Produto.Where(x => x.Nome.Equals(nome)).FirstOrDefaultAsync();
         }
 
         public async Task<List<Produto>> GetProdutos()
@@ -49,12 +49,12 @@ namespace Domain.Repositories
                 foundProducts = campo switch
                 {
                     string field when field.Equals("Nome") => from i in _context.Produto.AsNoTracking()
-                                                              where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
-                                                              select i,
+                                                                    where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
+                                                                    select i,
 
                     string field when field.Equals("Preco") => from i in _context.Produto.AsNoTracking()
-                                                               where EF.Functions.Like(i.Preco, $"%{conteudo.Trim()}%")
-                                                               select i,
+                                                                     where EF.Functions.Like(i.Preco, $"%{conteudo.Trim()}%")
+                                                                     select i,
 
                     _ => null
                 };
@@ -75,7 +75,7 @@ namespace Domain.Repositories
         {
             var productsToRemove = await _context.Produto.Where(x => produtos.Select(y => y.Id).Contains(x.Id)).ToListAsync();
 
-            await Task.Run(() => _context.Produto.RemoveRange(produtos));
+            await Task.Run(() => _context.Produto.RemoveRange(productsToRemove));
         }
 
         public async Task Save()
