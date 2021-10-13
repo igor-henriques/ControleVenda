@@ -8,7 +8,8 @@ namespace Domain.Interfaces
     {
         Task<List<Produto>> GetProdutos();
         Task<Produto> Get(int Id);
-        Task<Produto> Add(Produto produto);
+        Task<Produto> Get(string nome);
+        Task Add(Produto produto);
         Task Remove(int Id);
         Task Remove(List<Produto> produtos);
         Task Update(Produto produto);

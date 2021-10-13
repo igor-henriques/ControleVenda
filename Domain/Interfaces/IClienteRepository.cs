@@ -8,6 +8,7 @@ namespace Domain.Interfaces
     {
         Task<List<Cliente>> GetClientes();
         Task<Cliente> Get(int Id);
+        Task<Cliente> Get(string Nome);
         Task<Cliente> Add(Cliente cliente);
         Task Remove(int Id);
         Task Remove(List<Cliente> clientes);

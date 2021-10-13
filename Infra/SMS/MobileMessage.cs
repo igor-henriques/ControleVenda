@@ -17,11 +17,11 @@ namespace Infra.SMS
 
             TwilioClient.Init(accountSid, authToken);
 
-            var message = MessageResource.Create(
+            await Task.Run(() =>  MessageResource.Create(
                 body: conteudo,
                 from: new Twilio.Types.PhoneNumber("+12088261797"),
                 to: new Twilio.Types.PhoneNumber(telefone)
-            );
+            ));
         }
     }
 }

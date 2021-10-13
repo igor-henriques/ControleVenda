@@ -1,8 +1,11 @@
 ﻿using Domain.Interfaces;
 using Infra.Data;
 using Infra.Models.Table;
+using Infra.Models.Temp;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Domain.Repositories
@@ -16,9 +19,38 @@ namespace Domain.Repositories
             this._context = context;
         }
 
-        public Task<Venda> Add(Venda venda)
+        public async Task<Venda> Add(Venda venda)
         {
-            throw new NotImplementedException();
+            EntityEntry<Venda> response = default;
+
+            await Task.Run(() =>
+            {
+                response = _context.Venda.Add(venda);
+            });
+
+            return response?.Entity;
+        }
+
+        public async Task AddProducts(VendaViewModel venda)
+        {
+            await Task.Run(() =>
+            {
+                List<ProdutoVenda> produtosPorVenda = new();
+
+                foreach (var produto in venda.Produtos)
+                {
+                    ProdutoVenda produtoNaVenda = new()
+                    {
+                        IdProduto = produto.Produto.Id,
+                        IdVenda = venda.Venda.Id,
+                        Quantidade = produto.Quantidade,
+                    };
+
+                    produtosPorVenda.Add(produtoNaVenda);
+                }
+
+                _context.ProdutoVenda.AddRange(produtosPorVenda);
+            });            
         }
 
         public Task<Venda> Get(int Id)

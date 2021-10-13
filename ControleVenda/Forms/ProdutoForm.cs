@@ -257,5 +257,11 @@ namespace ControleVenda.Forms
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+        private void tbPrice_Leave(object sender, EventArgs e)
+        {
+            if (tbPrice.Text.Trim() != string.Empty)
+                tbPrice.Text = decimal.Parse(tbPrice.Text.Replace("R$ ", "").Trim()).ToString("c");
+        }
     }
 }

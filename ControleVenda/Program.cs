@@ -3,12 +3,15 @@ using ControleVenda.Forms.Utility;
 using Domain.Interfaces;
 using Domain.Repositories;
 using Infra.Data;
+using Infra.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ControleVenda
 {
@@ -17,7 +20,15 @@ namespace ControleVenda
         [STAThread]
         private static async Task Main()
         {
-            await CreateHostBuilder().Build().RunAsync();
+            try
+            {
+                await CreateHostBuilder().Build().RunAsync();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString(), "ERRO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogWriter.Write(e.ToString());                
+            }            
         }
         private static IHostBuilder CreateHostBuilder()
         {

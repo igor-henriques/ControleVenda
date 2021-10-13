@@ -27,6 +27,8 @@ namespace ControleVenda.Forms
         {
             using (new ControlManager(this.Controls))
                 await LoadGrid();
+
+            this.Focus();
         }
 
         private void pbBack_Click(object sender, EventArgs e)

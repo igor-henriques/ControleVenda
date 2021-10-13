@@ -24,8 +24,7 @@ namespace Domain.Repositories
 
             await Task.Run(() =>
             {
-                if (!_context.Cliente.Select(x => x.Id).Contains(cliente.Id))
-                    response = _context.Cliente.Add(cliente);
+                response = _context.Cliente.Add(cliente);
             });
 
             return response?.Entity;
@@ -34,6 +33,11 @@ namespace Domain.Repositories
         public async Task<Cliente> Get(int Id)
         {
             return await _context.Cliente.FindAsync(Id);
+        }
+
+        public async Task<Cliente> Get(string Nome)
+        {
+            return await _context.Cliente.Where(x => x.Nome.Equals(Nome)).FirstOrDefaultAsync();
         }
 
         public async Task<List<Cliente>> GetClientes()
@@ -48,29 +52,29 @@ namespace Domain.Repositories
             await Task.Run(() =>
             {
                 foundClients = campo switch
-                { 
-                    string field when field.Equals("Telefone") =>      from i in _context.Cliente.AsNoTracking()
-                                                                             where EF.Functions.Like(i.Telefone, $"%{conteudo.Trim()}%")
-                                                                             select i,
+                {
+                    string field when field.Equals("Telefone") => from i in _context.Cliente.AsNoTracking()
+                                                                  where EF.Functions.Like(i.Telefone, $"%{conteudo.Trim()}%")
+                                                                  select i,
 
-                    string field when field.Equals("Nome") =>          from i in _context.Cliente.AsNoTracking()
-                                                                             where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
-                                                                             select i,
+                    string field when field.Equals("Nome") => from i in _context.Cliente.AsNoTracking()
+                                                              where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
+                                                              select i,
 
                     string field when field.Equals("Identificador") => from i in _context.Cliente.AsNoTracking()
-                                                                             where EF.Functions.Like(i.Identificador, $"%{conteudo.Trim()}%")
-                                                                             select i,
+                                                                       where EF.Functions.Like(i.Identificador, $"%{conteudo.Trim()}%")
+                                                                       select i,
 
                     _ => null
-                };                                 
-            });          
+                };
+            });
 
             return foundClients.Where(x => x != null).AsEnumerable();
         }
 
         public async Task Remove(int Id)
         {
-            var clienteToRemove = await _context.Cliente.AsNoTracking().Where(x => x.Id.Equals(Id)).FirstOrDefaultAsync();
+            var clienteToRemove = await Get(Id);
 
             if (clienteToRemove != null)
                 _context.Cliente.Remove(clienteToRemove);
@@ -78,7 +82,9 @@ namespace Domain.Repositories
 
         public async Task Remove(List<Cliente> clientes)
         {            
-            await Task.Run(() => _context.Cliente.RemoveRange(clientes));
+            var clientsToRemove = await _context.Cliente.Where(x => clientes.Select(y => y.Id).Contains(x.Id)).ToListAsync();
+
+            await Task.Run(() => _context.Cliente.RemoveRange(clientsToRemove));
         }
 
         public async Task Save()

@@ -3,14 +3,16 @@ using System;
 using Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211012195123_AdicionadoCamposVenda")]
+    partial class AdicionadoCamposVenda
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,9 +109,6 @@ namespace Infra.Migrations
 
                     b.Property<decimal>("Desconto")
                         .HasColumnType("decimal(65,30)");
-
-                    b.Property<sbyte>("ModoVenda")
-                        .HasColumnType("tinyint");
 
                     b.Property<decimal>("TotalVenda")
                         .HasColumnType("decimal(65,30)");

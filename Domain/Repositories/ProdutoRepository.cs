@@ -2,7 +2,6 @@
 using Infra.Data;
 using Infra.Models.Table;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,22 +17,22 @@ namespace Domain.Repositories
         {
             this._context = context;
         }
-        public async Task<Produto> Add(Produto produto)
+        public async Task Add(Produto produto)
         {
-            EntityEntry<Produto> response = default;
-
             await Task.Run(() =>
             {
-                if (!_context.Produto.Select(x => x.Id).Contains(produto.Id))
-                    response = _context.Produto.Add(produto);
-            });            
-
-            return response?.Entity;
+                _context.Produto.Add(produto);
+            });
         }
 
         public async Task<Produto> Get(int Id)
         {
             return await _context.Produto.FindAsync(Id);
+        }
+
+        public Task<Produto> Get(string nome)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<List<Produto>> GetProdutos()
@@ -50,15 +49,15 @@ namespace Domain.Repositories
                 foundProducts = campo switch
                 {
                     string field when field.Equals("Nome") => from i in _context.Produto.AsNoTracking()
-                                                                    where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
-                                                                    select i,
+                                                              where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
+                                                              select i,
 
                     string field when field.Equals("Preco") => from i in _context.Produto.AsNoTracking()
-                                                                     where EF.Functions.Like(i.Preco, $"%{conteudo.Trim()}%")
-                                                                     select i,
+                                                               where EF.Functions.Like(i.Preco, $"%{conteudo.Trim()}%")
+                                                               select i,
 
                     _ => null
-                };                
+                };
             });
 
             return foundProducts.Where(x => x != null).AsEnumerable();
@@ -66,7 +65,7 @@ namespace Domain.Repositories
 
         public async Task Remove(int Id)
         {
-            var productToRemove = await _context.Produto.AsNoTracking().Where(x => x.Id.Equals(Id)).FirstOrDefaultAsync();
+            var productToRemove = await Get(Id);
 
             if (productToRemove != null)
                 _context.Produto.Remove(productToRemove);
@@ -74,6 +73,8 @@ namespace Domain.Repositories
 
         public async Task Remove(List<Produto> produtos)
         {
+            var productsToRemove = await _context.Produto.Where(x => produtos.Select(y => y.Id).Contains(x.Id)).ToListAsync();
+
             await Task.Run(() => _context.Produto.RemoveRange(produtos));
         }
 
@@ -89,7 +90,7 @@ namespace Domain.Repositories
             if (entry != null)
             {
                 await Task.Run(() => _context.Entry(entry).CurrentValues.SetValues(produto));
-            }            
+            }
         }
     }
 }
