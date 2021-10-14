@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211012210542_AdicionadoModoVenda")]
-    partial class AdicionadoModoVenda
+    [Migration("20211014005218_AdicionadoLog")]
+    partial class AdicionadoLog
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,6 +46,24 @@ namespace Infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cliente");
+                });
+
+            modelBuilder.Entity("Infra.Models.Table.Log", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Log");
                 });
 
             modelBuilder.Entity("Infra.Models.Table.Produto", b =>
@@ -110,6 +128,9 @@ namespace Infra.Migrations
                     b.Property<decimal>("Desconto")
                         .HasColumnType("decimal(65,30)");
 
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int");
+
                     b.Property<sbyte>("ModoVenda")
                         .HasColumnType("tinyint");
 
@@ -117,6 +138,8 @@ namespace Infra.Migrations
                         .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdCliente");
 
                     b.ToTable("Venda");
                 });
@@ -145,6 +168,17 @@ namespace Infra.Migrations
                     b.Navigation("Produto");
 
                     b.Navigation("Venda");
+                });
+
+            modelBuilder.Entity("Infra.Models.Table.Venda", b =>
+                {
+                    b.HasOne("Infra.Models.Table.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("IdCliente")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("Infra.Models.Table.Venda", b =>

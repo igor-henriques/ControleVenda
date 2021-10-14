@@ -28,6 +28,7 @@ namespace ControleVenda.Forms.Utility
                 { "Relatorio",  _services.GetRequiredService<RelatorioForm>()  },
                 { "Produto",    _services.GetRequiredService<ProdutoForm>()    },
                 { "Cliente",    _services.GetRequiredService<ClienteForm>()    },
+                { "ConsultaVenda",    _services.GetRequiredService<ConsultaVendaForm>()    },
             };
 
             return Menu.Where(item => item.Key.Equals(formTag)).Select(item => item.Value).FirstOrDefault();

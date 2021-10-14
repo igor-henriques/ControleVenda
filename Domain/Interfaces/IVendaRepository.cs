@@ -13,6 +13,7 @@ namespace Domain.Interfaces
         Task<Venda> Add(Venda venda);
         Task Remove(int Id);
         Task Update(Venda venda);
+        Task<List<ProdutoVenda>> GetProdutosPorVenda(int idVenda);
         Task Save();
     }
 }

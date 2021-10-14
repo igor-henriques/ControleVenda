@@ -54,6 +54,12 @@ namespace ControleVenda.Forms
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.pbBack = new System.Windows.Forms.PictureBox();
             this.rbTelefone = new System.Windows.Forms.RadioButton();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.pictureBox7 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -62,6 +68,7 @@ namespace ControleVenda.Forms
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBack)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvClientes
@@ -105,15 +112,15 @@ namespace ControleVenda.Forms
             this.dgvClientes.ShowCellErrors = false;
             this.dgvClientes.ShowEditingIcon = false;
             this.dgvClientes.ShowRowErrors = false;
-            this.dgvClientes.Size = new System.Drawing.Size(732, 296);
+            this.dgvClientes.Size = new System.Drawing.Size(863, 296);
             this.dgvClientes.TabIndex = 46;
             // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Black;
-            this.pictureBox1.Location = new System.Drawing.Point(20, 106);
+            this.pictureBox1.Location = new System.Drawing.Point(107, 105);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(93, 1);
+            this.pictureBox1.Size = new System.Drawing.Size(41, 1);
             this.pictureBox1.TabIndex = 50;
             this.pictureBox1.TabStop = false;
             // 
@@ -121,10 +128,9 @@ namespace ControleVenda.Forms
             // 
             this.tbIdentificador.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbIdentificador.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbIdentificador.Location = new System.Drawing.Point(20, 83);
+            this.tbIdentificador.Location = new System.Drawing.Point(107, 82);
             this.tbIdentificador.Name = "tbIdentificador";
-            this.tbIdentificador.PlaceholderText = "Identificador";
-            this.tbIdentificador.Size = new System.Drawing.Size(93, 20);
+            this.tbIdentificador.Size = new System.Drawing.Size(41, 20);
             this.tbIdentificador.TabIndex = 0;
             this.tbIdentificador.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbIdentificador_KeyDown);
             this.tbIdentificador.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbIdentificador_KeyPress);
@@ -134,19 +140,18 @@ namespace ControleVenda.Forms
             this.tbNome.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbNome.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.tbNome.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbNome.Location = new System.Drawing.Point(132, 83);
+            this.tbNome.Location = new System.Drawing.Point(217, 84);
             this.tbNome.Name = "tbNome";
-            this.tbNome.PlaceholderText = "Nome";
-            this.tbNome.Size = new System.Drawing.Size(230, 20);
+            this.tbNome.Size = new System.Drawing.Size(182, 20);
             this.tbNome.TabIndex = 1;
             this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Black;
-            this.pictureBox2.Location = new System.Drawing.Point(132, 106);
+            this.pictureBox2.Location = new System.Drawing.Point(217, 107);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(230, 1);
+            this.pictureBox2.Size = new System.Drawing.Size(182, 1);
             this.pictureBox2.TabIndex = 50;
             this.pictureBox2.TabStop = false;
             // 
@@ -156,7 +161,7 @@ namespace ControleVenda.Forms
             this.lblDescription.Font = new System.Drawing.Font("Roboto", 26F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblDescription.Location = new System.Drawing.Point(0, 0);
             this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(732, 68);
+            this.lblDescription.Size = new System.Drawing.Size(863, 68);
             this.lblDescription.TabIndex = 51;
             this.lblDescription.Text = "GERENCIAMENTO DE CLIENTES";
             this.lblDescription.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -164,9 +169,9 @@ namespace ControleVenda.Forms
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Black;
-            this.pictureBox3.Location = new System.Drawing.Point(379, 106);
+            this.pictureBox3.Location = new System.Drawing.Point(491, 107);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(93, 1);
+            this.pictureBox3.Size = new System.Drawing.Size(54, 1);
             this.pictureBox3.TabIndex = 53;
             this.pictureBox3.TabStop = false;
             // 
@@ -174,10 +179,9 @@ namespace ControleVenda.Forms
             // 
             this.tbNumeroCurso.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbNumeroCurso.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbNumeroCurso.Location = new System.Drawing.Point(380, 83);
+            this.tbNumeroCurso.Location = new System.Drawing.Point(492, 84);
             this.tbNumeroCurso.Name = "tbNumeroCurso";
-            this.tbNumeroCurso.PlaceholderText = "Nº Curso";
-            this.tbNumeroCurso.Size = new System.Drawing.Size(93, 20);
+            this.tbNumeroCurso.Size = new System.Drawing.Size(54, 20);
             this.tbNumeroCurso.TabIndex = 2;
             this.tbNumeroCurso.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNumeroCurso_KeyDown);
             this.tbNumeroCurso.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbNumeroCurso_KeyPress);
@@ -185,9 +189,9 @@ namespace ControleVenda.Forms
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.Color.Black;
-            this.pictureBox4.Location = new System.Drawing.Point(491, 106);
+            this.pictureBox4.Location = new System.Drawing.Point(648, 107);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(93, 1);
+            this.pictureBox4.Size = new System.Drawing.Size(29, 1);
             this.pictureBox4.TabIndex = 55;
             this.pictureBox4.TabStop = false;
             // 
@@ -195,10 +199,9 @@ namespace ControleVenda.Forms
             // 
             this.tbNumeroPel.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbNumeroPel.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbNumeroPel.Location = new System.Drawing.Point(491, 83);
+            this.tbNumeroPel.Location = new System.Drawing.Point(648, 84);
             this.tbNumeroPel.Name = "tbNumeroPel";
-            this.tbNumeroPel.PlaceholderText = "Nº Pel";
-            this.tbNumeroPel.Size = new System.Drawing.Size(93, 20);
+            this.tbNumeroPel.Size = new System.Drawing.Size(29, 20);
             this.tbNumeroPel.TabIndex = 3;
             this.tbNumeroPel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNumeroPel_KeyDown);
             this.tbNumeroPel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbNumeroPel_KeyPress);
@@ -207,7 +210,7 @@ namespace ControleVenda.Forms
             // 
             this.mtbTelefone.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.mtbTelefone.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.mtbTelefone.Location = new System.Drawing.Point(600, 89);
+            this.mtbTelefone.Location = new System.Drawing.Point(725, 85);
             this.mtbTelefone.Mask = "(00) 00000-0000";
             this.mtbTelefone.Name = "mtbTelefone";
             this.mtbTelefone.Size = new System.Drawing.Size(120, 20);
@@ -221,7 +224,7 @@ namespace ControleVenda.Forms
             this.btnExcluir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExcluir.Font = new System.Drawing.Font("Caviar Dreams", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnExcluir.Image = ((System.Drawing.Image)(resources.GetObject("btnExcluir.Image")));
-            this.btnExcluir.Location = new System.Drawing.Point(538, 123);
+            this.btnExcluir.Location = new System.Drawing.Point(668, 123);
             this.btnExcluir.Name = "btnExcluir";
             this.btnExcluir.Size = new System.Drawing.Size(193, 55);
             this.btnExcluir.TabIndex = 7;
@@ -239,7 +242,7 @@ namespace ControleVenda.Forms
             this.btnSalvar.Image = ((System.Drawing.Image)(resources.GetObject("btnSalvar.Image")));
             this.btnSalvar.Location = new System.Drawing.Point(0, 123);
             this.btnSalvar.Name = "btnSalvar";
-            this.btnSalvar.Size = new System.Drawing.Size(351, 55);
+            this.btnSalvar.Size = new System.Drawing.Size(489, 55);
             this.btnSalvar.TabIndex = 5;
             this.btnSalvar.Text = "   Salvar";
             this.btnSalvar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -254,9 +257,9 @@ namespace ControleVenda.Forms
             this.btnEditar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEditar.Font = new System.Drawing.Font("Caviar Dreams", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnEditar.Image = ((System.Drawing.Image)(resources.GetObject("btnEditar.Image")));
-            this.btnEditar.Location = new System.Drawing.Point(349, 123);
+            this.btnEditar.Location = new System.Drawing.Point(484, 123);
             this.btnEditar.Name = "btnEditar";
-            this.btnEditar.Size = new System.Drawing.Size(203, 55);
+            this.btnEditar.Size = new System.Drawing.Size(198, 55);
             this.btnEditar.TabIndex = 6;
             this.btnEditar.Text = "  Editar";
             this.btnEditar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -303,7 +306,7 @@ namespace ControleVenda.Forms
             this.btnAtualizar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnAtualizar.FlatAppearance.BorderSize = 0;
             this.btnAtualizar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAtualizar.Location = new System.Drawing.Point(700, 484);
+            this.btnAtualizar.Location = new System.Drawing.Point(828, 484);
             this.btnAtualizar.Name = "btnAtualizar";
             this.btnAtualizar.Size = new System.Drawing.Size(20, 20);
             this.btnAtualizar.TabIndex = 12;
@@ -318,7 +321,7 @@ namespace ControleVenda.Forms
             this.tbPesquisa.Location = new System.Drawing.Point(280, 481);
             this.tbPesquisa.Name = "tbPesquisa";
             this.tbPesquisa.PlaceholderText = "Pesquisar";
-            this.tbPesquisa.Size = new System.Drawing.Size(409, 18);
+            this.tbPesquisa.Size = new System.Drawing.Size(535, 18);
             this.tbPesquisa.TabIndex = 11;
             this.tbPesquisa.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbPesquisa_KeyUp);
             // 
@@ -327,7 +330,7 @@ namespace ControleVenda.Forms
             this.pictureBox6.BackColor = System.Drawing.Color.Black;
             this.pictureBox6.Location = new System.Drawing.Point(280, 501);
             this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(409, 1);
+            this.pictureBox6.Size = new System.Drawing.Size(535, 1);
             this.pictureBox6.TabIndex = 66;
             this.pictureBox6.TabStop = false;
             // 
@@ -354,12 +357,77 @@ namespace ControleVenda.Forms
             this.rbTelefone.Text = "Telefone";
             this.rbTelefone.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(11, 86);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(95, 18);
+            this.label1.TabIndex = 112;
+            this.label1.Text = "Identificador:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label2.Location = new System.Drawing.Point(162, 86);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(52, 18);
+            this.label2.TabIndex = 113;
+            this.label2.Text = "Nome:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label3.Location = new System.Drawing.Point(416, 86);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(73, 18);
+            this.label3.TabIndex = 114;
+            this.label3.Text = "Nº Curso:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label4.Location = new System.Drawing.Point(560, 86);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(85, 18);
+            this.label4.TabIndex = 115;
+            this.label4.Text = "Nº Pelotão:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label5.Location = new System.Drawing.Point(690, 86);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(36, 18);
+            this.label5.TabIndex = 116;
+            this.label5.Text = "Tel.:";
+            // 
+            // pictureBox7
+            // 
+            this.pictureBox7.BackColor = System.Drawing.Color.Black;
+            this.pictureBox7.Location = new System.Drawing.Point(725, 107);
+            this.pictureBox7.Name = "pictureBox7";
+            this.pictureBox7.Size = new System.Drawing.Size(110, 1);
+            this.pictureBox7.TabIndex = 117;
+            this.pictureBox7.TabStop = false;
+            // 
             // ClienteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(732, 514);
+            this.ClientSize = new System.Drawing.Size(863, 514);
+            this.Controls.Add(this.pictureBox7);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.rbTelefone);
             this.Controls.Add(this.pbBack);
             this.Controls.Add(this.pictureBox5);
@@ -398,6 +466,7 @@ namespace ControleVenda.Forms
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBack)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -427,5 +496,11 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.PictureBox pictureBox6;
         private System.Windows.Forms.PictureBox pbBack;
         private System.Windows.Forms.RadioButton rbTelefone;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.PictureBox pictureBox7;
     }
 }

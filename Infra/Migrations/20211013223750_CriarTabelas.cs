@@ -4,17 +4,21 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infra.Migrations
 {
-    public partial class createTables : Migration
+    public partial class CriarTabelas : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "Cliente",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Identificador = table.Column<int>(type: "int", nullable: false),
+                    Identificador = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Nome = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NumeroCurso = table.Column<ushort>(type: "smallint unsigned", nullable: false),
@@ -35,11 +39,21 @@ namespace Infra.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Data = table.Column<DateTime>(type: "datetime", nullable: false),
-                    TotalVenda = table.Column<decimal>(type: "decimal(65,30)", nullable: false)
+                    TotalVenda = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Acrescimo = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Desconto = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    ModoVenda = table.Column<sbyte>(type: "tinyint", nullable: false),
+                    IdCliente = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Venda", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Venda_Cliente_IdCliente",
+                        column: x => x.IdCliente,
+                        principalTable: "Cliente",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -108,13 +122,15 @@ namespace Infra.Migrations
                 name: "IX_ProdutoVenda_IdVenda",
                 table: "ProdutoVenda",
                 column: "IdVenda");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Venda_IdCliente",
+                table: "Venda",
+                column: "IdCliente");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Cliente");
-
             migrationBuilder.DropTable(
                 name: "ProdutoVenda");
 
@@ -123,6 +139,9 @@ namespace Infra.Migrations
 
             migrationBuilder.DropTable(
                 name: "Venda");
+
+            migrationBuilder.DropTable(
+                name: "Cliente");
         }
     }
 }

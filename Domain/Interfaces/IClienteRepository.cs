@@ -7,6 +7,7 @@ namespace Domain.Interfaces
     public interface IClienteRepository
     {
         Task<List<Cliente>> GetClientes();
+        Task<List<Venda>> ChecarVendasComCliente(List<Cliente> clientes);
         Task<Cliente> Get(int Id);
         Task<Cliente> Get(string Identificador);
         Task<Cliente> Add(Cliente cliente);

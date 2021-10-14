@@ -27,7 +27,6 @@ namespace ControleVenda.Forms
             this._clienteContext = clienteRepository;
         }
 
-
         private async void VendaForm_Load(object sender, EventArgs e)
         {
             await LoadForm();
@@ -263,7 +262,8 @@ namespace ControleVenda.Forms
                         Acrescimo = decimal.Parse(tbTaxa.Text.Replace("R$", default).Trim()),
                         Desconto = decimal.Parse(tbDesconto.Text.Replace("R$", default).Trim()),
                         ModoVenda = Enum.Parse<EModoVenda>(cbModoVenda.SelectedItem.ToString()),
-                        TotalVenda = totalVenda
+                        TotalVenda = totalVenda,
+                        IdCliente = (cbClientes.SelectedItem as Cliente).Id
                     };
 
                     var vendaProcessada = await _vendaContext.Add(venda);
@@ -278,7 +278,7 @@ namespace ControleVenda.Forms
 
                     await _vendaContext.Save();
 
-                    MessageBox.Show("Venda finalizada", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Venda finalizada. Abra a tela de Consultar Venda para verificar o registro.", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 await Clear();

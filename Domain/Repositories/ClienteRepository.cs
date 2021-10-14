@@ -30,6 +30,11 @@ namespace Domain.Repositories
             return response?.Entity;
         }
 
+        public async Task<List<Venda>> ChecarVendasComCliente(List<Cliente> clientes)
+        {
+            return await _context.Venda.Where(x => clientes.Select(y => y.Id).Contains(x.IdCliente)).ToListAsync();
+        }
+
         public async Task<Cliente> Get(int Id)
         {
             return await _context.Cliente.FindAsync(Id);
@@ -84,7 +89,20 @@ namespace Domain.Repositories
         {            
             var clientsToRemove = await _context.Cliente.Where(x => clientes.Select(y => y.Id).Contains(x.Id)).ToListAsync();
 
-            await Task.Run(() => _context.Cliente.RemoveRange(clientsToRemove));
+            foreach (var cliente in clientsToRemove)
+            {
+                var vendasPorCliente = await _context.Venda.Where(x => x.IdCliente.Equals(cliente.Id)).ToListAsync();
+
+                foreach (var venda in vendasPorCliente)
+                {
+                    var produtosPorVenda = await _context.ProdutoVenda.Where(x => x.IdVenda.Equals(venda.Id)).ToListAsync();
+                    _context.ProdutoVenda.RemoveRange(produtosPorVenda);
+                }
+
+                _context.Venda.RemoveRange(vendasPorCliente);
+            }
+
+            _context.Cliente.RemoveRange(clientsToRemove);
         }
 
         public async Task Save()

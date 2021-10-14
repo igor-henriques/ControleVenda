@@ -14,11 +14,13 @@ namespace ControleVenda.Forms
     public partial class ProdutoForm : Form
     {
         private readonly IProdutoRepository _produtoContext;
-        public ProdutoForm(IProdutoRepository produtoContext)
+        private readonly ILogRepository _log;
+        public ProdutoForm(IProdutoRepository produtoContext, ILogRepository logRepository)
         {
             InitializeComponent();
 
             this._produtoContext = produtoContext;
+            this._log = logRepository;
         }
 
         private void pbBack_Click(object sender, EventArgs e)
@@ -58,6 +60,8 @@ namespace ControleVenda.Forms
                 await _produtoContext.Save();
 
                 await LoadGrid();
+
+                await _log.Add($"Produto {produto.Nome} ADICIONADO ao sistema");
             }
 
             Clear();
@@ -158,6 +162,8 @@ namespace ControleVenda.Forms
                     await _produtoContext.Save();
 
                     await LoadGrid();
+
+                    await _log.Add($"Produto {selectedProduct.Nome} ATUALIZADO no sistema");
                 }
 
                 btnSalvar.Enabled = true;
@@ -178,22 +184,32 @@ namespace ControleVenda.Forms
                 return;
             }
 
-            if (MessageBox.Show($"Tem certeza que deseja excluir os {dgvProdutos.SelectedRows.Count} produtos?", "Excluir Produto", MessageBoxButtons.YesNo, MessageBoxIcon.Question).Equals(DialogResult.Yes))
+
+            if (MessageBox.Show($"Tem certeza que deseja excluir os {dgvProdutos.SelectedRows.Count} produtos?", "Excluir Produto", MessageBoxButtons.YesNo, MessageBoxIcon.Question).Equals(DialogResult.No))
+                return;
+
+            var selectedProducts = GetSelectedProducts();
+
+            if (selectedProducts.Count > 0)
             {
-                var selectedProducts = GetSelectedProducts();
-
-                if (selectedProducts.Count > 0)
+                var vendasAfetadas = await _produtoContext.ChecarVendasComProduto(selectedProducts);
+                if (vendasAfetadas?.Count > 0)
                 {
-                    using (new ControlManager(this.Controls))
-                    {
-                        await _produtoContext.Remove(selectedProducts);
-                        await _produtoContext.Save();
-
-                        await LoadGrid();
-                    }
-
-                    Clear();
+                    if (MessageBox.Show($"Há {vendasAfetadas.Count} venda(s) realizada(s) com esse(s) produto(s). Caso opte por excluir, o(s) registro(s) de venda será(ão) deletados. DESEJA CONTINUAR?", "Excluir Produto", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk).Equals(DialogResult.No))
+                        return;
                 }
+
+                using (new ControlManager(this.Controls))
+                {
+                    await _produtoContext.Remove(selectedProducts);
+                    await _produtoContext.Save();
+
+                    await LoadGrid();
+
+                    selectedProducts.ForEach(async selectedProduct => await _log.Add($"Produto {selectedProduct.Nome} REMOVIDO do sistema"));
+                }
+
+                Clear();
             }
         }
         private List<Produto> GetSelectedProducts()

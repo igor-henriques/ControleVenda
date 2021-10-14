@@ -16,11 +16,13 @@ namespace ControleVenda.Forms
     public partial class ClienteForm : Form
     {
         private readonly IClienteRepository _clienteContext;
-        public ClienteForm(IClienteRepository clienteContext)
+        private readonly ILogRepository _log;
+        public ClienteForm(IClienteRepository clienteContext, ILogRepository logContext)
         {
             InitializeComponent();
 
-            this._clienteContext = clienteContext;            
+            this._clienteContext = clienteContext;
+            this._log = logContext;
         }
 
         private async void ClienteForm_Load(object sender, EventArgs e)
@@ -87,6 +89,8 @@ namespace ControleVenda.Forms
                 await _clienteContext.Save();
 
                 await LoadGrid();
+
+                await _log.Add($"Cliente {cliente.Nome}({cliente.Identificador}) ADICIONADO ao sistema");
             }
 
             Clear();
@@ -210,6 +214,8 @@ namespace ControleVenda.Forms
                     await _clienteContext.Save();
 
                     await LoadGrid();
+
+                    await _log.Add($"Cliente {selectedClient.Nome}({selectedClient.Identificador}) ATUALIZADO no sistema");
                 }
 
                 btnSalvar.Enabled = true;
@@ -256,12 +262,21 @@ namespace ControleVenda.Forms
 
                 if (selectedClients.Count > 0)
                 {
+                    var vendasAfetadas = await _clienteContext.ChecarVendasComCliente(selectedClients);
+                    if (vendasAfetadas?.Count > 0)
+                    {
+                        if (MessageBox.Show($"Há {vendasAfetadas.Count} venda(s) realizada(s) com esse(s) cliente(s). Caso opte por excluir, o(s) registro(s) de venda será(ão) deletados. DESEJA CONTINUAR?", "Excluir Produto", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk).Equals(DialogResult.No))
+                            return;
+                    }
+
                     using (new ControlManager(this.Controls))
                     {
                         await _clienteContext.Remove(selectedClients);
                         await _clienteContext.Save();
 
                         await LoadGrid();
+
+                        selectedClients.ForEach(async cliente => await _log.Add($"Cliente {cliente.Nome}({cliente.Identificador}) REMOVIDO do sistema"));
                     }
 
                     Clear();

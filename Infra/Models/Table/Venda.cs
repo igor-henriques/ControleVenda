@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Infra.Models.Table
 {
@@ -15,6 +16,9 @@ namespace Infra.Models.Table
         public decimal Acrescimo { get; init; }
         public decimal Desconto { get; init; }
         public EModoVenda ModoVenda { get; init; }
+        [ForeignKey("Cliente")]
+        public int IdCliente { get; set; }
+        public Cliente Cliente { get; set; }
         public List<Produto> Produtos { get; init; }
     }
 }

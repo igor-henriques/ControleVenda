@@ -25,6 +25,11 @@ namespace Domain.Repositories
             });
         }
 
+        public async Task<List<Venda>> ChecarVendasComProduto(List<Produto> produtos)
+        {
+            return await _context.ProdutoVenda.Include(x => x.Venda).Where(x => produtos.Select(x => x.Id).Contains(x.IdProduto)).Select(x => x.Venda).ToListAsync();
+        }
+
         public async Task<Produto> Get(int Id)
         {
             return await _context.Produto.FindAsync(Id);
@@ -74,6 +79,13 @@ namespace Domain.Repositories
         public async Task Remove(List<Produto> produtos)
         {
             var productsToRemove = await _context.Produto.Where(x => produtos.Select(y => y.Id).Contains(x.Id)).ToListAsync();
+
+            foreach (var product in productsToRemove)
+            {
+                var vendasComProduto = await _context.ProdutoVenda.Include(x => x.Venda).Where(x => x.IdProduto.Equals(product.Id)).Select(x => x.Venda).ToListAsync();
+
+                _context.Venda.RemoveRange(vendasComProduto);
+            }
 
             await Task.Run(() => _context.Produto.RemoveRange(productsToRemove));
         }

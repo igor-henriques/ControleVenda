@@ -51,10 +51,12 @@ namespace ControleVenda
                     services.AddTransient<ClienteForm>();
                     services.AddTransient<RelatorioForm>();
                     services.AddTransient<ProdutoForm>();
+                    services.AddTransient<ConsultaVendaForm>();
 
                     services.AddScoped<IClienteRepository, ClienteRepository>();
                     services.AddScoped<IProdutoRepository, ProdutoRepository>();
                     services.AddScoped<IVendaRepository, VendaRepository>();
+                    services.AddScoped<ILogRepository, LogRepository>();
 
                     services.AddLogging(
                     builder =>

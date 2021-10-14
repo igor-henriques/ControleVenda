@@ -30,11 +30,12 @@ namespace ControleVenda.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.MainFormMenu = new System.Windows.Forms.MenuStrip();
             this.VendaMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ConsultaVendaMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ClienteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ProdutoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RelatorioMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,7 +47,11 @@ namespace ControleVenda.Forms
             this.TimeStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblSeparator2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.LogsDesc = new System.Windows.Forms.ToolStripStatusLabel();
-            this.logsStatusCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.LogsStatusCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.LogsUpdateDesc = new System.Windows.Forms.ToolStripStatusLabel();
+            this.LogsUpdateCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblDescription = new System.Windows.Forms.Label();
             this.oneSecond = new System.Windows.Forms.Timer(this.components);
             this.dgvMain = new System.Windows.Forms.DataGridView();
@@ -68,6 +73,7 @@ namespace ControleVenda.Forms
             this.MainFormMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.MainFormMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.VendaMenuItem,
+            this.ConsultaVendaMenuItem,
             this.ClienteMenuItem,
             this.ProdutoMenuItem,
             this.RelatorioMenuItem});
@@ -84,9 +90,19 @@ namespace ControleVenda.Forms
             this.VendaMenuItem.Image = global::ControleVenda.Properties.Resources.shopping_bag;
             this.VendaMenuItem.Name = "VendaMenuItem";
             this.VendaMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.VendaMenuItem.Size = new System.Drawing.Size(85, 22);
+            this.VendaMenuItem.Size = new System.Drawing.Size(148, 22);
             this.VendaMenuItem.Tag = "Venda";
-            this.VendaMenuItem.Text = "VENDA";
+            this.VendaMenuItem.Text = "LANÇAR VENDA";
+            // 
+            // ConsultaVendaMenuItem
+            // 
+            this.ConsultaVendaMenuItem.Font = new System.Drawing.Font("Roboto", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.ConsultaVendaMenuItem.ForeColor = System.Drawing.Color.Black;
+            this.ConsultaVendaMenuItem.Image = global::ControleVenda.Properties.Resources.search__1_;
+            this.ConsultaVendaMenuItem.Name = "ConsultaVendaMenuItem";
+            this.ConsultaVendaMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.ConsultaVendaMenuItem.Tag = "ConsultaVenda";
+            this.ConsultaVendaMenuItem.Text = "CONSULTAR VENDA";
             // 
             // ClienteMenuItem
             // 
@@ -134,7 +150,11 @@ namespace ControleVenda.Forms
             this.TimeStatus,
             this.lblSeparator2,
             this.LogsDesc,
-            this.logsStatusCount});
+            this.LogsStatusCount,
+            this.toolStripStatusLabel1,
+            this.LogsUpdateDesc,
+            this.LogsUpdateCount,
+            this.toolStripStatusLabel2});
             this.statusStrip.Location = new System.Drawing.Point(0, 701);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -195,11 +215,43 @@ namespace ControleVenda.Forms
             this.LogsDesc.Size = new System.Drawing.Size(37, 17);
             this.LogsDesc.Text = "Logs";
             // 
-            // logsStatusCount
+            // LogsStatusCount
             // 
-            this.logsStatusCount.ForeColor = System.Drawing.Color.Black;
-            this.logsStatusCount.Name = "logsStatusCount";
-            this.logsStatusCount.Size = new System.Drawing.Size(0, 17);
+            this.LogsStatusCount.ForeColor = System.Drawing.Color.Black;
+            this.LogsStatusCount.Name = "LogsStatusCount";
+            this.LogsStatusCount.Size = new System.Drawing.Size(0, 17);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.toolStripStatusLabel1.ForeColor = System.Drawing.Color.Black;
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(12, 17);
+            this.toolStripStatusLabel1.Text = "|";
+            // 
+            // LogsUpdateDesc
+            // 
+            this.LogsUpdateDesc.Font = new System.Drawing.Font("Malgun Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.LogsUpdateDesc.ForeColor = System.Drawing.Color.Black;
+            this.LogsUpdateDesc.Name = "LogsUpdateDesc";
+            this.LogsUpdateDesc.Size = new System.Drawing.Size(137, 17);
+            this.LogsUpdateDesc.Text = "Atualizando logs em";
+            // 
+            // LogsUpdateCount
+            // 
+            this.LogsUpdateCount.Font = new System.Drawing.Font("Malgun Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.LogsUpdateCount.ForeColor = System.Drawing.Color.Black;
+            this.LogsUpdateCount.Name = "LogsUpdateCount";
+            this.LogsUpdateCount.Size = new System.Drawing.Size(22, 17);
+            this.LogsUpdateCount.Text = "61";
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Font = new System.Drawing.Font("Malgun Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.toolStripStatusLabel2.ForeColor = System.Drawing.Color.Black;
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(67, 17);
+            this.toolStripStatusLabel2.Text = "segundos";
             // 
             // lblDescription
             // 
@@ -209,7 +261,7 @@ namespace ControleVenda.Forms
             this.lblDescription.Name = "lblDescription";
             this.lblDescription.Size = new System.Drawing.Size(1350, 98);
             this.lblDescription.TabIndex = 46;
-            this.lblDescription.Text = "VENDAS DO DIA 00/00/0000";
+            this.lblDescription.Text = "MOVIMENTOS DO DIA 00/00/0000";
             this.lblDescription.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // oneSecond
@@ -230,23 +282,23 @@ namespace ControleVenda.Forms
             this.dgvMain.BackgroundColor = System.Drawing.Color.WhiteSmoke;
             this.dgvMain.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvMain.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvMain.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvMain.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvMain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvMain.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvMain.DefaultCellStyle = dataGridViewCellStyle4;
             this.dgvMain.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvMain.GridColor = System.Drawing.Color.White;
             this.dgvMain.Location = new System.Drawing.Point(0, 127);
@@ -282,7 +334,7 @@ namespace ControleVenda.Forms
             this.tbSearch.BackColor = System.Drawing.Color.White;
             this.tbSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbSearch.Font = new System.Drawing.Font("Malgun Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbSearch.Location = new System.Drawing.Point(35, 676);
+            this.tbSearch.Location = new System.Drawing.Point(35, 678);
             this.tbSearch.Name = "tbSearch";
             this.tbSearch.PlaceholderText = "Pesquisar";
             this.tbSearch.Size = new System.Drawing.Size(1264, 20);
@@ -293,7 +345,7 @@ namespace ControleVenda.Forms
             this.pictureBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox6.BackColor = System.Drawing.Color.Black;
-            this.pictureBox6.Location = new System.Drawing.Point(35, 697);
+            this.pictureBox6.Location = new System.Drawing.Point(35, 699);
             this.pictureBox6.Name = "pictureBox6";
             this.pictureBox6.Size = new System.Drawing.Size(1264, 1);
             this.pictureBox6.TabIndex = 50;
@@ -307,7 +359,7 @@ namespace ControleVenda.Forms
             this.btnUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnUpdate.FlatAppearance.BorderSize = 0;
             this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUpdate.Location = new System.Drawing.Point(1315, 678);
+            this.btnUpdate.Location = new System.Drawing.Point(1314, 681);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(20, 20);
             this.btnUpdate.TabIndex = 48;
@@ -332,6 +384,7 @@ namespace ControleVenda.Forms
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Controle de Venda - Principal";
+            this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.MainFormMenu.ResumeLayout(false);
@@ -361,7 +414,7 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.ToolStripStatusLabel TimeStatus;
         private System.Windows.Forms.ToolStripStatusLabel lblSeparator2;
         private System.Windows.Forms.ToolStripStatusLabel LogsDesc;
-        private System.Windows.Forms.ToolStripStatusLabel logsStatusCount;
+        private System.Windows.Forms.ToolStripStatusLabel LogsStatusCount;
         private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.Timer oneSecond;
         private System.Windows.Forms.DataGridView dgvMain;
@@ -369,6 +422,11 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.TextBox tbSearch;
         private System.Windows.Forms.PictureBox pictureBox6;
         private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.ToolStripMenuItem ConsultaVendaMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel LogsUpdateDesc;
+        private System.Windows.Forms.ToolStripStatusLabel LogsUpdateCount;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
 

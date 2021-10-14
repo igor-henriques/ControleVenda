@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211012175416_IdentificadorParaString")]
-    partial class IdentificadorParaString
+    [Migration("20211013223750_CriarTabelas")]
+    partial class CriarTabelas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -101,13 +101,27 @@ namespace Infra.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Acrescimo")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime");
+
+                    b.Property<decimal>("Desconto")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int");
+
+                    b.Property<sbyte>("ModoVenda")
+                        .HasColumnType("tinyint");
 
                     b.Property<decimal>("TotalVenda")
                         .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdCliente");
 
                     b.ToTable("Venda");
                 });
@@ -136,6 +150,17 @@ namespace Infra.Migrations
                     b.Navigation("Produto");
 
                     b.Navigation("Venda");
+                });
+
+            modelBuilder.Entity("Infra.Models.Table.Venda", b =>
+                {
+                    b.HasOne("Infra.Models.Table.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("IdCliente")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("Infra.Models.Table.Venda", b =>

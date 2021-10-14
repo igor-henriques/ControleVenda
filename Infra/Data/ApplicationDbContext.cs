@@ -23,5 +23,6 @@ namespace Infra.Data
         public DbSet<Produto> Produto { get; set; }
         public DbSet<Venda> Venda { get; set; }
         public DbSet<ProdutoVenda> ProdutoVenda { get; set; }
+        public DbSet<Log> Log { get; set; }
     }
 }

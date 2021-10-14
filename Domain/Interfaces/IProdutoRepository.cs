@@ -7,6 +7,7 @@ namespace Domain.Interfaces
     public interface IProdutoRepository
     {
         Task<List<Produto>> GetProdutos();
+        Task<List<Venda>> ChecarVendasComProduto(List<Produto> produtos);
         Task<Produto> Get(int Id);
         Task<Produto> Get(string nome);
         Task Add(Produto produto);
