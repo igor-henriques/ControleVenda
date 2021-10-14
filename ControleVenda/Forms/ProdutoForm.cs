@@ -206,7 +206,10 @@ namespace ControleVenda.Forms
 
                     await LoadGrid();
 
-                    selectedProducts.ForEach(async selectedProduct => await _log.Add($"Produto {selectedProduct.Nome} REMOVIDO do sistema"));
+                    foreach (var selectedProduct in selectedProducts)
+                    {
+                        await _log.Add($"Produto {selectedProduct.Nome} REMOVIDO do sistema");
+                    }                    
                 }
 
                 Clear();

@@ -1,5 +1,6 @@
 ﻿using Infra.Models.Table;
 using Infra.Models.Temp;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,10 +11,12 @@ namespace Domain.Interfaces
         Task<List<Venda>> GetVendas();
         Task AddProducts(VendaViewModel venda);
         Task<Venda> Get(int Id);
+        Task<List<Venda>> Get(List<int> idVendas);
         Task<Venda> Add(Venda venda);
-        Task Remove(int Id);
-        Task Update(Venda venda);
+        Task Remove(List<Venda> vendas);
         Task<List<ProdutoVenda>> GetProdutosPorVenda(int idVenda);
+        Task<List<Venda>> SearchByDate(DateTime initialDate, DateTime finalDate);
+        Task<List<Venda>> SearchByCliente(Cliente cliente);
         Task Save();
     }
 }

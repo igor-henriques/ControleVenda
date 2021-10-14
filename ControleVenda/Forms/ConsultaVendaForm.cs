@@ -19,12 +19,14 @@ namespace ControleVenda.Forms
     {
         private readonly IClienteRepository _clienteContext;
         private readonly IVendaRepository _vendaContext;
-        public ConsultaVendaForm(IClienteRepository clienteContext, IVendaRepository vendaContext)
+        private readonly ILogRepository _log;
+        public ConsultaVendaForm(IClienteRepository clienteContext, IVendaRepository vendaContext, ILogRepository logRepository)
         {
             InitializeComponent();
 
             this._clienteContext = clienteContext;
             this._vendaContext = vendaContext;
+            this._log = logRepository;
         }
 
         private void dtiPicker_MouseDown(object sender, MouseEventArgs e)
@@ -37,13 +39,38 @@ namespace ControleVenda.Forms
             rbCliente.Checked = true;
         }
 
-        private void btnPesquisar_Click(object sender, EventArgs e)
+        private async void btnPesquisar_Click(object sender, EventArgs e)
         {
-            if (!rbCliente.Checked | !rbData.Checked)
+            if (!rbCliente.Checked && !rbData.Checked)
             {
                 MessageBox.Show("Selecione algum método de pesquisa", "Consultar Venda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            Dictionary<RadioButton, Func<Task>> searchOptions = new Dictionary<RadioButton, Func<Task>>
+            {
+                { rbData,    async () => await FillGrid(await SearchByDate(dtiPicker.Value, dtfPicker.Value))  },
+                { rbCliente, async () => await FillGrid(await SearchByCliente(cbClientePesquisa.SelectedItem as Cliente))  },
+            };
+
+            var searchResponse = searchOptions.Where(x => x.Key.Checked).Select(x => x.Value).FirstOrDefault();
+
+            if (searchResponse != null)
+            {
+                await searchResponse.Invoke();
+                FormatColumns();
+            }
+        }
+
+        private async Task<List<Venda>> SearchByDate(DateTime initialDate, DateTime finalDate)
+        {
+            var response = await _vendaContext.SearchByDate(initialDate, finalDate);
+            return response;
+        }
+        private async Task<List<Venda>> SearchByCliente(Cliente cliente)
+        {
+            var response = await _vendaContext.SearchByCliente(cliente);
+            return response;
         }
         private async Task<List<Cliente>> GetClients()
         {
@@ -112,7 +139,7 @@ namespace ControleVenda.Forms
                 cbClientePesquisa.DisplayMember = "Nome";
 
                 await FillGrid();
-            }            
+            }
         }
         private void FormatColumns()
         {
@@ -157,6 +184,60 @@ namespace ControleVenda.Forms
         private void pbBack_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private async void btnExcluir_Click(object sender, EventArgs e)
+        {
+            if (dgvVendas.SelectedRows.Count <= 0)
+            {
+                MessageBox.Show("Selecione ao menos uma linha para excluir", "Excluir Venda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (MessageBox.Show($"Tem certeza que deseja excluir o(s) {dgvVendas.SelectedRows.Count} registro(s) de Venda?", "Excluir Venda", MessageBoxButtons.YesNo, MessageBoxIcon.Question).Equals(DialogResult.No))
+                return;
+
+            using (new ControlManager(this.Controls))
+            {
+                var vendasSelecionadas = await GetSelectedVendas();
+
+                if (vendasSelecionadas.Count > 0)
+                {
+                    await _vendaContext.Remove(vendasSelecionadas);
+                    await _vendaContext.Save();
+
+                    foreach (var venda in vendasSelecionadas)
+                    {
+                        await _log.Add($"Venda Nº {venda.Id} em nome do cliente {venda.Cliente.Nome} no valor de {venda.TotalVenda.ToString("c")} foi REMOVIDA do sistema");
+                    }
+
+                    await FillGrid();
+
+                }
+            }
+        }
+        private async Task<List<Venda>> GetSelectedVendas()
+        {
+            List<int> idVendas = new();
+
+            foreach (DataGridViewRow row in dgvVendas.SelectedRows)
+            {
+                int idVenda = int.Parse(row.Cells["Id"].Value.ToString());
+
+                idVendas.Add(idVenda);
+            }
+
+            return await _vendaContext.Get(idVendas);
+        }
+
+        private async void btnUpdate_Click(object sender, EventArgs e)
+        {
+            rbCliente.Checked = false;
+            rbData.Checked = false;
+
+            cbClientePesquisa.SelectedItem = null;            
+
+            await FillGrid();
         }
     }
 }

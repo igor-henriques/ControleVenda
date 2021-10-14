@@ -56,5 +56,15 @@ namespace Domain.Repositories
             }
             catch (Exception ex) { LogWriter.Write(ex.ToString()); }
         }
+
+        public async Task<List<Log>> Search(string description)
+        {
+            var foundLogs = from i in _context.Log
+                            where i.Date.Date.Equals(DateTime.Today) | i.Date.Date.Equals(DateTime.Today.AddDays(-1))
+                            where EF.Functions.Like(i.Description.ToUpper(), $"%{description.ToUpper().Trim()}%")
+                            select i;
+
+            return await foundLogs.ToListAsync();
+        }
     }
 }

@@ -56,7 +56,7 @@ namespace Domain.Repositories
 
         public async Task<Venda> Get(int Id)
         {
-            var response = await _context.Venda.FindAsync(Id);
+            var response = await _context.Venda.Include(x => x.Cliente).AsNoTracking().Where(x => x.Id.Equals(Id)).FirstOrDefaultAsync();
             
             response = response with
             {
@@ -70,6 +70,12 @@ namespace Domain.Repositories
 
             return response;
         }
+
+        public async Task<List<Venda>> Get(List<int> idVendas)
+        {
+            return await _context.Venda.Include(x => x.Cliente).Where(x => idVendas.Contains(x.Id)).ToListAsync();
+        }
+
         public async Task<List<ProdutoVenda>> GetProdutosPorVenda(int idVenda)
         {
             var response = await _context.Venda.FindAsync(idVenda);
@@ -103,14 +109,14 @@ namespace Domain.Repositories
             return response;
         }
 
-        public async Task Remove(int IdVenda)
+        public async Task Remove(List<Venda> vendas)
         {
-            var vendaToRemove = await Get(IdVenda);
+            List<Venda> vendasToRemove = await Get(vendas.Select(x => x.Id).ToList());
 
-            if (vendaToRemove != null)
+            if (vendasToRemove != null)
             {
-                _context.ProdutoVenda.RemoveRange(await _context.ProdutoVenda.Where(x => x.IdVenda.Equals(vendaToRemove.Id)).ToListAsync());
-                _context.Venda.Remove(vendaToRemove);
+                _context.ProdutoVenda.RemoveRange(await _context.ProdutoVenda.Where(x => vendasToRemove.Select(x => x.Id).Contains(x.Id)).ToListAsync());
+                _context.Venda.RemoveRange(vendasToRemove);
             }
                 
         }
@@ -119,14 +125,14 @@ namespace Domain.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(Venda venda)
+        public async Task<List<Venda>> SearchByCliente(Cliente cliente)
         {
-            var entry = _context.Venda.FirstOrDefault(e => e.Id == venda.Id);
+            return await _context.Venda.Include(x => x.Cliente).Where(x => x.IdCliente.Equals(cliente.Id)).ToListAsync();
+        }
 
-            if (entry != null)
-            {
-                await Task.Run(() => _context.Entry(entry).CurrentValues.SetValues(venda));
-            }
+        public async Task<List<Venda>> SearchByDate(DateTime initialDate, DateTime finalDate)
+        {
+            return await _context.Venda.Include(x => x.Cliente).Where(x => x.Data >= initialDate && x.Data <= finalDate).ToListAsync();
         }
     }
 }

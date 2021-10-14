@@ -17,14 +17,16 @@ namespace ControleVenda.Forms
         private readonly IVendaRepository _vendaContext;
         private readonly IProdutoRepository _produtoContext;
         private readonly IClienteRepository _clienteContext;
+        private readonly ILogRepository _log;
 
-        public VendaForm(IVendaRepository vendaRepository, IProdutoRepository produtoRepository, IClienteRepository clienteRepository)
+        public VendaForm(IVendaRepository vendaRepository, IProdutoRepository produtoRepository, IClienteRepository clienteRepository, ILogRepository logRepository)
         {
             InitializeComponent();
 
             this._vendaContext = vendaRepository;
             this._produtoContext = produtoRepository;
             this._clienteContext = clienteRepository;
+            this._log = logRepository;
         }
 
         private async void VendaForm_Load(object sender, EventArgs e)
@@ -238,7 +240,7 @@ namespace ControleVenda.Forms
                 return;
             }
 
-            if (cbModoVenda.SelectedItem is null or 0)
+            if (cbModoVenda.SelectedItem is null | cbModoVenda.SelectedIndex <= 0)
             {
                 MessageBox.Show("Selecione um modo de venda", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -278,7 +280,9 @@ namespace ControleVenda.Forms
 
                     await _vendaContext.Save();
 
-                    MessageBox.Show("Venda finalizada. Abra a tela de Consultar Venda para verificar o registro.", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await _log.Add($"Venda Nº {venda.Id} finalizada no sistema em nome do cliente {(cbClientes.SelectedItem as Cliente).Nome} no valor total de {venda.TotalVenda.ToString("c")}");
+
+                    MessageBox.Show("Venda finalizada com sucesso. Abra a tela de Consultar Venda para verificar o registro.", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 await Clear();
@@ -387,25 +391,6 @@ namespace ControleVenda.Forms
                     currentRow.Cells["Quantia"].Value = "0";
                 }
             }
-        }
-
-        private async void btnAtualizar_Click(object sender, EventArgs e)
-        {
-            await FillGrid();
-        }
-
-        private async void tbPesquisa_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode.Equals(Keys.Enter))
-            {
-                await Pesquisar();
-            }
-        }
-        private async Task Pesquisar()
-        {
-            var matchRecords = GetProdutosOnGrid().Where(x => x.Produto.Nome.ToUpper().Contains(tbPesquisa.Text.ToUpper().Trim())).ToList();
-
-            await FillGrid(matchRecords.Count > 0 && tbPesquisa.Text.Trim().Length <= 0 ? null : matchRecords);
         }
     }
 }

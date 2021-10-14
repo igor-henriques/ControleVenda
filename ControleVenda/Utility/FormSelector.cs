@@ -24,11 +24,11 @@ namespace ControleVenda.Forms.Utility
         {
             this.Menu = new Dictionary<string, Form>
             {
-                { "Venda",      _services.GetRequiredService<VendaForm>()      },
-                { "Relatorio",  _services.GetRequiredService<RelatorioForm>()  },
-                { "Produto",    _services.GetRequiredService<ProdutoForm>()    },
-                { "Cliente",    _services.GetRequiredService<ClienteForm>()    },
-                { "ConsultaVenda",    _services.GetRequiredService<ConsultaVendaForm>()    },
+                { "Venda",         _services.GetRequiredService<VendaForm>()         },
+                { "Relatorio",     _services.GetRequiredService<RelatorioForm>()     },
+                { "Produto",       _services.GetRequiredService<ProdutoForm>()       },
+                { "Cliente",       _services.GetRequiredService<ClienteForm>()       },
+                { "ConsultaVenda", _services.GetRequiredService<ConsultaVendaForm>() },
             };
 
             return Menu.Where(item => item.Key.Equals(formTag)).Select(item => item.Value).FirstOrDefault();

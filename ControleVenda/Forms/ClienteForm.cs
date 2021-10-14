@@ -276,7 +276,10 @@ namespace ControleVenda.Forms
 
                         await LoadGrid();
 
-                        selectedClients.ForEach(async cliente => await _log.Add($"Cliente {cliente.Nome}({cliente.Identificador}) REMOVIDO do sistema"));
+                        foreach (var cliente in selectedClients)
+                        {
+                            await _log.Add($"Cliente {cliente.Nome}({cliente.Identificador}) REMOVIDO do sistema");
+                        }                        
                     }
 
                     Clear();

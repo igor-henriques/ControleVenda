@@ -21,10 +21,10 @@ namespace ControleVenda.Forms
         {
             InitializeComponent();
 
-            this._selector = selector;
-            BuildStatusBar();
-
+            this._selector = selector;            
             this._logContext = logContext;
+
+            BuildStatusBar();
         }
 
         private async void MainFormMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -43,8 +43,7 @@ namespace ControleVenda.Forms
                         });
                     }
 
-
-                    if (IsFormOpened(selectedForm, out Form currentForm) != null)
+                    if (IsFormOpened(selectedForm, out Form currentForm))
                     {
                         currentForm?.Activate();
                     }
@@ -52,7 +51,7 @@ namespace ControleVenda.Forms
                     {
                         selectedForm?.Show();
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -60,21 +59,21 @@ namespace ControleVenda.Forms
                 throw;
             }
         }
-        private Form IsFormOpened(Form currentForm, out Form outForm)
+        private bool IsFormOpened(Form currentForm, out Form outForm)
         {
+            outForm = null;
+
             foreach (Form form in Application.OpenForms)
             {
                 if (currentForm != null && form.Name.Equals(currentForm.Name))
                 {
-                    outForm = form;
+                    outForm = form;                    
 
-                    return form;
+                    return true;
                 }
             }
 
-            outForm = null;
-
-            return null;
+            return false;
         }
         private void BuildStatusBar()
         {
@@ -92,12 +91,12 @@ namespace ControleVenda.Forms
             if (currentLogUpdateCount < 0)
             {
                 await FillGrid();
-                LogsUpdateCount.Text = "61";
+                LogsUpdateCount.Text = "60";
             }
             else
             {
                 LogsUpdateCount.Text = currentLogUpdateCount.ToString();
-            }            
+            }
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -128,7 +127,7 @@ namespace ControleVenda.Forms
                     dgvMain.DataSource = logs;
                     FormatColumns();
                 }
-            }            
+            }
         }
         private void FormatColumns()
         {
@@ -157,6 +156,33 @@ namespace ControleVenda.Forms
         }
 
         private async void MainForm_Activated(object sender, EventArgs e)
+        {
+            await FillGrid();
+        }
+
+        private async void tbSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.KeyCode.Equals(Keys.Enter))
+                    if (tbSearch.Text.Trim() != string.Empty)
+                    {
+                        var searchResult = await _logContext.Search(tbSearch.Text);
+                        
+                        await FillGrid(searchResult);
+
+                        if (dgvMain.RowCount > 0)
+                            dgvMain.Rows[dgvMain.Rows.Count - 1].Selected = true;
+                    }
+                    else
+                    {
+                        btnUpdate.PerformClick();
+                    }
+            }
+            catch (Exception ex) { LogWriter.Write(ex.ToString()); }
+        }
+
+        private async void btnUpdate_Click(object sender, EventArgs e)
         {
             await FillGrid();
         }
