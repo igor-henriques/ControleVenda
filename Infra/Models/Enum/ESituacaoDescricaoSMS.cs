@@ -13,7 +13,7 @@ namespace Infra.Models.Enum
         [Description("Mensagem aguardando processamento")]
         FILA,
         [Description("Mensagem cancelada pelo usuário")]
-        CANCELADA,
+        CANCELADA,        
         [Description("Destinatário ativo no grupo ‘Black List’")]
         BLACK_LIST
     }

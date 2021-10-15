@@ -214,7 +214,7 @@ namespace ControleVenda.Forms
             // 
             this.mtbTelefone.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.mtbTelefone.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.mtbTelefone.Location = new System.Drawing.Point(729, 85);
+            this.mtbTelefone.Location = new System.Drawing.Point(732, 85);
             this.mtbTelefone.Mask = "(00) 00000-0000";
             this.mtbTelefone.Name = "mtbTelefone";
             this.mtbTelefone.Size = new System.Drawing.Size(120, 20);
@@ -408,7 +408,7 @@ namespace ControleVenda.Forms
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(688, 86);
+            this.label5.Location = new System.Drawing.Point(686, 86);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(47, 18);
             this.label5.TabIndex = 116;
@@ -418,7 +418,7 @@ namespace ControleVenda.Forms
             // pictureBox7
             // 
             this.pictureBox7.BackColor = System.Drawing.Color.Black;
-            this.pictureBox7.Location = new System.Drawing.Point(729, 107);
+            this.pictureBox7.Location = new System.Drawing.Point(732, 107);
             this.pictureBox7.Name = "pictureBox7";
             this.pictureBox7.Size = new System.Drawing.Size(115, 1);
             this.pictureBox7.TabIndex = 117;

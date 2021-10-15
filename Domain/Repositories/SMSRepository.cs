@@ -33,11 +33,13 @@ namespace Domain.Repositories
         {
             try
             {
+                situacaoSMS = situacaoSMS with { Key = key };
+
                 var jsonSms = JsonConvert.SerializeObject(situacaoSMS);
 
-                this.restClient = new RestClient($"https://api.smsdev.com.br/v1/balance?key={key}");
+                this.restClient = new RestClient($"https://api.smsdev.com.br");
 
-                this.request = new RestRequest("", Method.POST);
+                this.request = new RestRequest("v1/dlr", Method.POST);
 
                 this.request.RequestFormat = DataFormat.Json;
 
@@ -122,6 +124,11 @@ namespace Domain.Repositories
             {
                 await Task.Run(() => _context.Entry(currentSMS).CurrentValues.SetValues(sms));
             }
+        }
+
+        public async Task<SMS> Get(long Id)
+        {
+            return await _context.SMS.FindAsync(Id);
         }
     }
 }

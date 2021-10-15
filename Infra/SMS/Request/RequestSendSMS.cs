@@ -6,7 +6,7 @@ namespace Infra.SMS.Request
     public record RequestSendSMS
     {
         public string Key { get; init; }
-        public byte Type { get { return 9; } }
+        private byte Type { get { return 9; } }
         public string Number { get; init; }
         public string Msg { get; init; }
     }

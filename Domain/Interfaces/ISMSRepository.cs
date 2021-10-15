@@ -12,6 +12,7 @@ namespace Domain.Interfaces
         ResponseSaldoSMS GetSaldo();
         ResponseSituacaoSMS CheckSituationSMS(RequestSituacaoSMS situacaoSMS);
         Task<List<SMS>> Get();
+        Task<SMS> Get(long Id);
         Task Add(SMS sms);
         Task Add(List<SMS> sms);
         Task Save();

@@ -29,21 +29,23 @@ namespace ControleVenda.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MessageServiceForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pbBack = new System.Windows.Forms.PictureBox();
             this.lblDescription = new System.Windows.Forms.Label();
             this.dgvSms = new System.Windows.Forms.DataGridView();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lblSaldo = new System.Windows.Forms.Label();
-            this.btnSalvar = new System.Windows.Forms.Button();
             this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Situacao = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Telefone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Descricao = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Mensagem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Retry = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lblSaldo = new System.Windows.Forms.Label();
+            this.btnSalvar = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pbBack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSms)).BeginInit();
             this.SuspendLayout();
@@ -122,46 +124,7 @@ namespace ControleVenda.Forms
             this.dgvSms.ShowRowErrors = false;
             this.dgvSms.Size = new System.Drawing.Size(800, 345);
             this.dgvSms.TabIndex = 72;
-            // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(0, 68);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(800, 23);
-            this.label1.TabIndex = 114;
-            this.label1.Text = "Saldo de SMS";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblSaldo
-            // 
-            this.lblSaldo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblSaldo.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblSaldo.Location = new System.Drawing.Point(0, 91);
-            this.lblSaldo.Name = "lblSaldo";
-            this.lblSaldo.Size = new System.Drawing.Size(800, 23);
-            this.lblSaldo.TabIndex = 115;
-            this.lblSaldo.Text = "0";
-            this.lblSaldo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // btnSalvar
-            // 
-            this.btnSalvar.BackColor = System.Drawing.Color.White;
-            this.btnSalvar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnSalvar.FlatAppearance.BorderSize = 0;
-            this.btnSalvar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSalvar.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnSalvar.Image = global::ControleVenda.Properties.Resources.buy__1_;
-            this.btnSalvar.Location = new System.Drawing.Point(0, 473);
-            this.btnSalvar.Name = "btnSalvar";
-            this.btnSalvar.Size = new System.Drawing.Size(800, 60);
-            this.btnSalvar.TabIndex = 122;
-            this.btnSalvar.Text = "   Recarregar SMS";
-            this.btnSalvar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnSalvar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnSalvar.UseVisualStyleBackColor = false;
-            this.btnSalvar.Click += new System.EventHandler(this.btnSalvar_Click);
+            this.dgvSms.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSms_CellContentClick);
             // 
             // Id
             // 
@@ -213,6 +176,48 @@ namespace ControleVenda.Forms
             this.Retry.UseColumnTextForButtonValue = true;
             this.Retry.Width = 75;
             // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(0, 68);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(800, 23);
+            this.label1.TabIndex = 114;
+            this.label1.Text = "Saldo de SMS";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip.SetToolTip(this.label1, "Pressione F5 para atualizar o saldo de SMS");
+            // 
+            // lblSaldo
+            // 
+            this.lblSaldo.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblSaldo.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblSaldo.Location = new System.Drawing.Point(0, 91);
+            this.lblSaldo.Name = "lblSaldo";
+            this.lblSaldo.Size = new System.Drawing.Size(800, 23);
+            this.lblSaldo.TabIndex = 115;
+            this.lblSaldo.Text = "0";
+            this.lblSaldo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip.SetToolTip(this.lblSaldo, "Pressione F5 para atualizar o saldo de SMS");
+            // 
+            // btnSalvar
+            // 
+            this.btnSalvar.BackColor = System.Drawing.Color.White;
+            this.btnSalvar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnSalvar.FlatAppearance.BorderSize = 0;
+            this.btnSalvar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSalvar.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnSalvar.Image = global::ControleVenda.Properties.Resources.buy__1_;
+            this.btnSalvar.Location = new System.Drawing.Point(0, 473);
+            this.btnSalvar.Name = "btnSalvar";
+            this.btnSalvar.Size = new System.Drawing.Size(800, 60);
+            this.btnSalvar.TabIndex = 122;
+            this.btnSalvar.Text = "   Recarregar SMS";
+            this.btnSalvar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnSalvar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnSalvar.UseVisualStyleBackColor = false;
+            this.btnSalvar.Click += new System.EventHandler(this.btnSalvar_Click);
+            // 
             // MessageServiceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -250,5 +255,6 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.DataGridViewTextBoxColumn Descricao;
         private System.Windows.Forms.DataGridViewTextBoxColumn Mensagem;
         private System.Windows.Forms.DataGridViewButtonColumn Retry;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

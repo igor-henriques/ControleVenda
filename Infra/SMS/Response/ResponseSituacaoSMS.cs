@@ -12,6 +12,6 @@ namespace Infra.SMS.Response
         [JsonProperty("data_envio")]
         public DateTime DataEnvio { get; init; }
         public Operadora Operadora { get; init; }
-        public ESituacaoDescricaoSMS Descricao { get; init; }
+        public string Descricao { get; init; }
     }
 }
