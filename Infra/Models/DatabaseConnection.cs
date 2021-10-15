@@ -1,4 +1,4 @@
-﻿namespace Infra.Model
+﻿namespace Infra.Models
 {
     public class DatabaseConnection
     {

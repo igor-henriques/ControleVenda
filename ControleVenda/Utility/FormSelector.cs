@@ -29,6 +29,7 @@ namespace ControleVenda.Forms.Utility
                 { "Produto",       _services.GetRequiredService<ProdutoForm>()       },
                 { "Cliente",       _services.GetRequiredService<ClienteForm>()       },
                 { "ConsultaVenda", _services.GetRequiredService<ConsultaVendaForm>() },
+                { "SMS",           _services.GetRequiredService<MessageServiceForm>()}
             };
 
             return Menu.Where(item => item.Key.Equals(formTag)).Select(item => item.Value).FirstOrDefault();

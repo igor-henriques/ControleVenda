@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using Infra.Data;
+using Infra.Models.Enum;
 using Infra.Models.Table;
 using Infra.Models.Temp;
 using Microsoft.EntityFrameworkCore;
@@ -64,7 +65,6 @@ namespace Domain.Repositories
                     .Include(x => x.Produto)
                     .Where(x => x.IdVenda
                     .Equals(response.Id))
-                    .Select(x => x.Produto)
                     .ToListAsync()
             };
 
@@ -101,7 +101,6 @@ namespace Domain.Repositories
                     .Include(x => x.Produto)
                     .Where(x => x.IdVenda
                     .Equals(venda.Id))
-                    .Select(x => x.Produto)
                     .ToListAsync()
                 });
             }
@@ -133,6 +132,20 @@ namespace Domain.Repositories
         public async Task<List<Venda>> SearchByDate(DateTime initialDate, DateTime finalDate)
         {
             return await _context.Venda.Include(x => x.Cliente).Where(x => x.Data >= initialDate && x.Data <= finalDate).ToListAsync();
+        }
+
+        public async Task<Venda> SearchByDateAndMode(DateTime initialDate, DateTime finalDate, EModoVenda modoVenda)
+        {
+            return await _context.Venda.Where(x => x.Data >= initialDate && x.Data <= finalDate && x.ModoVenda.Equals(modoVenda)).FirstOrDefaultAsync();
+        }
+
+        public async Task SwitchSaleState(int idVenda, bool state)
+        {
+            var venda = await _context.Venda.FindAsync(idVenda);
+
+            var vendaAlterada = venda with { VendaPaga = state };
+
+            _context.Entry<Venda>(venda).CurrentValues.SetValues(vendaAlterada);
         }
     }
 }

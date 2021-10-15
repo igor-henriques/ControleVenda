@@ -119,5 +119,26 @@ namespace Domain.Repositories
                 _context.Entry(entry).CurrentValues.SetValues(cliente);
             }
         }
+
+        public async Task<List<Venda>> VendasPorCliente(Cliente cliente)
+        {
+            List<Venda> response = new();
+
+            var vendas = await _context.Venda.Include(x => x.Cliente).Where(x => x.IdCliente.Equals(cliente.Id)).ToListAsync();
+
+            foreach (var venda in vendas)
+            {
+                response.Add(venda with
+                {
+                    Produtos = await _context.ProdutoVenda
+                    .Include(x => x.Produto)
+                    .Where(x => x.IdVenda
+                    .Equals(venda.Id))
+                    .ToListAsync()
+                });
+            }
+
+            return response;
+        }
     }
 }

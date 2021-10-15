@@ -29,6 +29,7 @@ namespace ControleVenda.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClienteForm));
@@ -60,6 +61,7 @@ namespace ControleVenda.Forms
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -118,9 +120,9 @@ namespace ControleVenda.Forms
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Black;
-            this.pictureBox1.Location = new System.Drawing.Point(107, 105);
+            this.pictureBox1.Location = new System.Drawing.Point(120, 105);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(41, 1);
+            this.pictureBox1.Size = new System.Drawing.Size(28, 1);
             this.pictureBox1.TabIndex = 50;
             this.pictureBox1.TabStop = false;
             // 
@@ -128,10 +130,11 @@ namespace ControleVenda.Forms
             // 
             this.tbIdentificador.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbIdentificador.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbIdentificador.Location = new System.Drawing.Point(107, 82);
+            this.tbIdentificador.Location = new System.Drawing.Point(120, 82);
             this.tbIdentificador.Name = "tbIdentificador";
-            this.tbIdentificador.Size = new System.Drawing.Size(41, 20);
+            this.tbIdentificador.Size = new System.Drawing.Size(28, 20);
             this.tbIdentificador.TabIndex = 0;
+            this.toolTip.SetToolTip(this.tbIdentificador, "Campo obrigatório");
             this.tbIdentificador.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbIdentificador_KeyDown);
             this.tbIdentificador.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbIdentificador_KeyPress);
             // 
@@ -140,18 +143,19 @@ namespace ControleVenda.Forms
             this.tbNome.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbNome.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.tbNome.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbNome.Location = new System.Drawing.Point(217, 84);
+            this.tbNome.Location = new System.Drawing.Point(225, 84);
             this.tbNome.Name = "tbNome";
-            this.tbNome.Size = new System.Drawing.Size(182, 20);
+            this.tbNome.Size = new System.Drawing.Size(172, 20);
             this.tbNome.TabIndex = 1;
+            this.toolTip.SetToolTip(this.tbNome, "Campo obrigatório");
             this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Black;
-            this.pictureBox2.Location = new System.Drawing.Point(217, 107);
+            this.pictureBox2.Location = new System.Drawing.Point(225, 107);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(182, 1);
+            this.pictureBox2.Size = new System.Drawing.Size(172, 1);
             this.pictureBox2.TabIndex = 50;
             this.pictureBox2.TabStop = false;
             // 
@@ -169,7 +173,7 @@ namespace ControleVenda.Forms
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Black;
-            this.pictureBox3.Location = new System.Drawing.Point(491, 107);
+            this.pictureBox3.Location = new System.Drawing.Point(489, 107);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(54, 1);
             this.pictureBox3.TabIndex = 53;
@@ -179,7 +183,7 @@ namespace ControleVenda.Forms
             // 
             this.tbNumeroCurso.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbNumeroCurso.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbNumeroCurso.Location = new System.Drawing.Point(492, 84);
+            this.tbNumeroCurso.Location = new System.Drawing.Point(490, 84);
             this.tbNumeroCurso.Name = "tbNumeroCurso";
             this.tbNumeroCurso.Size = new System.Drawing.Size(54, 20);
             this.tbNumeroCurso.TabIndex = 2;
@@ -189,7 +193,7 @@ namespace ControleVenda.Forms
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.Color.Black;
-            this.pictureBox4.Location = new System.Drawing.Point(648, 107);
+            this.pictureBox4.Location = new System.Drawing.Point(646, 107);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(29, 1);
             this.pictureBox4.TabIndex = 55;
@@ -199,7 +203,7 @@ namespace ControleVenda.Forms
             // 
             this.tbNumeroPel.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbNumeroPel.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbNumeroPel.Location = new System.Drawing.Point(648, 84);
+            this.tbNumeroPel.Location = new System.Drawing.Point(646, 84);
             this.tbNumeroPel.Name = "tbNumeroPel";
             this.tbNumeroPel.Size = new System.Drawing.Size(29, 20);
             this.tbNumeroPel.TabIndex = 3;
@@ -210,11 +214,12 @@ namespace ControleVenda.Forms
             // 
             this.mtbTelefone.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.mtbTelefone.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.mtbTelefone.Location = new System.Drawing.Point(725, 85);
+            this.mtbTelefone.Location = new System.Drawing.Point(729, 85);
             this.mtbTelefone.Mask = "(00) 00000-0000";
             this.mtbTelefone.Name = "mtbTelefone";
             this.mtbTelefone.Size = new System.Drawing.Size(120, 20);
             this.mtbTelefone.TabIndex = 4;
+            this.toolTip.SetToolTip(this.mtbTelefone, "Campo obrigatório");
             this.mtbTelefone.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mtbTelefone_KeyDown);
             // 
             // btnExcluir
@@ -363,25 +368,27 @@ namespace ControleVenda.Forms
             this.label1.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(11, 86);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(95, 18);
+            this.label1.Size = new System.Drawing.Size(106, 18);
             this.label1.TabIndex = 112;
-            this.label1.Text = "Identificador:";
+            this.label1.Text = "Identificador* :";
+            this.toolTip.SetToolTip(this.label1, "Campo obrigatório");
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(162, 86);
+            this.label2.Location = new System.Drawing.Point(160, 86);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(52, 18);
+            this.label2.Size = new System.Drawing.Size(63, 18);
             this.label2.TabIndex = 113;
-            this.label2.Text = "Nome:";
+            this.label2.Text = "Nome* :";
+            this.toolTip.SetToolTip(this.label2, "Campo obrigatório");
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(416, 86);
+            this.label3.Location = new System.Drawing.Point(414, 86);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(73, 18);
             this.label3.TabIndex = 114;
@@ -391,7 +398,7 @@ namespace ControleVenda.Forms
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(560, 86);
+            this.label4.Location = new System.Drawing.Point(558, 86);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(85, 18);
             this.label4.TabIndex = 115;
@@ -401,18 +408,19 @@ namespace ControleVenda.Forms
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(690, 86);
+            this.label5.Location = new System.Drawing.Point(688, 86);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(36, 18);
+            this.label5.Size = new System.Drawing.Size(47, 18);
             this.label5.TabIndex = 116;
-            this.label5.Text = "Tel.:";
+            this.label5.Text = "Tel.* :";
+            this.toolTip.SetToolTip(this.label5, "Campo obrigatório");
             // 
             // pictureBox7
             // 
             this.pictureBox7.BackColor = System.Drawing.Color.Black;
-            this.pictureBox7.Location = new System.Drawing.Point(725, 107);
+            this.pictureBox7.Location = new System.Drawing.Point(729, 107);
             this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(110, 1);
+            this.pictureBox7.Size = new System.Drawing.Size(115, 1);
             this.pictureBox7.TabIndex = 117;
             this.pictureBox7.TabStop = false;
             // 
@@ -502,5 +510,6 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.PictureBox pictureBox7;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

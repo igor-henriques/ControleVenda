@@ -134,6 +134,8 @@ namespace Infra.Helpers
 
             return newObject;
         }
+        public static List<T> CreateList<T>(params T[] elements) => new List<T>(elements);
+        
         public static T GetRequiredService<T>(this IServiceProvider _services) => (T)_services.GetService(typeof(T));
     }
 }

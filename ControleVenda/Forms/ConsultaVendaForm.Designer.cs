@@ -43,14 +43,6 @@ namespace ControleVenda.Forms
             this.pbBack = new System.Windows.Forms.PictureBox();
             this.lblDescription = new System.Windows.Forms.Label();
             this.dgvVendas = new System.Windows.Forms.DataGridView();
-            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Data = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TotalVenda = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Acrescimo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Desconto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ModoVenda = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Produtos = new System.Windows.Forms.DataGridViewButtonColumn();
             this.cbClientePesquisa = new System.Windows.Forms.ComboBox();
             this.rbCliente = new System.Windows.Forms.RadioButton();
             this.rbData = new System.Windows.Forms.RadioButton();
@@ -61,6 +53,15 @@ namespace ControleVenda.Forms
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnPesquisar = new System.Windows.Forms.Button();
             this.btnExcluir = new System.Windows.Forms.Button();
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TotalVenda = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Acrescimo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Desconto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ModoVenda = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VendaPaga = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Produtos = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.pbBack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvVendas)).BeginInit();
             this.SuspendLayout();
@@ -116,6 +117,7 @@ namespace ControleVenda.Forms
             this.Acrescimo,
             this.Desconto,
             this.ModoVenda,
+            this.VendaPaga,
             this.Produtos});
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
@@ -153,80 +155,6 @@ namespace ControleVenda.Forms
             this.dgvVendas.Size = new System.Drawing.Size(896, 368);
             this.dgvVendas.TabIndex = 95;
             this.dgvVendas.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCautelas_CellContentClick);
-            // 
-            // Id
-            // 
-            this.Id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.Id.HeaderText = "Id";
-            this.Id.Name = "Id";
-            this.Id.ReadOnly = true;
-            this.Id.Width = 45;
-            // 
-            // Cliente
-            // 
-            this.Cliente.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Cliente.HeaderText = "Cliente";
-            this.Cliente.Name = "Cliente";
-            this.Cliente.ReadOnly = true;
-            // 
-            // Data
-            // 
-            this.Data.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Data.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Data.HeaderText = "Data";
-            this.Data.Name = "Data";
-            this.Data.ReadOnly = true;
-            this.Data.Width = 63;
-            // 
-            // TotalVenda
-            // 
-            this.TotalVenda.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.TotalVenda.DefaultCellStyle = dataGridViewCellStyle4;
-            this.TotalVenda.HeaderText = "Total";
-            this.TotalVenda.Name = "TotalVenda";
-            this.TotalVenda.ReadOnly = true;
-            this.TotalVenda.Width = 66;
-            // 
-            // Acrescimo
-            // 
-            this.Acrescimo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Acrescimo.DefaultCellStyle = dataGridViewCellStyle5;
-            this.Acrescimo.HeaderText = "Acréscimo";
-            this.Acrescimo.Name = "Acrescimo";
-            this.Acrescimo.ReadOnly = true;
-            // 
-            // Desconto
-            // 
-            this.Desconto.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Desconto.DefaultCellStyle = dataGridViewCellStyle6;
-            this.Desconto.HeaderText = "Desconto";
-            this.Desconto.Name = "Desconto";
-            this.Desconto.ReadOnly = true;
-            this.Desconto.Width = 93;
-            // 
-            // ModoVenda
-            // 
-            this.ModoVenda.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.ModoVenda.DefaultCellStyle = dataGridViewCellStyle7;
-            this.ModoVenda.HeaderText = "Modo";
-            this.ModoVenda.Name = "ModoVenda";
-            this.ModoVenda.ReadOnly = true;
-            this.ModoVenda.Width = 69;
-            // 
-            // Produtos
-            // 
-            this.Produtos.HeaderText = "Produtos";
-            this.Produtos.Name = "Produtos";
-            this.Produtos.ReadOnly = true;
-            this.Produtos.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Produtos.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Produtos.Text = "Verificar";
-            this.Produtos.UseColumnTextForButtonValue = true;
             // 
             // cbClientePesquisa
             // 
@@ -357,6 +285,87 @@ namespace ControleVenda.Forms
             this.btnExcluir.UseVisualStyleBackColor = false;
             this.btnExcluir.Click += new System.EventHandler(this.btnExcluir_Click);
             // 
+            // Id
+            // 
+            this.Id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.Id.HeaderText = "Id";
+            this.Id.Name = "Id";
+            this.Id.ReadOnly = true;
+            this.Id.Width = 45;
+            // 
+            // Cliente
+            // 
+            this.Cliente.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Cliente.HeaderText = "Cliente";
+            this.Cliente.Name = "Cliente";
+            this.Cliente.ReadOnly = true;
+            // 
+            // Data
+            // 
+            this.Data.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Data.DefaultCellStyle = dataGridViewCellStyle3;
+            this.Data.HeaderText = "Data";
+            this.Data.Name = "Data";
+            this.Data.ReadOnly = true;
+            this.Data.Width = 63;
+            // 
+            // TotalVenda
+            // 
+            this.TotalVenda.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.TotalVenda.DefaultCellStyle = dataGridViewCellStyle4;
+            this.TotalVenda.HeaderText = "Total";
+            this.TotalVenda.Name = "TotalVenda";
+            this.TotalVenda.ReadOnly = true;
+            this.TotalVenda.Width = 66;
+            // 
+            // Acrescimo
+            // 
+            this.Acrescimo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Acrescimo.DefaultCellStyle = dataGridViewCellStyle5;
+            this.Acrescimo.HeaderText = "Acréscimo";
+            this.Acrescimo.Name = "Acrescimo";
+            this.Acrescimo.ReadOnly = true;
+            // 
+            // Desconto
+            // 
+            this.Desconto.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Desconto.DefaultCellStyle = dataGridViewCellStyle6;
+            this.Desconto.HeaderText = "Desconto";
+            this.Desconto.Name = "Desconto";
+            this.Desconto.ReadOnly = true;
+            this.Desconto.Width = 93;
+            // 
+            // ModoVenda
+            // 
+            this.ModoVenda.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.ModoVenda.DefaultCellStyle = dataGridViewCellStyle7;
+            this.ModoVenda.HeaderText = "Modo";
+            this.ModoVenda.Name = "ModoVenda";
+            this.ModoVenda.ReadOnly = true;
+            this.ModoVenda.Width = 69;
+            // 
+            // VendaPaga
+            // 
+            this.VendaPaga.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.VendaPaga.HeaderText = "Pago";
+            this.VendaPaga.Name = "VendaPaga";
+            this.VendaPaga.ReadOnly = true;
+            // 
+            // Produtos
+            // 
+            this.Produtos.HeaderText = "Produtos";
+            this.Produtos.Name = "Produtos";
+            this.Produtos.ReadOnly = true;
+            this.Produtos.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Produtos.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Produtos.Text = "Verificar";
+            this.Produtos.UseColumnTextForButtonValue = true;
+            // 
             // ConsultaVendaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -376,6 +385,7 @@ namespace ControleVenda.Forms
             this.Controls.Add(this.dtiPicker);
             this.Controls.Add(this.pbBack);
             this.Controls.Add(this.lblDescription);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -412,6 +422,7 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.DataGridViewTextBoxColumn Acrescimo;
         private System.Windows.Forms.DataGridViewTextBoxColumn Desconto;
         private System.Windows.Forms.DataGridViewTextBoxColumn ModoVenda;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn VendaPaga;
         private System.Windows.Forms.DataGridViewButtonColumn Produtos;
     }
 }

@@ -61,7 +61,7 @@ namespace ControleVenda.Forms
         }
         private bool CheckTextbox()
         {
-            if (string.IsNullOrEmpty(tbNome.Text.Trim()) | string.IsNullOrEmpty(tbIdentificador.Text.Trim()) | string.IsNullOrEmpty(mtbTelefone.Text))
+            if (string.IsNullOrEmpty(tbNome.Text.Trim()) | string.IsNullOrEmpty(tbIdentificador.Text.Trim()) | !mtbTelefone.Text.Any(c => char.IsDigit(c)))
                 return false;
 
             return true;
@@ -198,7 +198,14 @@ namespace ControleVenda.Forms
                 btnEditar.Text = "  Atualizar";
             }
             else
-            {
+            {                
+                if (!CheckTextbox())
+                {
+                    MessageBox.Show("Há campos vazios", "Salvar Cliente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ReturnFromEditing();
+                    return;
+                }
+
                 selectedClient = selectedClient with
                 {
                     Nome = tbNome.Text,
@@ -207,6 +214,13 @@ namespace ControleVenda.Forms
                     Pelotao = ushort.Parse(tbNumeroPel.Text.Length > 0 ? tbNumeroPel.Text.Trim() : "0"),
                     Telefone = mtbTelefone.Text.Trim()
                 };
+
+                if (await _clienteContext.Get(selectedClient.Identificador) is not null)
+                {
+                    MessageBox.Show("Já existe registro com esse Identificador", "Salvar Cliente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ReturnFromEditing();
+                    return;
+                }
 
                 using (new ControlManager(this.Controls))
                 {
@@ -218,15 +232,19 @@ namespace ControleVenda.Forms
                     await _log.Add($"Cliente {selectedClient.Nome}({selectedClient.Identificador}) ATUALIZADO no sistema");
                 }
 
-                btnSalvar.Enabled = true;
-                btnExcluir.Enabled = true;
-                dgvClientes.Enabled = true;
-                tbPesquisa.Enabled = true;
-
-                btnEditar.Text = "  Editar";
-
-                Clear();
+                ReturnFromEditing();
             }
+        }
+        private void ReturnFromEditing()
+        {
+            btnSalvar.Enabled = true;
+            btnExcluir.Enabled = true;
+            dgvClientes.Enabled = true;
+            tbPesquisa.Enabled = true;
+
+            btnEditar.Text = "  Editar";
+
+            Clear();
         }
         private List<Cliente> GetSelectedClients()
         {

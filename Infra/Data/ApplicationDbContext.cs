@@ -24,5 +24,6 @@ namespace Infra.Data
         public DbSet<Venda> Venda { get; set; }
         public DbSet<ProdutoVenda> ProdutoVenda { get; set; }
         public DbSet<Log> Log { get; set; }
+        public DbSet<Infra.Models.Table.SMS> SMS { get; set; }
     }
 }

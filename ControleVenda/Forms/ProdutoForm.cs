@@ -150,11 +150,29 @@ namespace ControleVenda.Forms
             }
             else
             {
+                if (!CheckTextbox())
+                {
+                    MessageBox.Show("Há campos vazios", "Salvar Produto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    ReturnFromEditing();
+
+                    return;
+                }
+
                 selectedProduct = selectedProduct with
                 {
                     Nome = tbNome.Text,
                     Preco = decimal.Parse(tbPrice.Text.Replace("R$", default).Trim())
                 };
+
+                if (await _produtoContext.Get(selectedProduct.Nome) is not null)
+                {
+                    MessageBox.Show("Já existe registro com esse nome", "Salvar Produto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    ReturnFromEditing();
+
+                    return;
+                }
 
                 using (new ControlManager(this.Controls))
                 {
@@ -166,16 +184,19 @@ namespace ControleVenda.Forms
                     await _log.Add($"Produto {selectedProduct.Nome} ATUALIZADO no sistema");
                 }
 
-                btnSalvar.Enabled = true;
-                btnExcluir.Enabled = true;
-                dgvProdutos.Enabled = true;
-
-                btnEditar.Text = "  Editar";
-
-                Clear();
+                ReturnFromEditing();
             }
         }
+        private void ReturnFromEditing()
+        {
+            btnSalvar.Enabled = true;
+            btnExcluir.Enabled = true;
+            dgvProdutos.Enabled = true;
 
+            btnEditar.Text = "  Editar";
+
+            Clear();
+        }
         private async void btnDelete_Click(object sender, EventArgs e)
         {
             if (dgvProdutos.SelectedRows.Count <= 0)

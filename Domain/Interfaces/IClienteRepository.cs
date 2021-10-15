@@ -16,5 +16,6 @@ namespace Domain.Interfaces
         Task Update(Cliente cliente);
         Task Save();
         Task<IEnumerable<Cliente>> Pesquisar(string campo, string conteudo);
+        Task<List<Venda>> VendasPorCliente(Cliente cliente);
     }
 }

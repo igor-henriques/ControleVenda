@@ -95,6 +95,7 @@ namespace ControleVenda.Forms
                         venda.Acrescimo.ToString("c"),
                         venda.Desconto.ToString("c"),
                         venda.ModoVenda.ToString(),
+                        venda.VendaPaga,
                         CreateGridButton()
                     });
                 }
@@ -118,14 +119,27 @@ namespace ControleVenda.Forms
             {
                 var senderGrid = (DataGridView)sender;
 
-                if (dgvVendas.RowCount > 0)
+                if (dgvVendas.RowCount > 0 && e.RowIndex >= 0)
                 {
                     int idVenda = (int)senderGrid.SelectedRows[0].Cells["Id"].Value;
 
-                    if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+                    if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
                     {
                         ProdutoVendaForm produtosPorVenda = new ProdutoVendaForm((await _vendaContext.GetProdutosPorVenda(idVenda)));
                         produtosPorVenda.ShowDialog();
+                    }
+                    else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn)
+                    {
+                        if (MessageBox.Show("Deseja alterar o estado de pagamento dessa venda?", "Alterar Estado", MessageBoxButtons.YesNo, MessageBoxIcon.Question).Equals(DialogResult.Yes))
+                        {
+                            using (new ControlManager(this.Controls))
+                            {
+                                await _vendaContext.SwitchSaleState(idVenda, !(bool)senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+                                await _vendaContext.Save();                                
+
+                                await FillGrid();
+                            }                            
+                        }
                     }
                 }
             }

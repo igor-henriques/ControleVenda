@@ -4,6 +4,8 @@ using Domain.Interfaces;
 using Domain.Repositories;
 using Infra.Data;
 using Infra.Helpers;
+using Infra.Models;
+using Infra.SMS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,7 +25,7 @@ namespace ControleVenda
         {
             try
             {
-                CheckConnection();   
+                CheckConnection();
 
                 await CreateHostBuilder().Build().RunAsync();
             }
@@ -65,6 +67,8 @@ namespace ControleVenda
                     services.AddHostedService<StartService>();
 
                     services.AddSingleton<FormSelector>();
+                    services.AddSingleton<ServiceKeySMS>();
+                    services.AddSingleton<Definitions>();
 
                     services.AddTransient<MainForm>();
                     services.AddTransient<VendaForm>();
@@ -72,11 +76,14 @@ namespace ControleVenda
                     services.AddTransient<RelatorioForm>();
                     services.AddTransient<ProdutoForm>();
                     services.AddTransient<ConsultaVendaForm>();
+                    services.AddTransient<MessageServiceForm>();
 
                     services.AddScoped<IClienteRepository, ClienteRepository>();
                     services.AddScoped<IProdutoRepository, ProdutoRepository>();
                     services.AddScoped<IVendaRepository, VendaRepository>();
                     services.AddScoped<ILogRepository, LogRepository>();
+                    services.AddScoped<IRelatorioRepository, RelatorioRepository>();
+                    services.AddScoped<ISMSRepository, SMSRepository>();
 
                     services.AddLogging(
                     builder =>

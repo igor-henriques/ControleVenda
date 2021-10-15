@@ -74,7 +74,7 @@ namespace ControleVenda.Forms
                     p.Produto.Id,
                     p.Produto.Nome,
                     p.Quantidade,
-                    p.Produto.Preco.ToString("c")
+                    p.Produto.Preco.ToString("c"),
                 }));
             }
 
@@ -237,12 +237,14 @@ namespace ControleVenda.Forms
             if (cbClientes.SelectedItem is null)
             {
                 MessageBox.Show("Cliente selecionado não existe", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cbClientes.Focus();
                 return;
             }
 
             if (cbModoVenda.SelectedItem is null | cbModoVenda.SelectedIndex <= 0)
             {
                 MessageBox.Show("Selecione um modo de venda", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cbModoVenda.Focus();
                 return;
             }
 
@@ -250,6 +252,36 @@ namespace ControleVenda.Forms
             {
                 MessageBox.Show("Não foi selecionado nenhum produto para venda", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
+
+            if (cbVendaPaga.Checked && MessageBox.Show($"A venda está sendo finalizada já como status de PAGO. Tem certeza que já está paga?", "Finalizar Venda", MessageBoxButtons.YesNo, MessageBoxIcon.Warning).Equals(DialogResult.No))
+            {
+                return;
+            }                
+
+            if (Enum.Parse<EModoVenda>(cbModoVenda.SelectedItem.ToString()) is not EModoVenda.Dia)
+            {
+                var entrada = Enum.Parse<EModoVenda>(cbModoVenda.SelectedItem.ToString());
+
+                var dataOrigem = entrada switch
+                {
+                    EModoVenda.Semana =>   DateTime.Now.AddDays(-7),
+                    EModoVenda.Mes =>      DateTime.Now.AddMonths(-1),
+                    EModoVenda.Semestre => DateTime.Now.AddMonths(-6),
+                    EModoVenda.Ano =>      DateTime.Now.AddYears(-1),
+                    _ => new DateTime()
+                };
+
+                if (dataOrigem != new DateTime())
+                {
+                    var result = await _vendaContext.SearchByDateAndMode(dataOrigem, DateTime.Today, entrada);
+
+                    if (result != null)
+                    {
+                        if (MessageBox.Show($"Foi encontrado registro de venda de {entrada.ToString().ToUpper()} no mesmo período. Deseja realmente lançar novamente?", "Finalizar Venda", MessageBoxButtons.YesNo, MessageBoxIcon.Warning).Equals(DialogResult.No))                       
+                            return;                        
+                    }
+                }                
             }
 
             CalcularTotalVenda();
@@ -265,7 +297,8 @@ namespace ControleVenda.Forms
                         Desconto = decimal.Parse(tbDesconto.Text.Replace("R$", default).Trim()),
                         ModoVenda = Enum.Parse<EModoVenda>(cbModoVenda.SelectedItem.ToString()),
                         TotalVenda = totalVenda,
-                        IdCliente = (cbClientes.SelectedItem as Cliente).Id
+                        IdCliente = (cbClientes.SelectedItem as Cliente).Id,
+                        VendaPaga = cbVendaPaga.Checked
                     };
 
                     var vendaProcessada = await _vendaContext.Add(venda);
@@ -285,7 +318,9 @@ namespace ControleVenda.Forms
                     MessageBox.Show("Venda finalizada com sucesso. Abra a tela de Consultar Venda para verificar o registro.", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
-                await Clear();
+                Clear();
+
+                await LoadForm();
             }
             else
             {
@@ -293,13 +328,12 @@ namespace ControleVenda.Forms
                 return;
             }
         }
-        public async Task Clear()
+        public void Clear()
         {
             tbDesconto.Text = 0.ToString("c");
             tbTaxa.Text = 0.ToString("c");
             lblTotal.Text = 0.ToString("c");
-
-            await LoadForm();
+            cbVendaPaga.Checked = false;            
         }
         private void pbBack_Click(object sender, EventArgs e)
         {
@@ -348,7 +382,7 @@ namespace ControleVenda.Forms
         private void dgvProdutos_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             e.Control.KeyPress -= new KeyPressEventHandler(PriceColumn_KeyPress);
-            if (dgvProdutos.CurrentCell.ColumnIndex == 2) //Desired Column
+            if (dgvProdutos.CurrentCell.ColumnIndex == 2) 
             {
                 TextBox tb = e.Control as TextBox;
                 if (tb != null)

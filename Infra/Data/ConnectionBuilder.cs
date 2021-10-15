@@ -1,4 +1,4 @@
-﻿using Infra.Model;
+﻿using Infra.Models;
 using Newtonsoft.Json;
 using System.IO;
 

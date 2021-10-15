@@ -3,6 +3,7 @@ using ControleVenda.Utility;
 using Domain.Interfaces;
 using Infra.Helpers;
 using Infra.Models.Table;
+using Infra.SMS;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -55,8 +56,8 @@ namespace ControleVenda.Forms
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.ToString(), "ERRO", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 LogWriter.Write(ex.ToString());
-                throw;
             }
         }
         private bool IsFormOpened(Form currentForm, out Form outForm)

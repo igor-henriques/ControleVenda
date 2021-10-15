@@ -17,8 +17,9 @@ namespace Infra.Models.Table
         public decimal Desconto { get; init; }
         public EModoVenda ModoVenda { get; init; }
         [ForeignKey("Cliente")]
-        public int IdCliente { get; set; }
-        public Cliente Cliente { get; set; }
-        public List<Produto> Produtos { get; init; }
+        public int IdCliente { get; init; }
+        public Cliente Cliente { get; init; }
+        public bool VendaPaga { get; init; }
+        public List<ProdutoVenda> Produtos { get; init; }
     }
 }

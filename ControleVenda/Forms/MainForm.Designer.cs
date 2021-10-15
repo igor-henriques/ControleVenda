@@ -59,6 +59,7 @@ namespace ControleVenda.Forms
             this.tbSearch = new System.Windows.Forms.TextBox();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.btnUpdate = new System.Windows.Forms.Button();
+            this.SmsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormMenu.SuspendLayout();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
@@ -76,7 +77,8 @@ namespace ControleVenda.Forms
             this.ConsultaVendaMenuItem,
             this.ClienteMenuItem,
             this.ProdutoMenuItem,
-            this.RelatorioMenuItem});
+            this.RelatorioMenuItem,
+            this.SmsMenuItem});
             this.MainFormMenu.Location = new System.Drawing.Point(0, 0);
             this.MainFormMenu.Name = "MainFormMenu";
             this.MainFormMenu.Size = new System.Drawing.Size(1350, 26);
@@ -367,6 +369,16 @@ namespace ControleVenda.Forms
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
+            // SmsMenuItem
+            // 
+            this.SmsMenuItem.Font = new System.Drawing.Font("Roboto", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.SmsMenuItem.ForeColor = System.Drawing.Color.Black;
+            this.SmsMenuItem.Image = global::ControleVenda.Properties.Resources.sms;
+            this.SmsMenuItem.Name = "SmsMenuItem";
+            this.SmsMenuItem.Size = new System.Drawing.Size(67, 22);
+            this.SmsMenuItem.Tag = "SMS";
+            this.SmsMenuItem.Text = "SMS";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -429,6 +441,7 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.ToolStripStatusLabel LogsUpdateDesc;
         private System.Windows.Forms.ToolStripStatusLabel LogsUpdateCount;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripMenuItem SmsMenuItem;
     }
 }
 

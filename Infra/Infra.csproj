@@ -16,8 +16,8 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.2" />
+    <PackageReference Include="restsharp" Version="106.12.0" />
     <PackageReference Include="System.Management" Version="5.0.0" />
-    <PackageReference Include="twilio" Version="5.66.0" />
   </ItemGroup>
 
 </Project>
