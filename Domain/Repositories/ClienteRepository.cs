@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using Infra.Data;
+using Infra.Models;
 using Infra.Models.Table;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -13,9 +14,10 @@ namespace Domain.Repositories
     public class ClienteRepository : IClienteRepository
     {
         private readonly ApplicationDbContext _context;
-
-        public ClienteRepository(ApplicationDbContext context)
+        private readonly Settings _settings;
+        public ClienteRepository(ApplicationDbContext context, Settings settings)
         {
+            this._settings = settings;
             this._context = context;
         }
         public async Task<Cliente> Add(Cliente cliente)
@@ -47,7 +49,7 @@ namespace Domain.Repositories
 
         public async Task<List<Cliente>> GetClientes()
         {
-            return await _context.Cliente.AsNoTracking().ToListAsync();
+            return await _context.Cliente.AsNoTracking().Take(_settings.RegistrosEmTabela).ToListAsync();
         }
 
         public async Task<IEnumerable<Cliente>> Pesquisar(string campo, string conteudo)

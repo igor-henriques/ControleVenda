@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using Infra.Data;
+using Infra.Models;
 using Infra.Models.Table;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,9 +13,10 @@ namespace Domain.Repositories
     public class ProdutoRepository : IProdutoRepository
     {
         private readonly ApplicationDbContext _context;
-
-        public ProdutoRepository(ApplicationDbContext context)
+        private readonly Settings _settings;
+        public ProdutoRepository(ApplicationDbContext context, Settings settings)
         {
+            this._settings = settings;
             this._context = context;
         }
         public async Task Add(Produto produto)
@@ -42,7 +44,7 @@ namespace Domain.Repositories
 
         public async Task<List<Produto>> GetProdutos()
         {
-            return await _context.Produto.AsNoTracking().ToListAsync();
+            return await _context.Produto.AsNoTracking().Take(_settings.RegistrosEmTabela).ToListAsync();
         }
 
         public async Task<IEnumerable<Produto>> Pesquisar(string campo, string conteudo)

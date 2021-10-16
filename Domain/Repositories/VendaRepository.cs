@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using Infra.Data;
+using Infra.Models;
 using Infra.Models.Enum;
 using Infra.Models.Table;
 using Infra.Models.Temp;
@@ -15,9 +16,11 @@ namespace Domain.Repositories
     public class VendaRepository : IVendaRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly Settings _settings;
 
-        public VendaRepository(ApplicationDbContext context)
+        public VendaRepository(ApplicationDbContext context, Settings settings)
         {
+            this._settings = settings;
             this._context = context;
         }
 
@@ -91,7 +94,7 @@ namespace Domain.Repositories
         {
             List<Venda> response = new();
 
-            var vendas = await _context.Venda.Include(x => x.Cliente).ToListAsync();
+            var vendas = await _context.Venda.Include(x => x.Cliente).Take(_settings.RegistrosEmTabela).ToListAsync();
 
             foreach (var venda in vendas)
             {
