@@ -1,15 +1,12 @@
 ﻿using ControleVenda.Utility;
 using Domain.Interfaces;
 using Infra.Helpers;
-using Infra.Models.Enum;
 using Infra.Models.Table;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -49,7 +46,7 @@ namespace ControleVenda.Forms
 
             Dictionary<RadioButton, Func<Task>> searchOptions = new Dictionary<RadioButton, Func<Task>>
             {
-                { rbData,    async () => await FillGrid(await SearchByDate(dtiPicker.Value, dtfPicker.Value))  },
+                { rbData,    async () => await FillGrid(await SearchByDate(dtiPicker.Value, dtfPicker.Value))              },
                 { rbCliente, async () => await FillGrid(await SearchByCliente(cbClientePesquisa.SelectedItem as Cliente))  },
             };
 
@@ -135,10 +132,10 @@ namespace ControleVenda.Forms
                             using (new ControlManager(this.Controls))
                             {
                                 await _vendaContext.SwitchSaleState(idVenda, !(bool)senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
-                                await _vendaContext.Save();                                
+                                await _vendaContext.Save();
 
                                 await FillGrid();
-                            }                            
+                            }
                         }
                     }
                 }
@@ -249,7 +246,7 @@ namespace ControleVenda.Forms
             rbCliente.Checked = false;
             rbData.Checked = false;
 
-            cbClientePesquisa.SelectedItem = null;            
+            cbClientePesquisa.SelectedItem = null;
 
             await FillGrid();
         }

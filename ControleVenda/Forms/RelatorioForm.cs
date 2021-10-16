@@ -23,8 +23,8 @@ namespace ControleVenda.Forms
         private readonly IClienteRepository _clienteContext;
         private readonly IRelatorioRepository _relatorioContext;
         private readonly ISMSRepository _smsContext;
-        private readonly Definitions _definitions;
-        public RelatorioForm(IClienteRepository clienteRepository, IRelatorioRepository relatorioRepository, ISMSRepository smsContext, Definitions defs)
+        private readonly Settings _definitions;
+        public RelatorioForm(IClienteRepository clienteRepository, IRelatorioRepository relatorioRepository, ISMSRepository smsContext, Settings defs)
         {
             InitializeComponent();
 
@@ -231,27 +231,33 @@ namespace ControleVenda.Forms
 
             foreach (var vendasPorCliente in vendasAgrupadasPorCliente)
             {
+                decimal totalPorCliente = 0M;
+
                 sb.AppendLine($"{vendasPorCliente.Key.Nome} ({vendasPorCliente.Key.Identificador})");
 
                 foreach (var venda in vendasPorCliente)
                 {
-                    sb.AppendLine($"\nVenda Nº {venda.Id} - Data: {venda.Data.ToShortDateString()} - Total: {venda.TotalVenda.ToString("c")} - Acréscimo: {venda.Acrescimo.ToString("c")} - Desconto: {venda.Desconto.ToString("c")}");
+                    sb.AppendLine($"\nVenda {venda.ModoVenda} Nº {venda.Id} ; Data: {venda.Data.ToShortDateString()} ; Total: {venda.TotalVenda.ToString("c")} ; Acréscimo: {venda.Acrescimo.ToString("c")} ; Desconto: {venda.Desconto.ToString("c")}");
                     sb.AppendLine("Produtos: ");
 
                     foreach (var produto in venda.Produtos)
                     {
-                        sb.AppendLine($"Nome: {produto.Produto.Nome} - Preço: {produto.Produto.Preco.ToString("c")} - Quantidade: {produto.Quantidade}");
+                        sb.AppendLine($"Nome: {produto.Produto.Nome} ; Preço: {produto.Produto.Preco.ToString("c")} ; Quantidade: {produto.Quantidade} ; Subtotal do Produto: {(produto.Quantidade * produto.Produto.Preco).ToString("c")}");
                     }
+
+                    totalPorCliente += venda.TotalVenda;                    
                 }
 
                 sb.AppendLine("\n\n\n");
 
                 totalFinal += vendasPorCliente.Sum(x => x.TotalVenda);
+
+                sb.AppendLine($"Total do Cliente: {totalPorCliente.ToString("c")}\n\n");
             }
 
             sb.AppendLine($"Total final: {totalFinal.ToString("c")}");
 
-            File.WriteAllTextAsync($"./Relatórios/{DateTime.Today.ToLongDateString()} - REL N{Directory.GetFiles("./Relatórios/").Count()} - Vendas por Cliente.txt", sb.ToString());
+            File.WriteAllTextAsync($"./Relatórios/{DateTime.Today.ToLongDateString()} - REL N{Directory.GetFiles("./Relatórios/").Count() + 1} - Vendas por Cliente.txt", sb.ToString());
         }
         private void BuildTXT(IOrderedEnumerable<IGrouping<DateTime, Venda>> vendasAgrupadasPorData)
         {
@@ -261,27 +267,33 @@ namespace ControleVenda.Forms
 
             foreach (var vendasPorData in vendasAgrupadasPorData)
             {
+                decimal totalPorData = 0M;
+
                 sb.AppendLine($"Dia: {vendasPorData.Key.ToShortDateString()}");
 
                 foreach (var venda in vendasPorData)
                 {
-                    sb.AppendLine($"\nVenda Nº {venda.Id} - Cliente: {venda.Cliente.Nome} ({venda.Cliente.Identificador}) - Total: {venda.TotalVenda.ToString("c")} - Acréscimo: {venda.Acrescimo.ToString("c")} - Desconto: {venda.Desconto.ToString("c")}");
+                    sb.AppendLine($"\nVenda Nº {venda.Id} ; Cliente: {venda.Cliente.Nome} ({venda.Cliente.Identificador}) ; Total: {venda.TotalVenda.ToString("c")} ; Acréscimo: {venda.Acrescimo.ToString("c")} ; Desconto: {venda.Desconto.ToString("c")}");
                     sb.AppendLine("Produtos: ");
 
                     foreach (var produto in venda.Produtos)
                     {
-                        sb.AppendLine($"Nome: {produto.Produto.Nome} - Preço: {produto.Produto.Preco.ToString("c")} - Quantidade: {produto.Quantidade}");
+                        sb.AppendLine($"Nome: {produto.Produto.Nome} ; Preço: {produto.Produto.Preco.ToString("c")} ; Quantidade: {produto.Quantidade}");
                     }
+
+                    totalPorData += venda.TotalVenda;
                 }
 
                 sb.AppendLine("\n\n\n");
 
                 totalFinal += vendasPorData.Sum(x => x.TotalVenda);
+
+                sb.AppendLine($"Total da Período: {totalPorData.ToString("c")}\n\n");
             }
 
             sb.AppendLine($"Total final: {totalFinal.ToString("c")}");
 
-            File.WriteAllTextAsync($"./Relatórios/{DateTime.Today.ToLongDateString()} - REL N{Directory.GetFiles("./Relatórios/").Count()} - Vendas por Data.txt", sb.ToString());
+            File.WriteAllTextAsync($"./Relatórios/{DateTime.Today.ToLongDateString()} - REL N{Directory.GetFiles("./Relatórios/").Count() + 1} - Vendas por Data.txt", sb.ToString());
         }
         private List<Cliente> GetSelectedClientsOnGrid()
         {
@@ -300,61 +312,6 @@ namespace ControleVenda.Forms
             }
 
             return clientes;
-        }
-        private void ExportToSheet(List<Log> logs)
-        {
-            try
-            {
-                using (var workbook = new XLWorkbook())
-                {
-                    List<Venda> vendas = new();
-
-                    var worksheet = workbook.Worksheets.Add($"RELATÓRIO DE VENDAS");
-
-                    worksheet.Cell("A1").Value = "DATA";
-                    worksheet.Cell("A1").Style.Font.Bold = true;
-                    worksheet.Cell("A1").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    worksheet.Cell("A1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-                    worksheet.Cell("B1").Value = "DESCRIÇÃO";
-                    worksheet.Cell("B1").Style.Font.Bold = true;
-                    worksheet.Cell("B1").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    worksheet.Cell("B1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-                    worksheet.Cell("C1").Value = "USUÁRIO";
-                    worksheet.Cell("C1").Style.Font.Bold = true;
-                    worksheet.Cell("C1").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    worksheet.Cell("C1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-                    int rowIndex = 2;
-
-                    for (int i = 0; i < logs.Count; i++)
-                    {
-                        worksheet.Cell(rowIndex, 1).Value = logs[i].Date;
-                        worksheet.Cell(rowIndex, 2).Value = logs[i].Description;
-
-                        worksheet.Cell(rowIndex, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                        worksheet.Cell(rowIndex, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                        worksheet.Cell(rowIndex, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                        worksheet.Cell(rowIndex, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                        worksheet.Cell(rowIndex, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                        worksheet.Cell(rowIndex, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-                        rowIndex++;
-                    }
-
-                    worksheet.Columns("C").AdjustToContents();
-                    worksheet.Columns("B").AdjustToContents();
-                    worksheet.Columns("A").AdjustToContents();
-
-                    worksheet.Columns("A").Width = 17;
-
-                    worksheet.Protect("masterkey", XLProtectionAlgorithm.Algorithm.SHA512);
-
-                    workbook.SaveAs(Directory.GetCurrentDirectory() + $"\\Relatórios\\RELATÓRIO DE VENDA - {DateTime.Today.ToLongDateString().ToUpper()}.xlsx");
-                }
-            }
-            catch (Exception ex) { LogWriter.Write(ex.ToString()); }
         }
     }
 }

@@ -6,6 +6,7 @@ using Infra.SMS;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,13 +17,15 @@ namespace ControleVenda.Forms
     public partial class ClienteForm : Form
     {
         private readonly IClienteRepository _clienteContext;
+        private readonly IRelatorioRepository _relatorioContext;
         private readonly ILogRepository _log;
-        public ClienteForm(IClienteRepository clienteContext, ILogRepository logContext)
+        public ClienteForm(IClienteRepository clienteContext, ILogRepository logContext, IRelatorioRepository relatorioContext)
         {
             InitializeComponent();
 
             this._clienteContext = clienteContext;
             this._log = logContext;
+            this._relatorioContext = relatorioContext;
         }
 
         private async void ClienteForm_Load(object sender, EventArgs e)
@@ -66,7 +69,22 @@ namespace ControleVenda.Forms
 
             return true;
         }
+        private void dgvClientes_MouseDown(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    var hti = dgvClientes.HitTest(e.X, e.Y);
 
+                    dgvClientes.Rows[hti.RowIndex <= -1 ? 0 : hti.RowIndex].Selected = true;
+
+                    Point here = new Point((dgvClientes.Location.X) + e.X, (dgvClientes.Location.Y) + e.Y);
+                    ctxMenu.Show(this, here);
+                }
+            }
+            catch (Exception) { }
+        }
         private async void btnSalvar_Click(object sender, EventArgs e)
         {
             if (!CheckTextbox())
@@ -198,7 +216,7 @@ namespace ControleVenda.Forms
                 btnEditar.Text = "  Atualizar";
             }
             else
-            {                
+            {
                 if (!CheckTextbox())
                 {
                     MessageBox.Show("Há campos vazios", "Salvar Cliente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -297,7 +315,7 @@ namespace ControleVenda.Forms
                         foreach (var cliente in selectedClients)
                         {
                             await _log.Add($"Cliente {cliente.Nome}({cliente.Identificador}) REMOVIDO do sistema");
-                        }                        
+                        }
                     }
 
                     Clear();
@@ -361,6 +379,73 @@ namespace ControleVenda.Forms
 
             using (new ControlManager(this.Controls))
                 await LoadGrid();
+        }
+
+        private async void ctxExportarPendencias_Click(object sender, EventArgs e)
+        {
+            using (new ControlManager(this.Controls))
+            {
+                var clientes = GetSelectedClients();
+
+                var sales = await _relatorioContext.RelatorioPorDataCliente(DateTime.Today.AddYears(-1), DateTime.Today, clientes, Infra.Models.Enum.EVendaEstado.Pendente);                
+
+                if (sales.Count <= 0)
+                {
+                    MessageBox.Show("Não foi encontrado registro de venda com a seleção especificada", "Emitir Relatório", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var vendasAgrupadasPorCliente = from venda in sales
+                                                group venda by venda.Cliente into vendasAgrupadas
+                                                orderby vendasAgrupadas.Key.Identificador
+                                                select vendasAgrupadas;
+
+                BuildTXT(vendasAgrupadasPorCliente);
+
+                MessageBox.Show("Relatório exportado com sucesso na pasta Pendências Cliente", "Emitir Relatório", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }            
+        }
+        private void BuildTXT(IOrderedEnumerable<IGrouping<Cliente, Venda>> vendasAgrupadasPorCliente)
+        {            
+            foreach (var vendasPorCliente in vendasAgrupadasPorCliente)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                decimal totalPorCliente = 0M;
+
+                sb.AppendLine($"{vendasPorCliente.Key.Nome} ({vendasPorCliente.Key.Identificador})");
+
+                foreach (var venda in vendasPorCliente)
+                {
+                    sb.AppendLine($"\nVenda {venda.ModoVenda} Nº {venda.Id} ; Data: {venda.Data.ToShortDateString()} ; Total: {venda.TotalVenda.ToString("c")} ; Acréscimo: {venda.Acrescimo.ToString("c")} ; Desconto: {venda.Desconto.ToString("c")}");
+                    sb.AppendLine("Produtos: ");
+
+                    foreach (var produto in venda.Produtos)
+                    {
+                        sb.AppendLine($"Nome: {produto.Produto.Nome} ; Preço: {produto.Produto.Preco.ToString("c")} ; Quantidade: {produto.Quantidade} ; Subtotal do Produto: {(produto.Quantidade * produto.Produto.Preco).ToString("c")}");                        
+                    }
+
+                    totalPorCliente += venda.TotalVenda;
+                }
+
+                sb.AppendLine("\n\n\n");
+
+                sb.AppendLine($"Total de Pendências do Cliente: {totalPorCliente.ToString("c")}");
+
+                CheckClientDirectory(vendasPorCliente.Key.Nome);
+
+                File.WriteAllTextAsync($"./Pendências Clientes/{vendasPorCliente.Key.Nome}/Relatório N{Directory.GetFiles($"./Pendências Clientes/{vendasPorCliente.Key.Nome}/").Count() + 1} - Cliente {vendasPorCliente.Key.Nome}({vendasPorCliente.Key.Identificador}).txt", sb.ToString());
+            }
+        }
+        private void CheckClientDirectory(string cliente)
+        {
+            if (!Directory.Exists($"./Pendências Clientes/{cliente}"))
+                Directory.CreateDirectory($"./Pendências Clientes/{cliente}");
+        }
+
+        private void ctxEnviarSMS_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Função ainda não implementada.", "Enviar SMS por Cliente", MessageBoxButtons.OK, MessageBoxIcon.Stop);
         }
     }
 }

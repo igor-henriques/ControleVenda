@@ -5,13 +5,13 @@ using Domain.Repositories;
 using Infra.Data;
 using Infra.Helpers;
 using Infra.Models;
-using Infra.SMS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,6 +25,8 @@ namespace ControleVenda
         {
             try
             {
+                CreateDefaultDirectories();
+
                 CheckConnection();
 
                 await CreateHostBuilder().Build().RunAsync();
@@ -37,13 +39,13 @@ namespace ControleVenda
         }
         private static void CheckConnection()
         {
-            if (!CheckForInternetConnection())
+            if (!CheckInternetConnection())
             {
                 bool connectionRestored = false;
 
-                while (!connectionRestored && MessageBox.Show("Conexão com internet instável. Verifique sua rede e tente novamente", "ERRO DE CONEXÃO", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error).Equals(DialogResult.Retry))
+                while (!connectionRestored && MessageBox.Show("Conexão instável. Verifique sua rede e tente novamente", "ERRO DE CONEXÃO", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error).Equals(DialogResult.Retry))
                 {
-                    connectionRestored = CheckForInternetConnection();
+                    connectionRestored = CheckInternetConnection();
                 }
 
                 if (!connectionRestored)
@@ -67,8 +69,7 @@ namespace ControleVenda
                     services.AddHostedService<StartService>();
 
                     services.AddSingleton<FormSelector>();
-                    services.AddSingleton<ServiceKeySMS>();
-                    services.AddSingleton<Definitions>();
+                    services.AddSingleton<Settings>();
 
                     services.AddTransient<MainForm>();
                     services.AddTransient<VendaForm>();
@@ -77,6 +78,7 @@ namespace ControleVenda
                     services.AddTransient<ProdutoForm>();
                     services.AddTransient<ConsultaVendaForm>();
                     services.AddTransient<MessageServiceForm>();
+                    services.AddTransient<ConfiguracaoForm>();
 
                     services.AddScoped<IClienteRepository, ClienteRepository>();
                     services.AddScoped<IProdutoRepository, ProdutoRepository>();
@@ -96,7 +98,7 @@ namespace ControleVenda
                     );
                 });
         }
-        public static bool CheckForInternetConnection(int timeoutMs = 10000, string url = null)
+        private static bool CheckInternetConnection(int timeoutMs = 10000, string url = null)
         {
             try
             {
@@ -113,6 +115,11 @@ namespace ControleVenda
             {
                 return false;
             }
+        }
+        private static void CreateDefaultDirectories()
+        {
+            if (!Directory.Exists("./Relatórios"))          Directory.CreateDirectory("./Relatórios");            
+            if (!Directory.Exists("./Pendências Clientes")) Directory.CreateDirectory("./Pendências Clientes");            
         }
     }
 }

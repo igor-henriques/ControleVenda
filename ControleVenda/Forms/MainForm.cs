@@ -2,8 +2,8 @@
 using ControleVenda.Utility;
 using Domain.Interfaces;
 using Infra.Helpers;
+using Infra.Models;
 using Infra.Models.Table;
-using Infra.SMS;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,13 +17,14 @@ namespace ControleVenda.Forms
     {
         private readonly FormSelector _selector;
         private readonly ILogRepository _logContext;
-
-        public MainForm(FormSelector selector, ILogRepository logContext)
+        private readonly Settings _settings;
+        public MainForm(FormSelector selector, ILogRepository logContext, Settings settings)
         {
             InitializeComponent();
 
-            this._selector = selector;            
+            this._selector = selector;
             this._logContext = logContext;
+            this._settings = settings;
 
             BuildStatusBar();
         }
@@ -32,6 +33,12 @@ namespace ControleVenda.Forms
         {
             try
             {
+                if (string.IsNullOrEmpty(_settings.NomeNegocio) && e.ClickedItem.Tag.ToString() != "Configuracao")
+                {
+                    MessageBox.Show("Configure a aplicação no menu Configuração antes de utilizar o programa.", "Configuração", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 if (!string.IsNullOrEmpty(e.ClickedItem.Tag.ToString()))
                 {
                     Form selectedForm = null;
@@ -68,7 +75,7 @@ namespace ControleVenda.Forms
             {
                 if (currentForm != null && form.Name.Equals(currentForm.Name))
                 {
-                    outForm = form;                    
+                    outForm = form;
 
                     return true;
                 }
@@ -107,6 +114,12 @@ namespace ControleVenda.Forms
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (e.CloseReason == CloseReason.ApplicationExitCall)
+            {
+                Application.Restart();
+                Process.GetCurrentProcess().Kill();
+            }
+
             if (MessageBox.Show("Tem certeza que deseja sair?", "Saindo", MessageBoxButtons.YesNo, MessageBoxIcon.Question).Equals(DialogResult.No))
             {
                 e.Cancel = true;
@@ -169,7 +182,7 @@ namespace ControleVenda.Forms
                     if (tbSearch.Text.Trim() != string.Empty)
                     {
                         var searchResult = await _logContext.Search(tbSearch.Text);
-                        
+
                         await FillGrid(searchResult);
 
                         if (dgvMain.RowCount > 0)

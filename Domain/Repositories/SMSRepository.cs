@@ -1,8 +1,8 @@
 ﻿using Domain.Interfaces;
 using Infra.Data;
 using Infra.Helpers;
+using Infra.Models;
 using Infra.Models.Table;
-using Infra.SMS;
 using Infra.SMS.Request;
 using Infra.SMS.Response;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +19,12 @@ namespace Domain.Repositories
         private RestClient restClient;
         private RestRequest request;
 
-        private readonly string key;
+        private readonly Settings _settings;
 
         private readonly ApplicationDbContext _context;
-        public SMSRepository(ServiceKeySMS key, ApplicationDbContext context)
+        public SMSRepository(Settings settings, ApplicationDbContext context)
         {
-            this.key = key.Key;
+            this._settings = settings;
             this.restClient = new RestClient();
             this.request = new RestRequest();
             this._context = context;
@@ -33,7 +33,7 @@ namespace Domain.Repositories
         {
             try
             {
-                situacaoSMS = situacaoSMS with { Key = key };
+                situacaoSMS = situacaoSMS with { Key = _settings.Key };
 
                 var jsonSms = JsonConvert.SerializeObject(situacaoSMS);
 
@@ -66,7 +66,7 @@ namespace Domain.Repositories
         {
             try
             {
-                this.restClient = new RestClient($"https://api.smsdev.com.br/v1/balance?key={key}");
+                this.restClient = new RestClient($"https://api.smsdev.com.br/v1/balance?key={_settings.Key}");
 
                 this.request = new RestRequest("", Method.GET);
 
@@ -84,7 +84,7 @@ namespace Domain.Repositories
 
         public ResponseSendSMS SendSMS(RequestSendSMS sms)
         {
-            sms = sms with { Key = this.key };
+            sms = sms with { Key = this._settings.Key };
 
             var jsonSms = JsonConvert.SerializeObject(sms);
 

@@ -62,6 +62,9 @@ namespace ControleVenda.Forms
             this.label5 = new System.Windows.Forms.Label();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxExportarPendencias = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxEnviarSMS = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -71,6 +74,7 @@ namespace ControleVenda.Forms
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
+            this.ctxMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvClientes
@@ -116,6 +120,7 @@ namespace ControleVenda.Forms
             this.dgvClientes.ShowRowErrors = false;
             this.dgvClientes.Size = new System.Drawing.Size(863, 296);
             this.dgvClientes.TabIndex = 46;
+            this.dgvClientes.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvClientes_MouseDown);
             // 
             // pictureBox1
             // 
@@ -424,6 +429,34 @@ namespace ControleVenda.Forms
             this.pictureBox7.TabIndex = 117;
             this.pictureBox7.TabStop = false;
             // 
+            // ctxMenu
+            // 
+            this.ctxMenu.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ctxExportarPendencias,
+            this.ctxEnviarSMS});
+            this.ctxMenu.Name = "ctxMenu";
+            this.ctxMenu.Size = new System.Drawing.Size(269, 48);
+            this.ctxMenu.Text = "Menu";
+            // 
+            // ctxExportarPendencias
+            // 
+            this.ctxExportarPendencias.Image = global::ControleVenda.Properties.Resources.report;
+            this.ctxExportarPendencias.Name = "ctxExportarPendencias";
+            this.ctxExportarPendencias.ShowShortcutKeys = false;
+            this.ctxExportarPendencias.Size = new System.Drawing.Size(268, 22);
+            this.ctxExportarPendencias.Text = "Emitir Pendências";
+            this.ctxExportarPendencias.ToolTipText = "Exporta as linhas selecionadas em arquivo";
+            this.ctxExportarPendencias.Click += new System.EventHandler(this.ctxExportarPendencias_Click);
+            // 
+            // ctxEnviarSMS
+            // 
+            this.ctxEnviarSMS.Image = global::ControleVenda.Properties.Resources.sms;
+            this.ctxEnviarSMS.Name = "ctxEnviarSMS";
+            this.ctxEnviarSMS.Size = new System.Drawing.Size(268, 22);
+            this.ctxEnviarSMS.Text = "Enviar SMS de Pendências";
+            this.ctxEnviarSMS.Click += new System.EventHandler(this.ctxEnviarSMS_Click);
+            // 
             // ClienteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -475,6 +508,7 @@ namespace ControleVenda.Forms
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
+            this.ctxMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -511,5 +545,8 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.PictureBox pictureBox7;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.ContextMenuStrip ctxMenu;
+        private System.Windows.Forms.ToolStripMenuItem ctxExportarPendencias;
+        private System.Windows.Forms.ToolStripMenuItem ctxEnviarSMS;
     }
 }
