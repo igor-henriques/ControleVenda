@@ -38,24 +38,28 @@ namespace ControleVenda.Forms
 
         private async void btnPesquisar_Click(object sender, EventArgs e)
         {
-            if (!rbCliente.Checked && !rbData.Checked)
+            if (!rbCliente.Checked && !rbData.Checked && !rbID.Checked)
             {
                 MessageBox.Show("Selecione algum método de pesquisa", "Consultar Venda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            Dictionary<RadioButton, Func<Task>> searchOptions = new Dictionary<RadioButton, Func<Task>>
+            using (new ControlManager(this.Controls))
             {
-                { rbData,    async () => await FillGrid(await SearchByDate(dtiPicker.Value, dtfPicker.Value))              },
-                { rbCliente, async () => await FillGrid(await SearchByCliente(cbClientePesquisa.SelectedItem as Cliente))  },
-            };
+                Dictionary<RadioButton, Func<Task>> searchOptions = new Dictionary<RadioButton, Func<Task>>
+                {
+                    { rbData,    async () => await FillGrid(await SearchByDate(dtiPicker.Value, dtfPicker.Value))              },
+                    { rbCliente, async () => await FillGrid(await SearchByCliente(cbClientePesquisa.SelectedItem as Cliente))  },
+                    { rbID,      async () => await FillGrid(await SearchByID(int.Parse(tbPesquisa.Text)))                 }
+                };
 
-            var searchResponse = searchOptions.Where(x => x.Key.Checked).Select(x => x.Value).FirstOrDefault();
+                var searchResponse = searchOptions.Where(x => x.Key.Checked).Select(x => x.Value).FirstOrDefault();
 
-            if (searchResponse != null)
-            {
-                await searchResponse.Invoke();
-                FormatColumns();
+                if (searchResponse != null)
+                {
+                    await searchResponse.Invoke();
+                    FormatColumns();
+                }
             }
         }
 
@@ -67,6 +71,16 @@ namespace ControleVenda.Forms
         private async Task<List<Venda>> SearchByCliente(Cliente cliente)
         {
             var response = await _vendaContext.SearchByCliente(cliente);
+            return response;
+        }
+        private async Task<List<Venda>> SearchByID(int Id)
+        {
+            List<Venda> response = new();
+
+            var record = await _vendaContext.Get(Id);
+            if (record != null)
+                response.Add(record);
+
             return response;
         }
         private async Task<List<Cliente>> GetClients()
@@ -242,13 +256,38 @@ namespace ControleVenda.Forms
         }
 
         private async void btnUpdate_Click(object sender, EventArgs e)
-        {
+        {                        
             rbCliente.Checked = false;
             rbData.Checked = false;
+            rbID.Checked = false;
+
+            tbPesquisa.Clear();
 
             cbClientePesquisa.SelectedItem = null;
 
-            await FillGrid();
+            using (new ControlManager(this.Controls))
+                await FillGrid();
+        }
+
+        private void tbPesquisa_MouseDown(object sender, MouseEventArgs e)
+        {
+            rbID.Checked = true;
+        }
+
+        private void tbPesquisa_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode.Equals(Keys.Enter))
+                btnPesquisar.PerformClick();
+        }
+
+        private void tbPesquisa_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var ch = e.KeyChar;
+
+            if ((!ch.Equals((char)Keys.Back)) && (!char.IsDigit(ch) || !int.TryParse(tbPesquisa.Text.Trim() + ch, out _)))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

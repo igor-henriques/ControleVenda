@@ -49,7 +49,7 @@ namespace Domain.Repositories
 
         public async Task<List<Cliente>> GetClientes()
         {
-            return await _context.Cliente.AsNoTracking().Take(_settings.RegistrosEmTabela).OrderByDescending(x => x.Identificador).ToListAsync();
+            return await _context.Cliente.AsNoTracking().OrderByDescending(x => x.Identificador).ToListAsync();
         }
 
         public async Task<IEnumerable<Cliente>> Pesquisar(string campo, string conteudo)
@@ -61,16 +61,16 @@ namespace Domain.Repositories
                 foundClients = campo switch
                 {
                     string field when field.Equals("Telefone") => from i in _context.Cliente.AsNoTracking()
-                                                                  where EF.Functions.Like(i.Telefone, $"%{conteudo.Trim()}%")
-                                                                  select i,
+                                                                        where EF.Functions.Like(i.Telefone, $"%{conteudo.Trim()}%")
+                                                                        select i,
 
                     string field when field.Equals("Nome") => from i in _context.Cliente.AsNoTracking()
-                                                              where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
-                                                              select i,
+                                                                    where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
+                                                                    select i,
 
                     string field when field.Equals("Identificador") => from i in _context.Cliente.AsNoTracking()
-                                                                       where EF.Functions.Like(i.Identificador, $"%{conteudo.Trim()}%")
-                                                                       select i,
+                                                                             where EF.Functions.Like(i.Identificador, $"%{conteudo.Trim()}%")
+                                                                             select i,
 
                     _ => null
                 };

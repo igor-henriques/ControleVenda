@@ -40,6 +40,7 @@ namespace ControleVenda.Forms
             this.ProdutoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RelatorioMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SmsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ConfiguracaoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.DateDesc = new System.Windows.Forms.ToolStripStatusLabel();
             this.DateStatus = new System.Windows.Forms.ToolStripStatusLabel();
@@ -60,7 +61,6 @@ namespace ControleVenda.Forms
             this.tbSearch = new System.Windows.Forms.TextBox();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.btnUpdate = new System.Windows.Forms.Button();
-            this.ConfiguracaoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormMenu.SuspendLayout();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
@@ -150,6 +150,16 @@ namespace ControleVenda.Forms
             this.SmsMenuItem.Size = new System.Drawing.Size(67, 22);
             this.SmsMenuItem.Tag = "SMS";
             this.SmsMenuItem.Text = "SMS";
+            // 
+            // ConfiguracaoMenuItem
+            // 
+            this.ConfiguracaoMenuItem.Font = new System.Drawing.Font("Roboto", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.ConfiguracaoMenuItem.ForeColor = System.Drawing.Color.Black;
+            this.ConfiguracaoMenuItem.Image = global::ControleVenda.Properties.Resources.gear;
+            this.ConfiguracaoMenuItem.Name = "ConfiguracaoMenuItem";
+            this.ConfiguracaoMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.ConfiguracaoMenuItem.Tag = "Configuracao";
+            this.ConfiguracaoMenuItem.Text = "Configuração";
             // 
             // statusStrip
             // 
@@ -381,16 +391,6 @@ namespace ControleVenda.Forms
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
-            // ConfiguracaoMenuItem
-            // 
-            this.ConfiguracaoMenuItem.Font = new System.Drawing.Font("Roboto", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.ConfiguracaoMenuItem.ForeColor = System.Drawing.Color.Black;
-            this.ConfiguracaoMenuItem.Image = global::ControleVenda.Properties.Resources.gear;
-            this.ConfiguracaoMenuItem.Name = "ConfiguracaoMenuItem";
-            this.ConfiguracaoMenuItem.Size = new System.Drawing.Size(125, 22);
-            this.ConfiguracaoMenuItem.Tag = "Configuracao";
-            this.ConfiguracaoMenuItem.Text = "Configuração";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -413,6 +413,7 @@ namespace ControleVenda.Forms
             this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.MainFormMenu.ResumeLayout(false);
             this.MainFormMenu.PerformLayout();
             this.statusStrip.ResumeLayout(false);

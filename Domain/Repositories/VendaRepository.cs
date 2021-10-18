@@ -55,28 +55,17 @@ namespace Domain.Repositories
                 }
 
                 _context.ProdutoVenda.AddRange(produtosPorVenda);
-            });            
+            });
         }
 
         public async Task<Venda> Get(int Id)
         {
-            var response = await _context.Venda.Include(x => x.Cliente).AsNoTracking().Where(x => x.Id.Equals(Id)).FirstOrDefaultAsync();
-            
-            response = response with
-            {
-                Produtos = await _context.ProdutoVenda
-                    .Include(x => x.Produto)
-                    .Where(x => x.IdVenda
-                    .Equals(response.Id))
-                    .ToListAsync()
-            };
-
-            return response;
+            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).AsNoTracking().Where(x => x.Id.Equals(Id)).FirstOrDefaultAsync();
         }
 
         public async Task<List<Venda>> Get(List<int> idVendas)
         {
-            return await _context.Venda.Include(x => x.Cliente).Where(x => idVendas.Contains(x.Id)).ToListAsync();
+            return await _context.Venda.Where(x => idVendas.Contains(x.Id)).ToListAsync();
         }
 
         public async Task<List<ProdutoVenda>> GetProdutosPorVenda(int idVenda)
@@ -92,23 +81,7 @@ namespace Domain.Repositories
 
         public async Task<List<Venda>> GetVendas()
         {
-            List<Venda> response = new();
-
-            var vendas = await _context.Venda.Include(x => x.Cliente).Take(_settings.RegistrosEmTabela).OrderByDescending(x => x.Id).ToListAsync();
-
-            foreach (var venda in vendas)
-            {
-                response.Add(venda with
-                {
-                    Produtos = await _context.ProdutoVenda
-                    .Include(x => x.Produto)
-                    .Where(x => x.IdVenda
-                    .Equals(venda.Id))
-                    .ToListAsync()
-                });
-            }
-
-            return response;
+            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).OrderByDescending(x => x.Id).Take(_settings.RegistrosEmTabela).ToListAsync();
         }
 
         public async Task Remove(List<Venda> vendas)
@@ -120,7 +93,6 @@ namespace Domain.Repositories
                 _context.ProdutoVenda.RemoveRange(await _context.ProdutoVenda.Where(x => vendasToRemove.Select(x => x.Id).Contains(x.Id)).ToListAsync());
                 _context.Venda.RemoveRange(vendasToRemove);
             }
-                
         }
         public async Task Save()
         {

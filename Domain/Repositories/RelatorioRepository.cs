@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Repositories
@@ -20,33 +19,22 @@ namespace Domain.Repositories
         }
         public async Task<List<Venda>> RelatorioPorDataCliente(DateTime dtInicio, DateTime dtFinal, List<Cliente> clientes, EVendaEstado estadoVenda)
         {
-            List<Venda> response = new();
-
             var vendas = await _context.Venda
                         .Include(x => x.Cliente)
+                        .Include(x => x.Produtos)
+                        .ThenInclude(x => x.Produto)
                         .Where(venda => venda.Data >= dtInicio && venda.Data <= dtFinal
                         && clientes.Select(cliente => cliente.Identificador).Contains(venda.Cliente.Identificador))
                         .ToListAsync();
 
             var vendasFiltradas = estadoVenda switch
             {
-                EVendaEstado.Pago     => vendas.Where(x => x.VendaPaga).ToList(),
+                EVendaEstado.Pago => vendas.Where(x => x.VendaPaga).ToList(),
                 EVendaEstado.Pendente => vendas.Where(x => !x.VendaPaga).ToList(),
-                _                     => vendas
+                _ => vendas
             };
 
-            foreach (var venda in vendasFiltradas)
-            {
-                response.Add(venda with
-                {
-                    Produtos = await _context.ProdutoVenda
-                            .Include(x => x.Produto)
-                            .Where(x => x.IdVenda.Equals(venda.Id))
-                            .ToListAsync()
-                });
-            }
-
-            return response;
+            return vendasFiltradas;
         }
     }
 }
