@@ -14,10 +14,8 @@ namespace Domain.Repositories
     public class ClienteRepository : IClienteRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly Settings _settings;
-        public ClienteRepository(ApplicationDbContext context, Settings settings)
+        public ClienteRepository(ApplicationDbContext context)
         {
-            this._settings = settings;
             this._context = context;
         }
         public async Task<Cliente> Add(Cliente cliente)

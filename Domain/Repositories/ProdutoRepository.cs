@@ -55,13 +55,13 @@ namespace Domain.Repositories
             {
                 foundProducts = campo switch
                 {
-                    string field when field.Equals("Nome") => from i in _context.Produto.AsNoTracking()
-                                                                    where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
-                                                                    select i,
+                    "Nome"  => from i in _context.Produto.AsNoTracking()
+                               where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
+                               select i,
 
-                    string field when field.Equals("Preco") => from i in _context.Produto.AsNoTracking()
-                                                                     where EF.Functions.Like(i.Preco, $"%{conteudo.Trim()}%")
-                                                                     select i,
+                    "Preco" => from i in _context.Produto.AsNoTracking()
+                               where EF.Functions.Like(i.Preco, $"%{conteudo.Trim()}%")
+                               select i,
 
                     _ => null
                 };
