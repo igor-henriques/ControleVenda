@@ -94,7 +94,7 @@ namespace Domain.Repositories
         {
             List<Venda> response = new();
 
-            var vendas = await _context.Venda.Include(x => x.Cliente).Take(_settings.RegistrosEmTabela).ToListAsync();
+            var vendas = await _context.Venda.Include(x => x.Cliente).Take(_settings.RegistrosEmTabela).OrderByDescending(x => x.Id).ToListAsync();
 
             foreach (var venda in vendas)
             {

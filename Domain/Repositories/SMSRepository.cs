@@ -10,6 +10,8 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Repositories
@@ -59,7 +61,7 @@ namespace Domain.Repositories
 
         public async Task<List<SMS>> Get()
         {
-            return await _context.SMS.ToListAsync();
+            return await _context.SMS.Include(x => x.Cliente).OrderByDescending(x => x.Id).ToListAsync();
         }
 
         public ResponseSaldoSMS GetSaldo()
@@ -84,7 +86,7 @@ namespace Domain.Repositories
 
         public ResponseSendSMS SendSMS(RequestSendSMS sms)
         {
-            sms = sms with { Key = this._settings.Key };
+            sms = RequestSendSMS.TratarNumero(sms with { Key = this._settings.Key });
 
             var jsonSms = JsonConvert.SerializeObject(sms);
 
@@ -99,6 +101,64 @@ namespace Domain.Repositories
             var response = restClient.Execute(request);
 
             return JsonConvert.DeserializeObject<ResponseSendSMS>(response.Content);
+        }
+        public List<KeyValuePair<Cliente, string>> BuildMessageSMS(List<Venda> sales)
+        {
+            List<KeyValuePair<Cliente, string>> response = new();
+
+            var clientesDistintos = sales.Select(x => x.Cliente).Distinct().ToList();
+
+            foreach (var cliente in clientesDistintos)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                var vendasPorCliente = sales.Where(x => x.Cliente.Id.Equals(cliente.Id)).ToList();
+
+                var vendasPagas = vendasPorCliente.Where(x => x.VendaPaga).ToList();
+                if (vendasPagas.Count > 0)
+                {                    
+                    vendasPorCliente = vendasPorCliente.Except(vendasPagas).ToList();
+
+                    if (vendasPorCliente.Count <= 0)
+                        return null;
+                }
+
+                var produtosSeparadosPorVenda = vendasPorCliente.Select(x => x.Produtos.ToList()).ToList();
+                decimal totalDevedor = vendasPorCliente.Sum(x => x.TotalVenda);
+
+                sb.AppendLine($"Olá, {cliente.Nome}! Como vai? {_settings.NomeNegocio} aqui!");
+                sb.AppendLine($"Sua conta do mês de {DateTime.Today.ToString("MMMM").ToUpper()}: {totalDevedor.ToString("c")}");
+                sb.AppendLine("Produtos consumidos:\n");
+
+                Dictionary<Produto, int> produtoQuantidade = new Dictionary<Produto, int>();
+
+                foreach (var produtosVenda in produtosSeparadosPorVenda)
+                {
+                    foreach (var produto in produtosVenda)
+                    {
+                        var keyProduto = produtoQuantidade.Where(x => x.Key.Id.Equals(produto.Produto.Id)).Select(x => x.Key).FirstOrDefault();
+
+                        if (keyProduto is null)
+                        {
+                            produtoQuantidade.Add(produto.Produto, produto.Quantidade);
+                        }
+                        else
+                        {
+                            produtoQuantidade[produto.Produto] += produto.Quantidade;
+                        }
+                    }
+                }
+
+                foreach (var produto in produtoQuantidade)
+                    sb.AppendLine($"Produto: {produto.Key.Nome} - Preço: {produto.Key.Preco.ToString("c")} - Quantidade: {produto.Value} - Total por produto: {(produto.Key.Preco * produto.Value).ToString("c")}\n");
+
+                if (_settings.PIX.Length > 0) sb.AppendLine($"CHAVE PX: {_settings.PIX}");
+                if (_settings.PicPay.Length > 0) sb.AppendLine($"PICPAY: {_settings.PicPay}");
+
+                response.Add(new KeyValuePair<Cliente, string>(cliente, sb.ToString()));
+            }
+
+            return response;
         }
 
         public async Task Add(SMS sms)

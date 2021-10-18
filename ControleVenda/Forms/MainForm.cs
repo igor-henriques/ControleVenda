@@ -171,7 +171,7 @@ namespace ControleVenda.Forms
 
         private async void MainForm_Activated(object sender, EventArgs e)
         {
-            await FillGrid();
+            //await FillGrid();
         }
 
         private async void tbSearch_KeyDown(object sender, KeyEventArgs e)

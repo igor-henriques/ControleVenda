@@ -33,7 +33,7 @@ namespace ControleVenda.Forms
                 {
                     sms.Id,
                     sms.Situacao,
-                    sms.TelefoneDestino,
+                    sms.Cliente.Telefone,
                     sms.Descricao,
                     sms.Mensagem.Substring(0, 20) + "...",
                     CreateGridButton()
@@ -99,8 +99,9 @@ namespace ControleVenda.Forms
 
                 var sms = new RequestSendSMS()
                 {
+                    Type = 9,
                     Msg = dbSms.Mensagem,
-                    Number = dbSms.TelefoneDestino
+                    Number = dbSms.Cliente.Telefone,
                 };
 
                 var responseSMS = _smsContext.SendSMS(sms);
@@ -109,7 +110,7 @@ namespace ControleVenda.Forms
                 {
                     Id = responseSMS.Id,
                     Situacao = responseSMS.Situacao,
-                    TelefoneDestino = dbSms.TelefoneDestino,
+                    IdCliente = dbSms.IdCliente,
                     Mensagem = sms.Msg,
                     Codigo = responseSMS.Codigo,
                     Descricao = responseSMS.Descricao

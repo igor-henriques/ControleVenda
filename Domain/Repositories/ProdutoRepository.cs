@@ -44,7 +44,7 @@ namespace Domain.Repositories
 
         public async Task<List<Produto>> GetProdutos()
         {
-            return await _context.Produto.AsNoTracking().Take(_settings.RegistrosEmTabela).ToListAsync();
+            return await _context.Produto.AsNoTracking().Take(_settings.RegistrosEmTabela).OrderByDescending(x => x.Id).ToListAsync();
         }
 
         public async Task<IEnumerable<Produto>> Pesquisar(string campo, string conteudo)

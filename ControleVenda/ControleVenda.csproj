@@ -7,6 +7,10 @@
     <ApplicationIcon>dollar-_1_.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="closedxml" Version="0.95.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">

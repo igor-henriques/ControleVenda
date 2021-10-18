@@ -11,6 +11,7 @@ namespace Domain.Interfaces
         ResponseSendSMS SendSMS(RequestSendSMS sms);
         ResponseSaldoSMS GetSaldo();
         ResponseSituacaoSMS CheckSituationSMS(RequestSituacaoSMS situacaoSMS);
+        List<KeyValuePair<Cliente, string>> BuildMessageSMS(List<Venda> sales);
         Task<List<SMS>> Get();
         Task<SMS> Get(long Id);
         Task Add(SMS sms);

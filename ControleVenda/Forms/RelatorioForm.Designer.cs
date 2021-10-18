@@ -89,8 +89,8 @@ namespace ControleVenda.Forms
             this.dtiPicker.Name = "dtiPicker";
             this.dtiPicker.Size = new System.Drawing.Size(399, 24);
             this.dtiPicker.TabIndex = 99;
-            this.dtiPicker.Value = new System.DateTime(2021, 9, 14, 0, 0, 0, 0);
-            this.dtiPicker.ValueChanged += new System.EventHandler(this.dtiPicker_ValueChanged);
+            this.dtiPicker.Value = DateTime.Today.AddMonths(-1);
+            this.dtiPicker.ValueChanged += new System.EventHandler(this.dtiPicker_ValueChanged);            
             // 
             // label1
             // 
@@ -118,10 +118,10 @@ namespace ControleVenda.Forms
             this.dtfPicker.Font = new System.Drawing.Font("Roboto", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dtfPicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtfPicker.Location = new System.Drawing.Point(137, 120);
-            this.dtfPicker.Name = "dtfPicker";
+            this.dtfPicker.Name = "dtfPicker";            
             this.dtfPicker.Size = new System.Drawing.Size(399, 24);
             this.dtfPicker.TabIndex = 101;
-            this.dtfPicker.Value = new System.DateTime(2021, 10, 14, 0, 0, 0, 0);
+            this.dtfPicker.Value = DateTime.Today;
             this.dtfPicker.ValueChanged += new System.EventHandler(this.dtfPicker_ValueChanged);
             // 
             // btnEmitir

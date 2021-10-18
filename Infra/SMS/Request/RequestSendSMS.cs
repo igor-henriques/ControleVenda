@@ -6,8 +6,16 @@ namespace Infra.SMS.Request
     public record RequestSendSMS
     {
         public string Key { get; init; }
-        private byte Type { get { return 9; } }
+        public byte Type { get; init; }
         public string Number { get; init; }
         public string Msg { get; init; }
-    }
+
+        public static RequestSendSMS TratarNumero(RequestSendSMS request)
+        {
+            return request with
+            {
+                Number = $"55{request.Number.Replace("(", default).Replace(")", default).Replace("-", default).Replace(" ", default).Trim()}"
+            };
+        }
+    }    
 }

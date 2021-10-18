@@ -37,7 +37,7 @@ namespace Domain.Repositories
         {
             try
             {
-                return await _context.Log.Where(x => x.Date >= DateTime.Today.AddDays(-1)).ToListAsync();
+                return await _context.Log.Where(x => x.Date >= DateTime.Today.AddDays(-1)).OrderByDescending(x => x.Date).ToListAsync();
             }
             catch (Exception ex) { LogWriter.Write(ex.ToString()); }
 

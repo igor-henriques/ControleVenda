@@ -49,7 +49,7 @@ namespace Domain.Repositories
 
         public async Task<List<Cliente>> GetClientes()
         {
-            return await _context.Cliente.AsNoTracking().Take(_settings.RegistrosEmTabela).ToListAsync();
+            return await _context.Cliente.AsNoTracking().Take(_settings.RegistrosEmTabela).OrderByDescending(x => x.Identificador).ToListAsync();
         }
 
         public async Task<IEnumerable<Cliente>> Pesquisar(string campo, string conteudo)
@@ -93,6 +93,7 @@ namespace Domain.Repositories
 
             foreach (var cliente in clientsToRemove)
             {
+                var smsPorCliente = await _context.SMS.Where(x => x.IdCliente.Equals(cliente.Id)).ToListAsync();
                 var vendasPorCliente = await _context.Venda.Where(x => x.IdCliente.Equals(cliente.Id)).ToListAsync();
 
                 foreach (var venda in vendasPorCliente)
@@ -102,6 +103,7 @@ namespace Domain.Repositories
                 }
 
                 _context.Venda.RemoveRange(vendasPorCliente);
+                _context.SMS.RemoveRange(smsPorCliente);
             }
 
             _context.Cliente.RemoveRange(clientsToRemove);

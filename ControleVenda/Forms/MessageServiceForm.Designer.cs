@@ -106,11 +106,11 @@ namespace ControleVenda.Forms
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvSms.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvSms.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgvSms.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvSms.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvSms.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.dgvSms.GridColor = System.Drawing.Color.White;
-            this.dgvSms.Location = new System.Drawing.Point(0, 128);
+            this.dgvSms.Location = new System.Drawing.Point(0, 114);
             this.dgvSms.Name = "dgvSms";
             this.dgvSms.ReadOnly = true;
             this.dgvSms.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
@@ -122,7 +122,7 @@ namespace ControleVenda.Forms
             this.dgvSms.ShowCellErrors = false;
             this.dgvSms.ShowEditingIcon = false;
             this.dgvSms.ShowRowErrors = false;
-            this.dgvSms.Size = new System.Drawing.Size(800, 345);
+            this.dgvSms.Size = new System.Drawing.Size(800, 359);
             this.dgvSms.TabIndex = 72;
             this.dgvSms.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSms_CellContentClick);
             // 

@@ -23,7 +23,7 @@ namespace ControleVenda.Forms
         private readonly IClienteRepository _clienteContext;
         private readonly IRelatorioRepository _relatorioContext;
         private readonly ISMSRepository _smsContext;
-        private readonly Settings _definitions;
+        private readonly Settings _settings;
         public RelatorioForm(IClienteRepository clienteRepository, IRelatorioRepository relatorioRepository, ISMSRepository smsContext, Settings defs)
         {
             InitializeComponent();
@@ -31,7 +31,7 @@ namespace ControleVenda.Forms
             this._clienteContext = clienteRepository;
             this._relatorioContext = relatorioRepository;
             this._smsContext = smsContext;
-            this._definitions = defs;
+            this._settings = defs;
         }
 
         private void pbBack_Click(object sender, EventArgs e)
@@ -75,10 +75,10 @@ namespace ControleVenda.Forms
                     {
                         dgvClientes.Rows.Add(new object[]
                         {
-                        false,
-                        cliente.Identificador,
-                        cliente.Nome,
-                        cliente.Telefone
+                            false,
+                            cliente.Identificador,
+                            cliente.Nome,
+                            cliente.Telefone
                         });
                     }
                 }
@@ -117,7 +117,9 @@ namespace ControleVenda.Forms
 
             using (new ControlManager(this.Controls))
             {
-                var sales = await _relatorioContext.RelatorioPorDataCliente(dtiPicker.Value, dtfPicker.Value, clientesSelecionados, Enum.Parse<EVendaEstado>(cbEstadoVenda.SelectedItem.ToString()));
+                var estadoVenda = Enum.Parse<EVendaEstado>(cbEstadoVenda.SelectedItem.ToString());
+
+                var sales = await _relatorioContext.RelatorioPorDataCliente(dtiPicker.Value, dtfPicker.Value, clientesSelecionados, estadoVenda);
 
                 var clientesDistintos = sales.Select(x => x.Cliente).Distinct().ToList();
 
@@ -146,83 +148,47 @@ namespace ControleVenda.Forms
                     BuildTXT(vendasAgrupadasPorCliente);
                 }
 
-                if (MessageBox.Show($"O relatório foi salvo na pasta Relatórios. Deseja enviar SMS de cobrança a todos os {clientesDistintos.Count} clientes?", "Exportado", MessageBoxButtons.YesNo, MessageBoxIcon.Information).Equals(DialogResult.Yes))
+                MessageBox.Show($"O relatório foi salvo na pasta Relatórios", "Exportado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (!estadoVenda.Equals(EVendaEstado.Pago) && MessageBox.Show($"Deseja enviar SMS de cobrança? Há {clientesDistintos.Count} cliente(s) com pendências.", "Envio de SMS", MessageBoxButtons.YesNo, MessageBoxIcon.Information).Equals(DialogResult.Yes))
                 {
-                    await SendSMS(clientesDistintos, sales);
-                }
-            }
-        }
-        private async Task SendSMS(List<Cliente> clientesDistintos, List<Venda> sales)
-        {
-            foreach (var cliente in clientesDistintos)
-            {
-                StringBuilder sb = new StringBuilder();
-
-                var vendasPorCliente = sales.Where(x => x.Cliente.Id.Equals(cliente.Id)).ToList();
-
-                var vendasPagas = vendasPorCliente.Where(x => x.VendaPaga).ToList();
-                if (vendasPagas.Count > 0)
-                {
-                    MessageBox.Show($"Há {vendasPagas.Count} compra(s) já paga(s) pelo cliente {cliente.Nome}. Filtrando envio de cobrança somente das compras não-pagas, caso ainda houver.", "Envio de SMS", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    vendasPorCliente = vendasPorCliente.Except(vendasPagas).ToList();
-
-                    if (vendasPorCliente.Count <= 0)
-                        return;
-                }
-
-                var produtosSeparadosPorVenda = vendasPorCliente.Select(x => x.Produtos.ToList()).ToList();
-                decimal totalDevedor = vendasPorCliente.Sum(x => x.TotalVenda);
-
-                sb.AppendLine($"Olá, {cliente.Nome}! Como vai? {_definitions.NomeNegocio} aqui!");
-                sb.AppendLine($"Sua conta do mês de {DateTime.Today.ToString("MMMM").ToUpper()}: {totalDevedor.ToString("c")}");
-                sb.AppendLine("Produtos consumidos:\n");
-
-                Dictionary<Produto, int> produtoQuantidade = new Dictionary<Produto, int>();
-
-                foreach (var produtosVenda in produtosSeparadosPorVenda)
-                {
-                    foreach (var produto in produtosVenda)
+                    if (_smsContext.GetSaldo().SaldoSMS < clientesDistintos.Count)
                     {
-                        var keyProduto = produtoQuantidade.Where(x => x.Key.Id.Equals(produto.Produto.Id)).Select(x => x.Key).FirstOrDefault();
-
-                        if (keyProduto is null)
-                        {
-                            produtoQuantidade.Add(produto.Produto, produto.Quantidade);
-                        }
-                        else
-                        {
-                            produtoQuantidade[produto.Produto] += produto.Quantidade;
-                        }
+                        MessageBox.Show("Não há saldo de SMS para realizar a operação. Considere realizar uma recarga no Gerenciamento de SMS.", "Envio de SMS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
+
+                    var mensagensPorCliente = _smsContext.BuildMessageSMS(sales.Where(x => !x.VendaPaga).ToList());
+
+                    foreach (var mensagem in mensagensPorCliente)
+                    {
+                        var request = _smsContext.SendSMS(new RequestSendSMS
+                        {
+                            Type = 9,
+                            Msg = mensagem.Value,
+                            Number = mensagem.Key.Telefone
+                        });
+
+                        var situacao = _smsContext.CheckSituationSMS(new RequestSituacaoSMS()
+                        {
+                            Id = request.Id.ToString()
+                        });
+
+                        await _smsContext.Add(new SMS
+                        {
+                            Descricao = situacao.Descricao,
+                            Mensagem = mensagem.Value,
+                            Situacao = situacao.Situacao,
+                            Codigo = situacao.Codigo,
+                            IdCliente = mensagem.Key.Id
+                        });
+                    }
+
+                    await _smsContext.Save();
                 }
-
-                foreach (var produto in produtoQuantidade)
-                    sb.AppendLine($"Produto: {produto.Key.Nome} - Preço: {produto.Key.Preco.ToString("c")} - Quantidade: {produto.Value} - Total por produto: {(produto.Key.Preco * produto.Value).ToString("c")}\n");
-
-                if (_definitions.PIX.Length > 0) sb.AppendLine($"PIX:    {_definitions.PIX}");
-                if (_definitions.PicPay.Length > 0) sb.AppendLine($"PICPAY: {_definitions.PicPay}");
-
-                var responseSMS = _smsContext.SendSMS(new RequestSendSMS
-                {
-                    Number = cliente.Telefone,
-                    Msg = sb.ToString()
-                });
-
-                await _smsContext.Add(new SMS
-                {
-                    Id = responseSMS.Id,
-                    Situacao = responseSMS.Situacao,
-                    TelefoneDestino = cliente.Telefone,
-                    Mensagem = sb.ToString(),
-                    Codigo = responseSMS.Codigo,
-                    Descricao = responseSMS.Descricao
-                });
             }
-
-            await _smsContext.Save();
-
-            MessageBox.Show("Todas as SMS foram enviadas. Cheque a situação das mesmas no gerenciamento de SMS.", "Envio de SMS", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        
         private void BuildTXT(IOrderedEnumerable<IGrouping<Cliente, Venda>> vendasAgrupadasPorCliente)
         {
             var totalFinal = 0M;
@@ -248,16 +214,16 @@ namespace ControleVenda.Forms
                     totalPorCliente += venda.TotalVenda;                    
                 }
 
-                sb.AppendLine("\n\n\n");
+                sb.AppendLine("\n\n");
 
                 totalFinal += vendasPorCliente.Sum(x => x.TotalVenda);
 
-                sb.AppendLine($"Total do Cliente: {totalPorCliente.ToString("c")}\n\n");
+                sb.AppendLine($"Total do Cliente: {totalPorCliente.ToString("c")}\n\n\n");
             }
 
             sb.AppendLine($"Total final: {totalFinal.ToString("c")}");
 
-            File.WriteAllTextAsync($"./Relatórios/{DateTime.Today.ToLongDateString()} - REL N{Directory.GetFiles("./Relatórios/").Count() + 1} - Vendas por Cliente.txt", sb.ToString());
+            File.WriteAllTextAsync($"./Relatórios/{DateTime.Today.ToLongDateString()} - REL N{Directory.GetFiles("./Relatórios/").Count() + 1} - Vendas por Cliente - {cbEstadoVenda.SelectedItem.ToString()}.txt", sb.ToString());
         }
         private void BuildTXT(IOrderedEnumerable<IGrouping<DateTime, Venda>> vendasAgrupadasPorData)
         {
@@ -284,16 +250,16 @@ namespace ControleVenda.Forms
                     totalPorData += venda.TotalVenda;
                 }
 
-                sb.AppendLine("\n\n\n");
+                sb.AppendLine("\n\n");
 
                 totalFinal += vendasPorData.Sum(x => x.TotalVenda);
 
-                sb.AppendLine($"Total da Período: {totalPorData.ToString("c")}\n\n");
+                sb.AppendLine($"Total da Período: {totalPorData.ToString("c")}\n\n\n");
             }
 
             sb.AppendLine($"Total final: {totalFinal.ToString("c")}");
 
-            File.WriteAllTextAsync($"./Relatórios/{DateTime.Today.ToLongDateString()} - REL N{Directory.GetFiles("./Relatórios/").Count() + 1} - Vendas por Data.txt", sb.ToString());
+            File.WriteAllTextAsync($"./Relatórios/{DateTime.Today.ToLongDateString()} - REL N{Directory.GetFiles("./Relatórios/").Count() + 1} - Vendas por Data - {cbEstadoVenda.SelectedItem.ToString()}.txt", sb.ToString());
         }
         private List<Cliente> GetSelectedClientsOnGrid()
         {

@@ -165,15 +165,6 @@ namespace ControleVenda.Forms
                     Preco = decimal.Parse(tbPrice.Text.Replace("R$", default).Trim())
                 };
 
-                if (await _produtoContext.Get(selectedProduct.Nome) is not null)
-                {
-                    MessageBox.Show("Já existe registro com esse nome", "Salvar Produto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                    ReturnFromEditing();
-
-                    return;
-                }
-
                 using (new ControlManager(this.Controls))
                 {
                     await _produtoContext.Update(selectedProduct);
