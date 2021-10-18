@@ -20,3 +20,5 @@ Foi utilizado:
 * **Leitura e escritura de arquivos em tempo real, etc.**
 
 **PS.: Necessário SDK .NET 5 para compilar o projeto ou Runtime .NET 5 para executar.**
+
+Projeto finalizado em 6 dias.
