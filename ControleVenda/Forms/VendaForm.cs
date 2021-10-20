@@ -292,7 +292,7 @@ namespace ControleVenda.Forms
                 {
                     Venda venda = new()
                     {
-                        Data = DateTime.Today,
+                        Data = dtPicker.Value,
                         Acrescimo = decimal.Parse(tbTaxa.Text.Replace("R$", default).Trim()),
                         Desconto = decimal.Parse(tbDesconto.Text.Replace("R$", default).Trim()),
                         ModoVenda = Enum.Parse<EModoVenda>(cbModoVenda.SelectedItem.ToString()),
@@ -425,6 +425,16 @@ namespace ControleVenda.Forms
                     currentRow.Cells["Quantia"].Value = "0";
                 }
             }
+        }
+
+        private void dtPicker_ValueChanged(object sender, EventArgs e)
+        {
+            if (dtPicker.Value > DateTime.Today)
+            {
+                MessageBox.Show("Não é possível realizar venda com data maior que a atual. Faça o controle através do Modo de Venda", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dtPicker.Value = DateTime.Today;
+                return;
+            }                
         }
     }
 }

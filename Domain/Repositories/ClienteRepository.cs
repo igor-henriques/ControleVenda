@@ -1,6 +1,5 @@
 ﻿using Domain.Interfaces;
 using Infra.Data;
-using Infra.Models;
 using Infra.Models.Table;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -59,16 +58,16 @@ namespace Domain.Repositories
                 foundClients = campo switch
                 {
                     string field when field.Equals("Telefone") => from i in _context.Cliente.AsNoTracking()
-                                                                        where EF.Functions.Like(i.Telefone, $"%{conteudo.Trim()}%")
-                                                                        select i,
+                                                                  where EF.Functions.Like(i.Telefone, $"%{conteudo.Trim()}%")
+                                                                  select i,
 
                     string field when field.Equals("Nome") => from i in _context.Cliente.AsNoTracking()
-                                                                    where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
-                                                                    select i,
+                                                              where EF.Functions.Like(i.Nome, $"%{conteudo.Trim()}%")
+                                                              select i,
 
                     string field when field.Equals("Identificador") => from i in _context.Cliente.AsNoTracking()
-                                                                             where EF.Functions.Like(i.Identificador, $"%{conteudo.Trim()}%")
-                                                                             select i,
+                                                                       where EF.Functions.Like(i.Identificador, $"%{conteudo.Trim()}%")
+                                                                       select i,
 
                     _ => null
                 };
@@ -86,7 +85,7 @@ namespace Domain.Repositories
         }
 
         public async Task Remove(List<Cliente> clientes)
-        {            
+        {
             var clientsToRemove = await _context.Cliente.Where(x => clientes.Select(y => y.Id).Contains(x.Id)).ToListAsync();
 
             foreach (var cliente in clientsToRemove)

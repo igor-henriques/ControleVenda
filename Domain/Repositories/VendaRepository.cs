@@ -81,7 +81,7 @@ namespace Domain.Repositories
 
         public async Task<List<Venda>> GetVendas()
         {
-            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).OrderByDescending(x => x.Id).Take(_settings.RegistrosEmTabela).ToListAsync();
+            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).OrderByDescending(x => x.Data).ThenByDescending(x => x.Id).Take(_settings.RegistrosEmTabela).ToListAsync();
         }
 
         public async Task Remove(List<Venda> vendas)

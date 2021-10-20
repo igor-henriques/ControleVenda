@@ -59,6 +59,8 @@ namespace ControleVenda.Forms
             this.label5 = new System.Windows.Forms.Label();
             this.cbVendaPaga = new System.Windows.Forms.CheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.dtPicker = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.pbBack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProdutos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -123,7 +125,7 @@ namespace ControleVenda.Forms
             "Ano"});
             this.cbModoVenda.Location = new System.Drawing.Point(139, 107);
             this.cbModoVenda.Name = "cbModoVenda";
-            this.cbModoVenda.Size = new System.Drawing.Size(506, 23);
+            this.cbModoVenda.Size = new System.Drawing.Size(630, 23);
             this.cbModoVenda.TabIndex = 1;
             this.cbModoVenda.Leave += new System.EventHandler(this.cbModoVenda_Leave);
             // 
@@ -180,7 +182,7 @@ namespace ControleVenda.Forms
             this.dgvProdutos.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvProdutos.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.dgvProdutos.GridColor = System.Drawing.Color.White;
-            this.dgvProdutos.Location = new System.Drawing.Point(-1, 136);
+            this.dgvProdutos.Location = new System.Drawing.Point(-1, 168);
             this.dgvProdutos.Name = "dgvProdutos";
             this.dgvProdutos.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -201,7 +203,7 @@ namespace ControleVenda.Forms
             this.dgvProdutos.ShowCellErrors = false;
             this.dgvProdutos.ShowEditingIcon = false;
             this.dgvProdutos.ShowRowErrors = false;
-            this.dgvProdutos.Size = new System.Drawing.Size(787, 329);
+            this.dgvProdutos.Size = new System.Drawing.Size(787, 335);
             this.dgvProdutos.TabIndex = 94;
             this.dgvProdutos.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProdutos_CellLeave);
             this.dgvProdutos.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProdutos_CellLeave);
@@ -248,7 +250,7 @@ namespace ControleVenda.Forms
             this.btnSalvar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSalvar.Font = new System.Drawing.Font("Caviar Dreams", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSalvar.Image = ((System.Drawing.Image)(resources.GetObject("btnSalvar.Image")));
-            this.btnSalvar.Location = new System.Drawing.Point(0, 495);
+            this.btnSalvar.Location = new System.Drawing.Point(0, 536);
             this.btnSalvar.Name = "btnSalvar";
             this.btnSalvar.Size = new System.Drawing.Size(784, 56);
             this.btnSalvar.TabIndex = 6;
@@ -263,7 +265,7 @@ namespace ControleVenda.Forms
             this.tbTaxa.BackColor = System.Drawing.Color.White;
             this.tbTaxa.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbTaxa.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbTaxa.Location = new System.Drawing.Point(58, 474);
+            this.tbTaxa.Location = new System.Drawing.Point(58, 515);
             this.tbTaxa.Name = "tbTaxa";
             this.tbTaxa.PlaceholderText = "Adicionar Taxa";
             this.tbTaxa.Size = new System.Drawing.Size(246, 18);
@@ -275,7 +277,7 @@ namespace ControleVenda.Forms
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Black;
-            this.pictureBox1.Location = new System.Drawing.Point(58, 494);
+            this.pictureBox1.Location = new System.Drawing.Point(58, 535);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(246, 1);
             this.pictureBox1.TabIndex = 104;
@@ -286,7 +288,7 @@ namespace ControleVenda.Forms
             this.tbDesconto.BackColor = System.Drawing.Color.White;
             this.tbDesconto.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbDesconto.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbDesconto.Location = new System.Drawing.Point(401, 474);
+            this.tbDesconto.Location = new System.Drawing.Point(401, 515);
             this.tbDesconto.Name = "tbDesconto";
             this.tbDesconto.PlaceholderText = "Adicionar Desconto";
             this.tbDesconto.Size = new System.Drawing.Size(189, 18);
@@ -298,7 +300,7 @@ namespace ControleVenda.Forms
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Black;
-            this.pictureBox3.Location = new System.Drawing.Point(401, 494);
+            this.pictureBox3.Location = new System.Drawing.Point(401, 535);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(189, 1);
             this.pictureBox3.TabIndex = 106;
@@ -308,7 +310,7 @@ namespace ControleVenda.Forms
             // 
             this.lblTotalDescricao.AutoSize = true;
             this.lblTotalDescricao.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblTotalDescricao.Location = new System.Drawing.Point(596, 476);
+            this.lblTotalDescricao.Location = new System.Drawing.Point(596, 517);
             this.lblTotalDescricao.Name = "lblTotalDescricao";
             this.lblTotalDescricao.Size = new System.Drawing.Size(49, 19);
             this.lblTotalDescricao.TabIndex = 107;
@@ -318,7 +320,7 @@ namespace ControleVenda.Forms
             // 
             this.lblTotal.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTotal.ForeColor = System.Drawing.Color.SeaGreen;
-            this.lblTotal.Location = new System.Drawing.Point(658, 475);
+            this.lblTotal.Location = new System.Drawing.Point(658, 516);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(115, 19);
             this.lblTotal.TabIndex = 108;
@@ -329,7 +331,7 @@ namespace ControleVenda.Forms
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(8, 475);
+            this.label4.Location = new System.Drawing.Point(8, 516);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(44, 18);
             this.label4.TabIndex = 109;
@@ -339,7 +341,7 @@ namespace ControleVenda.Forms
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(320, 475);
+            this.label5.Location = new System.Drawing.Point(320, 516);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(75, 18);
             this.label5.TabIndex = 110;
@@ -349,7 +351,7 @@ namespace ControleVenda.Forms
             // 
             this.cbVendaPaga.AutoSize = true;
             this.cbVendaPaga.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.cbVendaPaga.Location = new System.Drawing.Point(664, 109);
+            this.cbVendaPaga.Location = new System.Drawing.Point(663, 140);
             this.cbVendaPaga.Name = "cbVendaPaga";
             this.cbVendaPaga.Size = new System.Drawing.Size(113, 23);
             this.cbVendaPaga.TabIndex = 111;
@@ -357,12 +359,35 @@ namespace ControleVenda.Forms
             this.toolTip.SetToolTip(this.cbVendaPaga, "Marque caso o cliente já tenho pago essa compra");
             this.cbVendaPaga.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Roboto", 9.9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(9, 145);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(101, 17);
+            this.label1.TabIndex = 113;
+            this.label1.Text = "Data da venda:";
+            // 
+            // dtPicker
+            // 
+            this.dtPicker.CalendarFont = new System.Drawing.Font("Caviar Dreams", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dtPicker.Font = new System.Drawing.Font("Roboto", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dtPicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtPicker.Location = new System.Drawing.Point(139, 138);
+            this.dtPicker.Name = "dtPicker";
+            this.dtPicker.Size = new System.Drawing.Size(506, 24);
+            this.dtPicker.TabIndex = 112;
+            this.dtPicker.ValueChanged += new System.EventHandler(this.dtPicker_ValueChanged);
+            // 
             // VendaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(784, 551);
+            this.ClientSize = new System.Drawing.Size(784, 592);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.dtPicker);
             this.Controls.Add(this.cbVendaPaga);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -420,5 +445,7 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.DataGridViewTextBoxColumn Preco;
         private System.Windows.Forms.CheckBox cbVendaPaga;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DateTimePicker dtPicker;
     }
 }
