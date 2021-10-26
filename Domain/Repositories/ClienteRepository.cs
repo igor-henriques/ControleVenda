@@ -46,7 +46,20 @@ namespace Domain.Repositories
 
         public async Task<List<Cliente>> GetClientes()
         {
-            return await _context.Cliente.AsNoTracking().OrderByDescending(x => x.Identificador).ToListAsync();
+            return (await _context.Cliente.AsNoTracking().ToListAsync()).OrderByDescending(x => int.Parse(x.Identificador)).ToList();
+        }
+
+        public async Task<List<Venda>> Pay(List<Cliente> clientes)
+        {
+            var vendas = await _context.Venda.Include(x => x.Cliente).Where(x => clientes.Select(x => x.Id).Contains(x.IdCliente)).ToListAsync();
+
+            if (vendas?.Count > 0)
+                foreach (var venda in vendas.Where(x => !x.VendaPaga))
+                {
+                    _context.Entry(venda).CurrentValues.SetValues(venda with { VendaPaga = true });
+                }
+
+            return vendas;
         }
 
         public async Task<IEnumerable<Cliente>> Pesquisar(string campo, string conteudo)

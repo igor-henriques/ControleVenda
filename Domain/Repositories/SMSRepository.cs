@@ -115,6 +115,7 @@ namespace Domain.Repositories
                 var vendasPorCliente = sales.Where(x => x.Cliente.Id.Equals(cliente.Id)).ToList();
 
                 var vendasPagas = vendasPorCliente.Where(x => x.VendaPaga).ToList();
+
                 if (vendasPagas.Count > 0)
                 {                    
                     vendasPorCliente = vendasPorCliente.Except(vendasPagas).ToList();
@@ -124,6 +125,7 @@ namespace Domain.Repositories
                 }
 
                 var produtosSeparadosPorVenda = vendasPorCliente.Select(x => x.Produtos.ToList()).ToList();
+
                 decimal totalDevedor = vendasPorCliente.Sum(x => x.TotalVenda);
 
                 sb.AppendLine($"Olá, {cliente.Nome}! Como vai? {_settings.NomeNegocio} aqui!");
@@ -152,7 +154,7 @@ namespace Domain.Repositories
                 foreach (var produto in produtoQuantidade)
                     sb.AppendLine($"Produto: {produto.Key.Nome} - Preço: {produto.Key.Preco.ToString("c")} - Quantidade: {produto.Value} - Total por produto: {(produto.Key.Preco * produto.Value).ToString("c")}\n");
 
-                if (_settings.PIX.Length > 0) sb.AppendLine($"CHAVE PX: {_settings.PIX}");
+                if (_settings.PIX.Length > 0) sb.AppendLine($"CHAVE P1X: {_settings.PIX}");
                 if (_settings.PicPay.Length > 0) sb.AppendLine($"PICPAY: {_settings.PicPay}");
 
                 response.Add(new KeyValuePair<Cliente, string>(cliente, sb.ToString()));

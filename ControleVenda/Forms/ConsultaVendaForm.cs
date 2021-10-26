@@ -1,6 +1,7 @@
 ﻿using ControleVenda.Utility;
 using Domain.Interfaces;
 using Infra.Helpers;
+using Infra.Models.Enum;
 using Infra.Models.Table;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace ControleVenda.Forms
 
         private async void btnPesquisar_Click(object sender, EventArgs e)
         {
-            if (!rbCliente.Checked && !rbData.Checked && !rbID.Checked)
+            if (!rbCliente.Checked && !rbData.Checked && !rbID.Checked && !rbEstadoVenda.Checked)
             {
                 MessageBox.Show("Selecione algum método de pesquisa", "Consultar Venda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -48,9 +49,10 @@ namespace ControleVenda.Forms
             {
                 Dictionary<RadioButton, Func<Task>> searchOptions = new Dictionary<RadioButton, Func<Task>>
                 {
-                    { rbData,    async () => await FillGrid(await SearchByDate(dtiPicker.Value, dtfPicker.Value))              },
-                    { rbCliente, async () => await FillGrid(await SearchByCliente(cbClientePesquisa.SelectedItem as Cliente))  },
-                    { rbID,      async () => await FillGrid(await SearchByID(int.Parse(tbPesquisa.Text)))                 }
+                    { rbData,        async () => await FillGrid(await SearchByDate(dtiPicker.Value, dtfPicker.Value))                },
+                    { rbCliente,     async () => await FillGrid(await SearchByCliente(cbClientePesquisa.SelectedItem as Cliente))    },
+                    { rbID,          async () => await FillGrid(await SearchByID(int.Parse(tbPesquisa.Text)))                        },
+                    { rbEstadoVenda, async () => await FillGrid(await SearchByState(cbEstadoVenda.SelectedIndex is 0 ? false : true))}
                 };
 
                 var searchResponse = searchOptions.Where(x => x.Key.Checked).Select(x => x.Value).FirstOrDefault();
@@ -73,6 +75,11 @@ namespace ControleVenda.Forms
             var response = await _vendaContext.SearchByCliente(cliente);
             return response;
         }
+        private async Task<List<Venda>> SearchByState(bool pago)
+        {
+            var response = await _vendaContext.SearchByState(pago);
+            return response;
+        }
         private async Task<List<Venda>> SearchByID(int Id)
         {
             List<Venda> response = new();
@@ -85,7 +92,7 @@ namespace ControleVenda.Forms
         }
         private async Task<List<Cliente>> GetClients()
         {
-            return await _clienteContext.GetClientes();
+            return (await _clienteContext.GetClientes()).OrderBy(x => x.Nome).ToList();
         }
         private async Task FillGrid(List<Venda> vendas = null)
         {
@@ -136,13 +143,12 @@ namespace ControleVenda.Forms
 
                     if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
                     {
-                        ProdutoVendaForm produtosPorVenda = new ProdutoVendaForm((await _vendaContext.GetProdutosPorVenda(idVenda)));
+                        ProdutoVendaForm produtosPorVenda = new ProdutoVendaForm(await _vendaContext.GetProdutosPorVenda(idVenda));
                         produtosPorVenda.ShowDialog();
                     }
                     else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn)
                     {
                         if (MessageBox.Show("Deseja alterar o estado de pagamento dessa venda?", "Alterar Estado", MessageBoxButtons.YesNo, MessageBoxIcon.Question).Equals(DialogResult.Yes))
-                        {
                             using (new ControlManager(this.Controls))
                             {
                                 await _vendaContext.SwitchSaleState(idVenda, !(bool)senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
@@ -150,7 +156,6 @@ namespace ControleVenda.Forms
 
                                 await FillGrid();
                             }
-                        }
                     }
                 }
             }
@@ -162,6 +167,7 @@ namespace ControleVenda.Forms
             {
                 cbClientePesquisa.DataSource = await GetClients();
                 cbClientePesquisa.DisplayMember = "Nome";
+                cbEstadoVenda.SelectedIndex = 0;
 
                 await FillGrid();
             }
@@ -219,7 +225,7 @@ namespace ControleVenda.Forms
                 return;
             }
 
-            if (MessageBox.Show($"Tem certeza que deseja excluir o(s) {dgvVendas.SelectedRows.Count} registro(s) de Venda?", "Excluir Venda", MessageBoxButtons.YesNo, MessageBoxIcon.Question).Equals(DialogResult.No))
+            if (MessageBox.Show($"Tem certeza que deseja excluir {dgvVendas.SelectedRows.Count} registro(s) de Venda?", "Excluir Venda", MessageBoxButtons.YesNo, MessageBoxIcon.Question).Equals(DialogResult.No))
                 return;
 
             using (new ControlManager(this.Controls))
@@ -256,10 +262,11 @@ namespace ControleVenda.Forms
         }
 
         private async void btnUpdate_Click(object sender, EventArgs e)
-        {                        
+        {
             rbCliente.Checked = false;
             rbData.Checked = false;
             rbID.Checked = false;
+            rbEstadoVenda.Checked = false;
 
             tbPesquisa.Clear();
 
@@ -287,6 +294,49 @@ namespace ControleVenda.Forms
             if ((!ch.Equals((char)Keys.Back)) && (!char.IsDigit(ch) || !int.TryParse(tbPesquisa.Text.Trim() + ch, out _)))
             {
                 e.Handled = true;
+            }
+        }
+
+        private void cbEstadoVenda_MouseDown(object sender, MouseEventArgs e)
+        {
+            rbEstadoVenda.Checked = true;
+        }
+
+        private async void btnQuitarPendencia_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (new ControlManager(this.Controls))
+                {
+                    if (dgvVendas.SelectedRows.Count <= 0)
+                    {
+                        MessageBox.Show("Selecione ao menos uma venda para quitar", "Quitar Pendência", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    if (MessageBox.Show($"Deseja realmente quitar {dgvVendas.SelectedRows.Count} vendas selecionadas?", "Quitar Pendência", MessageBoxButtons.YesNo, MessageBoxIcon.Warning).Equals(DialogResult.No))
+                        return;
+
+                    var vendasSelecionadas = await GetSelectedVendas();
+
+                    var vendasQuitadas = await _vendaContext.Pay(vendasSelecionadas);
+
+                    await _vendaContext.Save();
+
+                    MessageBox.Show($"{vendasQuitadas} venda(s) quitada(s)", "Quitar Pendência", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    foreach (var venda in vendasQuitadas)
+                    {
+                        await _log.Add($"Venda Nº {venda.Id} no nome do cliente {venda.Cliente.Nome}({venda.Cliente.Identificador}) QUITADA. Valor: {venda.TotalVenda.ToString("c")}");
+                    }
+
+                    await FillGrid();
+                }                
+            }
+            catch (Exception ex) 
+            {
+                LogWriter.Write(ex.ToString());
+                MessageBox.Show(ex.ToString());
             }
         }
     }

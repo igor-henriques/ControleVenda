@@ -176,6 +176,7 @@ namespace ControleVenda.Forms
 
                         await _smsContext.Add(new SMS
                         {
+                            Id = request.Id,
                             Descricao = situacao.Descricao,
                             Mensagem = mensagem.Value,
                             Situacao = situacao.Situacao,

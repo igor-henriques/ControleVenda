@@ -324,7 +324,7 @@ namespace ControleVenda.Forms
             {
                 if (dgvClientes.SelectedRows.Count <= 0)
                 {
-                    MessageBox.Show("Selecione ao menos uma linha para excluir", "Excluir Produto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Selecione ao menos uma linha para excluir", "Excluir Cliente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -475,7 +475,7 @@ namespace ControleVenda.Forms
 
                     sb.AppendLine($"{vendasPorCliente.Key.Nome} ({vendasPorCliente.Key.Identificador})");
 
-                    foreach (var venda in vendasPorCliente)
+                    foreach (var venda in vendasPorCliente.OrderBy(x => x.Data))
                     {
                         sb.AppendLine($"\nVenda {venda.ModoVenda} Nº {venda.Id} ; Data: {venda.Data.ToShortDateString()} ; Total: {venda.TotalVenda.ToString("c")} ; Acréscimo: {venda.Acrescimo.ToString("c")} ; Desconto: {venda.Desconto.ToString("c")}");
                         sb.AppendLine("Produtos: ");
@@ -537,20 +537,21 @@ namespace ControleVenda.Forms
 
                     foreach (var mensagem in mensagensPorCliente)
                     {
-                        var request = _smsContext.SendSMS(new RequestSendSMS
+                        var request = _smsContext.SendSMS(new()
                         {
                             Type = 9,
                             Msg = mensagem.Value,
                             Number = mensagem.Key.Telefone
                         });
 
-                        var situacao = _smsContext.CheckSituationSMS(new RequestSituacaoSMS()
+                        var situacao = _smsContext.CheckSituationSMS(new()
                         {
                             Id = request.Id.ToString()
                         });
 
                         await _smsContext.Add(new SMS
                         {
+                            Id = request.Id,
                             Descricao = situacao.Descricao,
                             Mensagem = $"{mensagem.Value}...",
                             Situacao = situacao.Situacao,
@@ -562,6 +563,51 @@ namespace ControleVenda.Forms
                     await _smsContext.Save();
 
                     MessageBox.Show("SMS enviadas a todos os clientes selecionados", "Enviar SMS", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "ERRO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogWriter.Write(ex.ToString());
+            }
+        }
+
+        private void tbIdentificador_DoubleClick(object sender, EventArgs e)
+        {
+            if (dgvClientes.RowCount > 0 & string.IsNullOrEmpty(tbIdentificador.Text))
+                tbIdentificador.Text = (int.Parse(dgvClientes.Rows[0].Cells["Identificador"].Value.ToString()) + 1).ToString("D2");
+        }
+
+        private async void ctxQuitarPendencia_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (new ControlManager(this.Controls))
+                {
+                    if (dgvClientes.SelectedRows.Count <= 0)
+                    {
+                        MessageBox.Show("Selecione ao menos um cliente para quitar pendência", "Quitar Pendência", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    if (MessageBox.Show($"Deseja realmente quitar pendência de {dgvClientes.SelectedRows.Count} cliente(s)?", "Quitar Pendência", MessageBoxButtons.YesNo, MessageBoxIcon.Warning).Equals(DialogResult.No))
+                        return;
+
+                    var clientes = GetSelectedClients();
+
+                    if (clientes?.Count > 0)
+                    {
+                        var vendasQuitadas = await _clienteContext.Pay(clientes);
+
+                        await _clienteContext.Save();
+
+                        MessageBox.Show($"{vendasQuitadas.Count} venda(s) quitada(s) de {clientes.Count} cliente(s)", "Quitar Pendência", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        foreach (var venda in vendasQuitadas)
+                        {
+                            await _log.Add($"Venda Nº {venda.Id} no nome do cliente {venda.Cliente.Nome}({venda.Cliente.Identificador}) QUITADA. Valor: {venda.TotalVenda.ToString("c")}");
+                        }
+                    }
                 }                
             }
             catch (Exception ex)

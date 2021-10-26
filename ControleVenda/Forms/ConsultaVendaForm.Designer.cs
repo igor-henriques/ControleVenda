@@ -30,16 +30,16 @@ namespace ControleVenda.Forms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConsultaVendaForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pbBack = new System.Windows.Forms.PictureBox();
             this.lblDescription = new System.Windows.Forms.Label();
             this.dgvVendas = new System.Windows.Forms.DataGridView();
@@ -65,6 +65,9 @@ namespace ControleVenda.Forms
             this.rbID = new System.Windows.Forms.RadioButton();
             this.tbPesquisa = new System.Windows.Forms.TextBox();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
+            this.cbEstadoVenda = new System.Windows.Forms.ComboBox();
+            this.rbEstadoVenda = new System.Windows.Forms.RadioButton();
+            this.btnQuitarPendencia = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbBack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvVendas)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
@@ -99,19 +102,19 @@ namespace ControleVenda.Forms
             this.dgvVendas.AllowUserToDeleteRows = false;
             this.dgvVendas.AllowUserToResizeColumns = false;
             this.dgvVendas.AllowUserToResizeRows = false;
-            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dgvVendas.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dgvVendas.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvVendas.BackgroundColor = System.Drawing.Color.WhiteSmoke;
             this.dgvVendas.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvVendas.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle22.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            dataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvVendas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvVendas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvVendas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvVendas.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Id,
@@ -123,14 +126,14 @@ namespace ControleVenda.Forms
             this.ModoVenda,
             this.VendaPaga,
             this.Produtos});
-            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle28.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle28.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle28.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle28.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle28.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle28.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvVendas.DefaultCellStyle = dataGridViewCellStyle28;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvVendas.DefaultCellStyle = dataGridViewCellStyle8;
             this.dgvVendas.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvVendas.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.dgvVendas.GridColor = System.Drawing.Color.White;
@@ -138,18 +141,18 @@ namespace ControleVenda.Forms
             this.dgvVendas.Name = "dgvVendas";
             this.dgvVendas.ReadOnly = true;
             this.dgvVendas.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
-            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle29.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle29.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            dataGridViewCellStyle29.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle29.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle29.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle29.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvVendas.RowHeadersDefaultCellStyle = dataGridViewCellStyle29;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvVendas.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvVendas.RowHeadersVisible = false;
             this.dgvVendas.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dgvVendas.RowsDefaultCellStyle = dataGridViewCellStyle30;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dgvVendas.RowsDefaultCellStyle = dataGridViewCellStyle10;
             this.dgvVendas.RowTemplate.Height = 25;
             this.dgvVendas.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgvVendas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -178,8 +181,8 @@ namespace ControleVenda.Forms
             // Data
             // 
             this.Data.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Data.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Data.DefaultCellStyle = dataGridViewCellStyle3;
             this.Data.HeaderText = "Data";
             this.Data.Name = "Data";
             this.Data.ReadOnly = true;
@@ -188,8 +191,8 @@ namespace ControleVenda.Forms
             // TotalVenda
             // 
             this.TotalVenda.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.TotalVenda.DefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.TotalVenda.DefaultCellStyle = dataGridViewCellStyle4;
             this.TotalVenda.HeaderText = "Total";
             this.TotalVenda.Name = "TotalVenda";
             this.TotalVenda.ReadOnly = true;
@@ -198,8 +201,8 @@ namespace ControleVenda.Forms
             // Acrescimo
             // 
             this.Acrescimo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Acrescimo.DefaultCellStyle = dataGridViewCellStyle25;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Acrescimo.DefaultCellStyle = dataGridViewCellStyle5;
             this.Acrescimo.HeaderText = "Acréscimo";
             this.Acrescimo.Name = "Acrescimo";
             this.Acrescimo.ReadOnly = true;
@@ -207,8 +210,8 @@ namespace ControleVenda.Forms
             // Desconto
             // 
             this.Desconto.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Desconto.DefaultCellStyle = dataGridViewCellStyle26;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Desconto.DefaultCellStyle = dataGridViewCellStyle6;
             this.Desconto.HeaderText = "Desconto";
             this.Desconto.Name = "Desconto";
             this.Desconto.ReadOnly = true;
@@ -217,8 +220,8 @@ namespace ControleVenda.Forms
             // ModoVenda
             // 
             this.ModoVenda.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.ModoVenda.DefaultCellStyle = dataGridViewCellStyle27;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.ModoVenda.DefaultCellStyle = dataGridViewCellStyle7;
             this.ModoVenda.HeaderText = "Modo";
             this.ModoVenda.Name = "ModoVenda";
             this.ModoVenda.ReadOnly = true;
@@ -251,9 +254,9 @@ namespace ControleVenda.Forms
             this.cbClientePesquisa.Items.AddRange(new object[] {
             "PENDENTE",
             "PROCESSADO"});
-            this.cbClientePesquisa.Location = new System.Drawing.Point(339, 103);
+            this.cbClientePesquisa.Location = new System.Drawing.Point(323, 103);
             this.cbClientePesquisa.Name = "cbClientePesquisa";
-            this.cbClientePesquisa.Size = new System.Drawing.Size(253, 26);
+            this.cbClientePesquisa.Size = new System.Drawing.Size(199, 26);
             this.cbClientePesquisa.TabIndex = 108;
             this.cbClientePesquisa.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cbClientePesquisa_MouseDown);
             // 
@@ -261,7 +264,7 @@ namespace ControleVenda.Forms
             // 
             this.rbCliente.AutoSize = true;
             this.rbCliente.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.rbCliente.Location = new System.Drawing.Point(339, 71);
+            this.rbCliente.Location = new System.Drawing.Point(323, 71);
             this.rbCliente.Name = "rbCliente";
             this.rbCliente.Size = new System.Drawing.Size(118, 27);
             this.rbCliente.TabIndex = 102;
@@ -283,7 +286,7 @@ namespace ControleVenda.Forms
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(182, 107);
+            this.label4.Location = new System.Drawing.Point(179, 108);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(17, 19);
             this.label4.TabIndex = 98;
@@ -304,7 +307,7 @@ namespace ControleVenda.Forms
             this.dtfPicker.CalendarFont = new System.Drawing.Font("Caviar Dreams", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dtfPicker.Font = new System.Drawing.Font("Roboto", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dtfPicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtfPicker.Location = new System.Drawing.Point(205, 105);
+            this.dtfPicker.Location = new System.Drawing.Point(199, 105);
             this.dtfPicker.Name = "dtfPicker";
             this.dtfPicker.Size = new System.Drawing.Size(108, 24);
             this.dtfPicker.TabIndex = 96;
@@ -344,9 +347,9 @@ namespace ControleVenda.Forms
             this.btnPesquisar.Font = new System.Drawing.Font("Caviar Dreams", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnPesquisar.Image = ((System.Drawing.Image)(resources.GetObject("btnPesquisar.Image")));
             this.btnPesquisar.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnPesquisar.Location = new System.Drawing.Point(0, 135);
+            this.btnPesquisar.Location = new System.Drawing.Point(0, 128);
             this.btnPesquisar.Name = "btnPesquisar";
-            this.btnPesquisar.Size = new System.Drawing.Size(829, 54);
+            this.btnPesquisar.Size = new System.Drawing.Size(829, 61);
             this.btnPesquisar.TabIndex = 109;
             this.btnPesquisar.Text = "   Pesquisar";
             this.btnPesquisar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -363,7 +366,7 @@ namespace ControleVenda.Forms
             this.btnExcluir.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnExcluir.Location = new System.Drawing.Point(0, 557);
             this.btnExcluir.Name = "btnExcluir";
-            this.btnExcluir.Size = new System.Drawing.Size(896, 55);
+            this.btnExcluir.Size = new System.Drawing.Size(696, 55);
             this.btnExcluir.TabIndex = 112;
             this.btnExcluir.Text = " Excluir";
             this.btnExcluir.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -374,7 +377,7 @@ namespace ControleVenda.Forms
             // 
             this.rbID.AutoSize = true;
             this.rbID.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.rbID.Location = new System.Drawing.Point(619, 71);
+            this.rbID.Location = new System.Drawing.Point(751, 71);
             this.rbID.Name = "rbID";
             this.rbID.Size = new System.Drawing.Size(78, 27);
             this.rbID.TabIndex = 113;
@@ -388,10 +391,10 @@ namespace ControleVenda.Forms
             this.tbPesquisa.BackColor = System.Drawing.Color.White;
             this.tbPesquisa.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbPesquisa.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbPesquisa.Location = new System.Drawing.Point(620, 106);
+            this.tbPesquisa.Location = new System.Drawing.Point(751, 106);
             this.tbPesquisa.Name = "tbPesquisa";
             this.tbPesquisa.PlaceholderText = "Pesquisar";
-            this.tbPesquisa.Size = new System.Drawing.Size(254, 20);
+            this.tbPesquisa.Size = new System.Drawing.Size(121, 20);
             this.tbPesquisa.TabIndex = 114;
             this.tbPesquisa.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbPesquisa_KeyDown);
             this.tbPesquisa.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbPesquisa_KeyPress);
@@ -402,11 +405,55 @@ namespace ControleVenda.Forms
             this.pictureBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox6.BackColor = System.Drawing.Color.Black;
-            this.pictureBox6.Location = new System.Drawing.Point(619, 128);
+            this.pictureBox6.Location = new System.Drawing.Point(750, 128);
             this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(254, 1);
+            this.pictureBox6.Size = new System.Drawing.Size(121, 1);
             this.pictureBox6.TabIndex = 115;
             this.pictureBox6.TabStop = false;
+            // 
+            // cbEstadoVenda
+            // 
+            this.cbEstadoVenda.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.cbEstadoVenda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbEstadoVenda.Font = new System.Drawing.Font("Roboto", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.cbEstadoVenda.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.cbEstadoVenda.FormattingEnabled = true;
+            this.cbEstadoVenda.Items.AddRange(new object[] {
+            "PENDENTE",
+            "PAGO"});
+            this.cbEstadoVenda.Location = new System.Drawing.Point(539, 103);
+            this.cbEstadoVenda.Name = "cbEstadoVenda";
+            this.cbEstadoVenda.Size = new System.Drawing.Size(195, 26);
+            this.cbEstadoVenda.TabIndex = 117;
+            this.cbEstadoVenda.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cbEstadoVenda_MouseDown);
+            // 
+            // rbEstadoVenda
+            // 
+            this.rbEstadoVenda.AutoSize = true;
+            this.rbEstadoVenda.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.rbEstadoVenda.Location = new System.Drawing.Point(539, 71);
+            this.rbEstadoVenda.Name = "rbEstadoVenda";
+            this.rbEstadoVenda.Size = new System.Drawing.Size(120, 27);
+            this.rbEstadoVenda.TabIndex = 116;
+            this.rbEstadoVenda.Text = "Por estado";
+            this.rbEstadoVenda.UseVisualStyleBackColor = true;
+            // 
+            // btnQuitarPendencia
+            // 
+            this.btnQuitarPendencia.BackColor = System.Drawing.Color.White;
+            this.btnQuitarPendencia.FlatAppearance.BorderSize = 0;
+            this.btnQuitarPendencia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQuitarPendencia.Font = new System.Drawing.Font("Caviar Dreams", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnQuitarPendencia.Image = global::ControleVenda.Properties.Resources.money__1_;
+            this.btnQuitarPendencia.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnQuitarPendencia.Location = new System.Drawing.Point(702, 557);
+            this.btnQuitarPendencia.Name = "btnQuitarPendencia";
+            this.btnQuitarPendencia.Size = new System.Drawing.Size(194, 55);
+            this.btnQuitarPendencia.TabIndex = 118;
+            this.btnQuitarPendencia.Text = " Pago";
+            this.btnQuitarPendencia.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnQuitarPendencia.UseVisualStyleBackColor = false;
+            this.btnQuitarPendencia.Click += new System.EventHandler(this.btnQuitarPendencia_Click);
             // 
             // ConsultaVendaForm
             // 
@@ -414,20 +461,23 @@ namespace ControleVenda.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(896, 612);
+            this.Controls.Add(this.cbEstadoVenda);
             this.Controls.Add(this.tbPesquisa);
+            this.Controls.Add(this.cbClientePesquisa);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.dtfPicker);
+            this.Controls.Add(this.dtiPicker);
+            this.Controls.Add(this.btnQuitarPendencia);
+            this.Controls.Add(this.rbEstadoVenda);
             this.Controls.Add(this.pictureBox6);
             this.Controls.Add(this.rbID);
             this.Controls.Add(this.dgvVendas);
             this.Controls.Add(this.btnExcluir);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnPesquisar);
-            this.Controls.Add(this.cbClientePesquisa);
             this.Controls.Add(this.rbCliente);
             this.Controls.Add(this.rbData);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.dtfPicker);
-            this.Controls.Add(this.dtiPicker);
             this.Controls.Add(this.pbBack);
             this.Controls.Add(this.lblDescription);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -473,5 +523,8 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.RadioButton rbID;
         private System.Windows.Forms.TextBox tbPesquisa;
         private System.Windows.Forms.PictureBox pictureBox6;
+        private System.Windows.Forms.ComboBox cbEstadoVenda;
+        private System.Windows.Forms.RadioButton rbEstadoVenda;
+        private System.Windows.Forms.Button btnQuitarPendencia;
     }
 }

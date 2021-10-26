@@ -65,6 +65,7 @@ namespace ControleVenda.Forms
             this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxExportarPendencias = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxEnviarSMS = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxQuitarPendencia = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -139,7 +140,8 @@ namespace ControleVenda.Forms
             this.tbIdentificador.Name = "tbIdentificador";
             this.tbIdentificador.Size = new System.Drawing.Size(28, 20);
             this.tbIdentificador.TabIndex = 0;
-            this.toolTip.SetToolTip(this.tbIdentificador, "Campo obrigatório");
+            this.toolTip.SetToolTip(this.tbIdentificador, "Campo obrigatório. Clique duas vezes para gerar um identificador");
+            this.tbIdentificador.DoubleClick += new System.EventHandler(this.tbIdentificador_DoubleClick);
             this.tbIdentificador.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbIdentificador_KeyDown);
             this.tbIdentificador.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbIdentificador_KeyPress);
             // 
@@ -434,9 +436,10 @@ namespace ControleVenda.Forms
             this.ctxMenu.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctxExportarPendencias,
-            this.ctxEnviarSMS});
+            this.ctxEnviarSMS,
+            this.ctxQuitarPendencia});
             this.ctxMenu.Name = "ctxMenu";
-            this.ctxMenu.Size = new System.Drawing.Size(269, 48);
+            this.ctxMenu.Size = new System.Drawing.Size(269, 92);
             this.ctxMenu.Text = "Menu";
             // 
             // ctxExportarPendencias
@@ -456,6 +459,14 @@ namespace ControleVenda.Forms
             this.ctxEnviarSMS.Size = new System.Drawing.Size(268, 22);
             this.ctxEnviarSMS.Text = "Enviar SMS de Pendências";
             this.ctxEnviarSMS.Click += new System.EventHandler(this.ctxEnviarSMS_Click);
+            // 
+            // ctxQuitarPendencia
+            // 
+            this.ctxQuitarPendencia.Image = global::ControleVenda.Properties.Resources.money;
+            this.ctxQuitarPendencia.Name = "ctxQuitarPendencia";
+            this.ctxQuitarPendencia.Size = new System.Drawing.Size(268, 22);
+            this.ctxQuitarPendencia.Text = "Quitar Pendências";
+            this.ctxQuitarPendencia.Click += new System.EventHandler(this.ctxQuitarPendencia_Click);
             // 
             // ClienteForm
             // 
@@ -548,5 +559,6 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.ContextMenuStrip ctxMenu;
         private System.Windows.Forms.ToolStripMenuItem ctxExportarPendencias;
         private System.Windows.Forms.ToolStripMenuItem ctxEnviarSMS;
+        private System.Windows.Forms.ToolStripMenuItem ctxQuitarPendencia;
     }
 }

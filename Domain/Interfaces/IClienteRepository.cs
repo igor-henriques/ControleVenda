@@ -11,6 +11,7 @@ namespace Domain.Interfaces
         Task<Cliente> Get(int Id);
         Task<Cliente> Get(string Identificador);
         Task<Cliente> Add(Cliente cliente);
+        Task<List<Venda>> Pay(List<Cliente> clientes);
         Task Remove(int Id);
         Task Remove(List<Cliente> clientes);
         Task Update(Cliente cliente);

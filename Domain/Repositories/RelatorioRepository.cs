@@ -23,7 +23,7 @@ namespace Domain.Repositories
                         .Include(x => x.Cliente)
                         .Include(x => x.Produtos)
                         .ThenInclude(x => x.Produto)
-                        .Where(venda => venda.Data >= dtInicio && venda.Data <= dtFinal
+                        .Where(venda => venda.Data >= dtInicio && venda.Data <= dtFinal.AddDays(1)
                         && clientes.Select(cliente => cliente.Identificador).Contains(venda.Cliente.Identificador))
                         .ToListAsync();
 

@@ -4,9 +4,11 @@ using Infra.Helpers;
 using Infra.Models.Enum;
 using Infra.Models.Table;
 using Infra.SMS.Request;
+using Infra.SMS.Response;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -35,7 +37,7 @@ namespace ControleVenda.Forms
                     sms.Situacao,
                     sms.Cliente.Telefone,
                     sms.Descricao,
-                    sms.Mensagem.Substring(0, 20) + "...",
+                    sms.Mensagem.Substring(0, 50) + "...",
                     CreateGridButton()
                 }));
             }
@@ -54,7 +56,17 @@ namespace ControleVenda.Forms
 
                     if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
                     {
+                        ReloadSaldo();
+
+                        if (lblSaldo.Text.Equals("0"))
+                        {
+                            MessageBox.Show("Não há saldo de SMS para realizar a operação. Considere realizar uma recarga clicando no botão inferior.", "Re-envio de SMS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
                         await RetrySendSMS(idSms);
+
+                        await FillGrid();
                     }
                 }
             }
@@ -62,27 +74,17 @@ namespace ControleVenda.Forms
         }
         private async Task RetrySendSMS(long id)
         {
-            ReloadSaldo();
-
-            if (lblSaldo.Text.Equals("0"))
-            {
-                MessageBox.Show("Não há saldo de SMS para realizar a operação. Considere realizar uma recarga clicando no botão inferior.", "Re-envio de SMS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             using (new ControlManager(this.Controls))
             {
                 var responseSituacao = _smsContext.CheckSituationSMS(new RequestSituacaoSMS()
                 {
                     Id = id.ToString()
-                });                                
+                });
 
                 var dbSms = await _smsContext.Get(id);
-                
-                if (responseSituacao.Situacao.Equals(ESituacaoResponseSMS.OK))
-                {
-                    MessageBox.Show("A mensagem atual já foi entregue ao cliente.", "Re-envio de SMS", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                if (responseSituacao.Descricao is "ENVIADA" or "RECEBIDA")
+                {
                     await _smsContext.Update(dbSms with
                     {
                         Descricao = responseSituacao.Descricao,
@@ -91,31 +93,29 @@ namespace ControleVenda.Forms
                     });
 
                     await _smsContext.Save();
-
-                    await FillGrid();
-
-                    return;
                 }
-
-                var sms = new RequestSendSMS()
+                else
                 {
-                    Type = 9,
-                    Msg = dbSms.Mensagem,
-                    Number = dbSms.Cliente.Telefone,
-                };
+                    var sms = new RequestSendSMS()
+                    {
+                        Type = 9,
+                        Msg = dbSms.Mensagem,
+                        Number = dbSms.Cliente.Telefone,
+                    };
 
-                var responseSMS = _smsContext.SendSMS(sms);
+                    var responseSMS = _smsContext.SendSMS(sms);
 
-                await _smsContext.Update(new SMS
-                {
-                    Id = responseSMS.Id,
-                    Situacao = responseSMS.Situacao,
-                    IdCliente = dbSms.IdCliente,
-                    Mensagem = sms.Msg,
-                    Codigo = responseSMS.Codigo,
-                    Descricao = responseSMS.Descricao
-                });
-            }            
+                    await _smsContext.Update(new SMS
+                    {
+                        Id = responseSMS.Id,
+                        Situacao = responseSMS.Situacao,
+                        IdCliente = dbSms.IdCliente,
+                        Mensagem = sms.Msg,
+                        Codigo = responseSMS.Codigo,
+                        Descricao = responseSMS.Descricao
+                    });
+                }
+            }
         }
         private DataGridViewButtonCell CreateGridButton()
         {
@@ -153,6 +153,8 @@ namespace ControleVenda.Forms
             {
                 ReloadSaldo();
 
+                await RefreshPending(await _smsContext.Get());
+
                 await FillGrid();
             }
         }
@@ -163,6 +165,59 @@ namespace ControleVenda.Forms
         private void pbBack_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private async Task RefreshPending(List<SMS> pendingSMS)
+        {
+            var sms = pendingSMS.Where(x => x.Descricao.Equals("FILA"));
+
+            if (sms.Count() > 0)
+            {
+                foreach (var pending in sms)
+                {
+                    var situacao = _smsContext.CheckSituationSMS(new() { Id = pending.Id.ToString() });
+
+                    var dbSms = await _smsContext.Get(pending.Id);
+
+                    await _smsContext.Update(new SMS
+                    {
+                        Id = pending.Id,
+                        Mensagem = dbSms.Mensagem,
+                        IdCliente = dbSms.IdCliente,
+                        Descricao = situacao.Descricao,
+                        Situacao = situacao.Situacao,
+                        Codigo = situacao.Codigo
+                    });
+                }
+
+                await _smsContext.Save();
+            }
+        }
+
+        private List<SMS> GetSelectedSMS()
+        {
+            try
+            {
+                List<SMS> response = new();
+
+                foreach (DataGridViewRow row in dgvSms.SelectedRows)
+                {
+                    response.Add(new()
+                    {
+                        Id = int.Parse(row.Cells["Id"].Value.ToString()),
+                        Descricao = row.Cells["Descricao"].Value.ToString()
+                    });
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "ERRO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogWriter.Write(ex.ToString());
+            }
+
+            return default;
         }
     }
 }

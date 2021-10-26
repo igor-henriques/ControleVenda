@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -137,5 +138,6 @@ namespace Infra.Helpers
         public static List<T> CreateList<T>(params T[] elements) => new List<T>(elements);
         
         public static T GetRequiredService<T>(this IServiceProvider _services) => (T)_services.GetService(typeof(T));
+
     }
 }

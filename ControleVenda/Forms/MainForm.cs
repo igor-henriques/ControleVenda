@@ -51,7 +51,7 @@ namespace ControleVenda.Forms
                         });
                     }
 
-                    if (IsFormOpened(selectedForm, out Form currentForm))
+                    if (IsFormOpened(selectedForm, out Form currentForm) & selectedForm.Name != "VendaForm")
                     {
                         currentForm?.Activate();
                     }
