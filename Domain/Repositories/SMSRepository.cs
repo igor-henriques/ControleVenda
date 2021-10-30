@@ -31,7 +31,11 @@ namespace Domain.Repositories
             this.request = new RestRequest();
             this._context = context;
         }
-        public ResponseSituacaoSMS CheckSituationSMS(RequestSituacaoSMS situacaoSMS)
+        public async Task<List<SMS>> GetPendingSMS()
+        {
+            return await _context.SMS.Where(x => !x.Descricao.Equals("RECEBIDA")).ToListAsync();
+        }
+        public async Task<ResponseSituacaoSMS> CheckSituationSMS(RequestSituacaoSMS situacaoSMS)
         {
             try
             {
@@ -41,13 +45,11 @@ namespace Domain.Repositories
 
                 this.restClient = new RestClient($"https://api.smsdev.com.br");
 
-                this.request = new RestRequest("v1/dlr", Method.POST);
-
-                this.request.RequestFormat = DataFormat.Json;
+                this.request = new RestRequest("v1/dlr", Method.POST, DataFormat.Json);
 
                 this.request.AddJsonBody(jsonSms);
 
-                var response = restClient.Execute(request);
+                var response = await restClient.ExecuteAsync(request);
 
                 return JsonConvert.DeserializeObject<ResponseSituacaoSMS>(response.Content);
             }
@@ -64,7 +66,7 @@ namespace Domain.Repositories
             return await _context.SMS.Include(x => x.Cliente).OrderByDescending(x => x.Id).ToListAsync();
         }
 
-        public ResponseSaldoSMS GetSaldo()
+        public async Task<ResponseSaldoSMS> GetSaldo()
         {
             try
             {
@@ -72,7 +74,7 @@ namespace Domain.Repositories
 
                 this.request = new RestRequest("", Method.GET);
 
-                var response = restClient.Execute(request);
+                var response = await restClient.ExecuteAsync(request);
 
                 return JsonConvert.DeserializeObject<ResponseSaldoSMS>(response.Content);
             }
@@ -84,7 +86,7 @@ namespace Domain.Repositories
             return default;
         }
 
-        public ResponseSendSMS SendSMS(RequestSendSMS sms)
+        public async Task<ResponseSendSMS> SendSMS(RequestSendSMS sms)
         {
             sms = RequestSendSMS.TratarNumero(sms with { Key = this._settings.Key });
 
@@ -92,13 +94,11 @@ namespace Domain.Repositories
 
             this.restClient = new RestClient("https://api.smsdev.com.br");
 
-            this.request = new RestRequest("v1/send", Method.POST);
-
-            this.request.RequestFormat = DataFormat.Json;
+            this.request = new RestRequest("v1/send", Method.POST, DataFormat.Json);
 
             this.request.AddJsonBody(jsonSms);
 
-            var response = restClient.Execute(request);
+            var response = await restClient.ExecuteAsync(request);
 
             return JsonConvert.DeserializeObject<ResponseSendSMS>(response.Content);
         }
@@ -154,7 +154,7 @@ namespace Domain.Repositories
                 foreach (var produto in produtoQuantidade)
                     sb.AppendLine($"Produto: {produto.Key.Nome} - Preço: {produto.Key.Preco.ToString("c")} - Quantidade: {produto.Value} - Total por produto: {(produto.Key.Preco * produto.Value).ToString("c")}\n");
 
-                if (_settings.PIX.Length > 0) sb.AppendLine($"CHAVE P1X: {_settings.PIX}");
+                if (_settings.PIX.Length > 0) sb.AppendLine($"CHAVE PX: {_settings.PIX}");
                 if (_settings.PicPay.Length > 0) sb.AppendLine($"PICPAY: {_settings.PicPay}");
 
                 response.Add(new KeyValuePair<Cliente, string>(cliente, sb.ToString()));

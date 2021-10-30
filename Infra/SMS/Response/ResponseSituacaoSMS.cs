@@ -11,7 +11,7 @@ namespace Infra.SMS.Response
         public int Codigo { get; init; }
         [JsonProperty("data_envio")]
         public string DataEnvio { get; init; }
-        public Operadora Operadora { get; init; }
+        public string Operadora { get; init; }
         public string Descricao { get; init; }
     }
 }

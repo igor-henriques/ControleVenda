@@ -50,9 +50,9 @@ namespace ControleVenda.Forms
                 Dictionary<RadioButton, Func<Task>> searchOptions = new Dictionary<RadioButton, Func<Task>>
                 {
                     { rbData,        async () => await FillGrid(await SearchByDate(dtiPicker.Value, dtfPicker.Value))                },
-                    { rbCliente,     async () => await FillGrid(await SearchByCliente(cbClientePesquisa.SelectedItem as Cliente))    },
+                    { rbCliente,     async () => await FillGrid((await SearchByCliente(cbClientePesquisa.SelectedItem as Cliente)).OrderBy(x => x.Data).ToList())    },
                     { rbID,          async () => await FillGrid(await SearchByID(int.Parse(tbPesquisa.Text)))                        },
-                    { rbEstadoVenda, async () => await FillGrid(await SearchByState(cbEstadoVenda.SelectedIndex is 0 ? false : true))}
+                    { rbEstadoVenda, async () => await FillGrid((await SearchByState(cbEstadoVenda.SelectedIndex is 0 ? false : true)).OrderBy(x => x.Data).ToList())}
                 };
 
                 var searchResponse = searchOptions.Where(x => x.Key.Checked).Select(x => x.Value).FirstOrDefault();
@@ -323,7 +323,7 @@ namespace ControleVenda.Forms
 
                     await _vendaContext.Save();
 
-                    MessageBox.Show($"{vendasQuitadas} venda(s) quitada(s)", "Quitar Pendência", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"{vendasQuitadas.Count} venda(s) quitada(s)", "Quitar Pendência", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     foreach (var venda in vendasQuitadas)
                     {

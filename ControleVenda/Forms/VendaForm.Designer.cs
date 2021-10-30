@@ -433,6 +433,7 @@ namespace ControleVenda.Forms
             this.tbDesconto.Size = new System.Drawing.Size(189, 18);
             this.tbDesconto.TabIndex = 112;
             this.tbDesconto.Text = "R$ 0,00";
+            this.tbDesconto.Leave += new System.EventHandler(this.tbDesconto_Leave);
             // 
             // pictureBox3
             // 
@@ -454,6 +455,7 @@ namespace ControleVenda.Forms
             this.tbTaxa.Size = new System.Drawing.Size(246, 18);
             this.tbTaxa.TabIndex = 111;
             this.tbTaxa.Text = "R$ 0,00";
+            this.tbTaxa.Leave += new System.EventHandler(this.tbTaxa_Leave);
             // 
             // pictureBox1
             // 

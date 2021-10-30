@@ -54,10 +54,10 @@ namespace Domain.Repositories
 
         public async Task<List<Venda>> Pay(List<Venda> vendas)
         {
-            var vendasParaProcessar = await _context.Venda.Where(x => vendas.Select(x => x.Id).Contains(x.Id) & x.VendaPaga.Equals(false)).ToListAsync();
+            var vendasParaProcessar = await _context.Venda.Where(x => vendas.Select(x => x.Id).Contains(x.Id)).ToListAsync();
 
             if (vendasParaProcessar?.Count > 0)
-                foreach (var venda in vendasParaProcessar)
+                foreach (var venda in vendasParaProcessar.Where(x => !x.VendaPaga))
                 {
                     _context.Entry(venda).CurrentValues.SetValues(venda with { VendaPaga = true });
                 }

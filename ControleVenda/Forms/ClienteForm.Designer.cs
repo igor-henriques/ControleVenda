@@ -457,16 +457,14 @@ namespace ControleVenda.Forms
             this.ctxEnviarSMS.Image = global::ControleVenda.Properties.Resources.sms;
             this.ctxEnviarSMS.Name = "ctxEnviarSMS";
             this.ctxEnviarSMS.Size = new System.Drawing.Size(268, 22);
-            this.ctxEnviarSMS.Text = "Enviar SMS de Pendências";
-            this.ctxEnviarSMS.Click += new System.EventHandler(this.ctxEnviarSMS_Click);
+            this.ctxEnviarSMS.Text = "Enviar SMS de Pendências";            
             // 
             // ctxQuitarPendencia
             // 
             this.ctxQuitarPendencia.Image = global::ControleVenda.Properties.Resources.money;
             this.ctxQuitarPendencia.Name = "ctxQuitarPendencia";
             this.ctxQuitarPendencia.Size = new System.Drawing.Size(268, 22);
-            this.ctxQuitarPendencia.Text = "Quitar Pendências";
-            this.ctxQuitarPendencia.Click += new System.EventHandler(this.ctxQuitarPendencia_Click);
+            this.ctxQuitarPendencia.Text = "Quitar Pendências";            
             // 
             // ClienteForm
             // 

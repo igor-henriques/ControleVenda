@@ -140,7 +140,7 @@ namespace ControleVenda.Forms
             this.btnEmitir.Text = "   Emitir Relatório";
             this.btnEmitir.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnEmitir.UseVisualStyleBackColor = false;
-            this.btnEmitir.Click += new System.EventHandler(this.btnEmitir_Click);
+            this.btnEmitir.Click += async (obj, e) => await this.btnEmitir_Click(obj, e);
             // 
             // dgvClientes
             // 
@@ -305,7 +305,7 @@ namespace ControleVenda.Forms
             this.Name = "RelatorioForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Controle de Venda - Relatórios";
-            this.Load += new System.EventHandler(this.RelatorioForm_Load);
+            this.Load += async (obj, e) => await this.RelatorioForm_Load(obj, e);
             ((System.ComponentModel.ISupportInitialize)(this.pbBack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).EndInit();
             this.ResumeLayout(false);

@@ -29,6 +29,9 @@ namespace ControleVenda.Forms
             this._log = logContext;
             this._relatorioContext = relatorioContext;
             this._smsContext = smsContext;
+
+            this.ctxEnviarSMS.Click += async (obj, e) => await this.ctxEnviarSMS_Click(obj, e);
+            this.ctxQuitarPendencia.Click += async (obj, e) => await this.ctxQuitarPendencia_Click(obj, e);
         }
 
         private async void ClienteForm_Load(object sender, EventArgs e)
@@ -517,7 +520,7 @@ namespace ControleVenda.Forms
             }
         }
 
-        private async void ctxEnviarSMS_Click(object sender, EventArgs e)
+        private async Task ctxEnviarSMS_Click(object sender, EventArgs e)
         {
             try
             {
@@ -537,14 +540,14 @@ namespace ControleVenda.Forms
 
                     foreach (var mensagem in mensagensPorCliente)
                     {
-                        var request = _smsContext.SendSMS(new()
+                        var request = await _smsContext.SendSMS(new()
                         {
                             Type = 9,
                             Msg = mensagem.Value,
                             Number = mensagem.Key.Telefone
                         });
 
-                        var situacao = _smsContext.CheckSituationSMS(new()
+                        var situacao = await _smsContext.CheckSituationSMS(new()
                         {
                             Id = request.Id.ToString()
                         });
@@ -578,7 +581,7 @@ namespace ControleVenda.Forms
                 tbIdentificador.Text = (int.Parse(dgvClientes.Rows[0].Cells["Identificador"].Value.ToString()) + 1).ToString("D2");
         }
 
-        private async void ctxQuitarPendencia_Click(object sender, EventArgs e)
+        private async Task ctxQuitarPendencia_Click(object sender, EventArgs e)
         {
             try
             {

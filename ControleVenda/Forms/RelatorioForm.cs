@@ -57,7 +57,7 @@ namespace ControleVenda.Forms
             }
         }
 
-        private async void RelatorioForm_Load(object sender, EventArgs e)
+        private async Task RelatorioForm_Load(object sender, EventArgs e)
         {
             await FillGrid();
         }
@@ -93,7 +93,7 @@ namespace ControleVenda.Forms
             }
         }
 
-        private async void btnEmitir_Click(object sender, EventArgs e)
+        private async Task btnEmitir_Click(object sender, EventArgs e)
         {
             if (cbAgrupamento.SelectedItem is null)
             {
@@ -152,11 +152,14 @@ namespace ControleVenda.Forms
 
                 if (!estadoVenda.Equals(EVendaEstado.Pago) && MessageBox.Show($"Deseja enviar SMS de cobrança? Há {clientesDistintos.Count} cliente(s) com pendências.", "Envio de SMS", MessageBoxButtons.YesNo, MessageBoxIcon.Information).Equals(DialogResult.Yes))
                 {
-                    if (_smsContext.GetSaldo().SaldoSMS < clientesDistintos.Count)
+                    if ((await _smsContext.GetSaldo()).SaldoSMS < clientesDistintos.Count)
                     {
                         MessageBox.Show("Não há saldo de SMS para realizar a operação. Considere realizar uma recarga no Gerenciamento de SMS.", "Envio de SMS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
+
+                    if (clientesDistintos.Count > 3)
+                        MessageBox.Show($"A operação levará cerca de {clientesDistintos.Count * 5} segundos para ser concluída.", "Envio de SMS", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     var mensagensPorCliente = _smsContext.BuildMessageSMS(sales.Where(x => !x.VendaPaga).ToList());
 
@@ -169,7 +172,7 @@ namespace ControleVenda.Forms
                             Number = mensagem.Key.Telefone
                         });
 
-                        var situacao = _smsContext.CheckSituationSMS(new RequestSituacaoSMS()
+                        var situacao = await _smsContext.CheckSituationSMS(new RequestSituacaoSMS()
                         {
                             Id = request.Id.ToString()
                         });
@@ -183,6 +186,9 @@ namespace ControleVenda.Forms
                             Codigo = situacao.Codigo,
                             IdCliente = mensagem.Key.Id
                         });
+
+                        if (clientesDistintos.Count > 3)
+                            await Task.Delay(5000);
                     }
 
                     await _smsContext.Save();

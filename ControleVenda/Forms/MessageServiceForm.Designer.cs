@@ -123,8 +123,7 @@ namespace ControleVenda.Forms
             this.dgvSms.ShowEditingIcon = false;
             this.dgvSms.ShowRowErrors = false;
             this.dgvSms.Size = new System.Drawing.Size(800, 359);
-            this.dgvSms.TabIndex = 72;
-            this.dgvSms.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSms_CellContentClick);
+            this.dgvSms.TabIndex = 72;            
             // 
             // Id
             // 
@@ -233,8 +232,7 @@ namespace ControleVenda.Forms
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MessageServiceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Controle de Venda - SMS";
-            this.Load += new System.EventHandler(this.MessageServiceForm_Load);
+            this.Text = "Controle de Venda - SMS";            
             ((System.ComponentModel.ISupportInitialize)(this.pbBack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSms)).EndInit();
             this.ResumeLayout(false);

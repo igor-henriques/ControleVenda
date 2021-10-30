@@ -1,27 +1,50 @@
 ﻿using ControleVenda.Utility;
 using Domain.Interfaces;
 using Infra.Helpers;
-using Infra.Models.Enum;
 using Infra.Models.Table;
 using Infra.SMS.Request;
-using Infra.SMS.Response;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ControleVenda.Forms
-{
+{    
     public partial class MessageServiceForm : Form
     {
+        [DllImport("user32.dll")]
+        internal static extern bool OpenClipboard(IntPtr hWndNewOwner);
+
+        [DllImport("user32.dll")]
+        internal static extern bool CloseClipboard();
+
+        [DllImport("user32.dll")]
+        internal static extern bool SetClipboardData(uint uFormat, IntPtr data);
         public readonly ISMSRepository _smsContext;
+        
         public MessageServiceForm(ISMSRepository smsContext)
         {
             InitializeComponent();
 
             this._smsContext = smsContext;
+
+            this.Load += async (obj, e) => await this.MessageServiceForm_Load(obj, e);
+            this.dgvSms.CellContentClick += async (obj, e) => await dgvSms_CellContentClick(obj, e);
+        }
+        public void ClipboardSet(string text)
+        {
+            OpenClipboard(IntPtr.Zero);
+
+            var ptr = Marshal.StringToHGlobalUni(text);
+            SetClipboardData(13, ptr);
+            CloseClipboard();
+
+            Marshal.FreeHGlobal(ptr);
         }
         public async Task FillGrid(List<SMS> sms = null)
         {
@@ -37,14 +60,22 @@ namespace ControleVenda.Forms
                     sms.Situacao,
                     sms.Cliente.Telefone,
                     sms.Descricao,
-                    sms.Mensagem.Substring(0, 50) + "...",
+                    sms.Mensagem,
                     CreateGridButton()
                 }));
+
+                FormatColumns();
             }
 
             dgvSms.ClearSelection();
         }
-        private async void dgvSms_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void FormatColumns()
+        {
+            for (int i = 0; i < dgvSms.RowCount; i++)
+                dgvSms.Rows[i].DefaultCellStyle.BackColor = i % 2 is 0 ? Color.AliceBlue : Color.WhiteSmoke;            
+        }
+        
+        private async Task dgvSms_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -56,7 +87,7 @@ namespace ControleVenda.Forms
 
                     if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
                     {
-                        ReloadSaldo();
+                        await ReloadSaldo();
 
                         if (lblSaldo.Text.Equals("0"))
                         {
@@ -68,6 +99,17 @@ namespace ControleVenda.Forms
 
                         await FillGrid();
                     }
+                    else if (senderGrid.Columns[e.ColumnIndex].Name.Equals("Mensagem"))
+                    {
+                        ProcessStartInfo pi = new ProcessStartInfo
+                        {
+                            Arguments = senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString(),
+                            FileName = Path.Combine(Directory.GetCurrentDirectory(), "ClipboardSetter.exe"),
+                            UseShellExecute = true,                            
+                        };
+
+                        Process.Start(pi);
+                    }
                 }
             }
             catch (Exception ex) { LogWriter.Write(ex.ToString()); }
@@ -76,7 +118,7 @@ namespace ControleVenda.Forms
         {
             using (new ControlManager(this.Controls))
             {
-                var responseSituacao = _smsContext.CheckSituationSMS(new RequestSituacaoSMS()
+                var responseSituacao = await _smsContext.CheckSituationSMS(new RequestSituacaoSMS()
                 {
                     Id = id.ToString()
                 });
@@ -85,14 +127,14 @@ namespace ControleVenda.Forms
 
                 if (responseSituacao.Descricao is "ENVIADA" or "RECEBIDA")
                 {
+                    MessageBox.Show("A SMS já foi entregue ao cliente.", "Re-envio de SMS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
                     await _smsContext.Update(dbSms with
                     {
                         Descricao = responseSituacao.Descricao,
                         Situacao = responseSituacao.Situacao,
                         Codigo = responseSituacao.Codigo
-                    });
-
-                    await _smsContext.Save();
+                    });                    
                 }
                 else
                 {
@@ -103,7 +145,7 @@ namespace ControleVenda.Forms
                         Number = dbSms.Cliente.Telefone,
                     };
 
-                    var responseSMS = _smsContext.SendSMS(sms);
+                    var responseSMS = await _smsContext.SendSMS(sms);
 
                     await _smsContext.Update(new SMS
                     {
@@ -115,6 +157,8 @@ namespace ControleVenda.Forms
                         Descricao = responseSMS.Descricao
                     });
                 }
+
+                await _smsContext.Save();
             }
         }
         private DataGridViewButtonCell CreateGridButton()
@@ -147,20 +191,20 @@ namespace ControleVenda.Forms
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
-        private async void MessageServiceForm_Load(object sender, EventArgs e)
+        private async Task MessageServiceForm_Load(object sender, EventArgs e)
         {
             using (new ControlManager(this.Controls))
             {
-                ReloadSaldo();
+                await ReloadSaldo();
 
                 await RefreshPending(await _smsContext.Get());
 
                 await FillGrid();
             }
         }
-        private void ReloadSaldo()
+        private async Task ReloadSaldo()
         {
-            this.lblSaldo.Text = $"{_smsContext.GetSaldo().SaldoSMS}";
+            this.lblSaldo.Text = $"{(await _smsContext.GetSaldo()).SaldoSMS}";
         }
         private void pbBack_Click(object sender, EventArgs e)
         {
@@ -169,24 +213,22 @@ namespace ControleVenda.Forms
 
         private async Task RefreshPending(List<SMS> pendingSMS)
         {
-            var sms = pendingSMS.Where(x => x.Descricao.Equals("FILA"));
+            var sms = pendingSMS.Where(x => !x.Descricao.Equals("RECEBIDA"));
 
             if (sms.Count() > 0)
             {
                 foreach (var pending in sms)
                 {
-                    var situacao = _smsContext.CheckSituationSMS(new() { Id = pending.Id.ToString() });
+                    var responseSituacao = await _smsContext.CheckSituationSMS(new() { Id = pending.Id.ToString() });
 
                     var dbSms = await _smsContext.Get(pending.Id);
 
-                    await _smsContext.Update(new SMS
+                    await _smsContext.Update(dbSms with
                     {
                         Id = pending.Id,
-                        Mensagem = dbSms.Mensagem,
-                        IdCliente = dbSms.IdCliente,
-                        Descricao = situacao.Descricao,
-                        Situacao = situacao.Situacao,
-                        Codigo = situacao.Codigo
+                        Descricao = responseSituacao.Descricao,
+                        Situacao = responseSituacao.Situacao,
+                        Codigo = responseSituacao.Codigo
                     });
                 }
 
@@ -218,6 +260,6 @@ namespace ControleVenda.Forms
             }
 
             return default;
-        }
+        }        
     }
 }
