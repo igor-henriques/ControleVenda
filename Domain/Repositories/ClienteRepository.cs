@@ -51,7 +51,7 @@ namespace Domain.Repositories
 
         public async Task<List<Venda>> Pay(List<Cliente> clientes)
         {
-            var vendas = await _context.Venda.Include(x => x.Cliente).Where(x => clientes.Select(x => x.Id).Contains(x.IdCliente)).ToListAsync();
+            var vendas = await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).ThenInclude(x => x.Produto).Where(x => clientes.Select(x => x.Id).Contains(x.IdCliente)).ToListAsync();
 
             if (vendas?.Count > 0)
                 foreach (var venda in vendas.Where(x => !x.VendaPaga))

@@ -50,6 +50,9 @@ namespace ControleVenda.Forms
             this.tbRegistros = new System.Windows.Forms.TextBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnSalvar = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.rbWppWeb = new System.Windows.Forms.RadioButton();
+            this.rbWppDesktop = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -237,11 +240,12 @@ namespace ControleVenda.Forms
             // btnSalvar
             // 
             this.btnSalvar.BackColor = System.Drawing.Color.White;
+            this.btnSalvar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btnSalvar.FlatAppearance.BorderSize = 0;
             this.btnSalvar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSalvar.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSalvar.Image = ((System.Drawing.Image)(resources.GetObject("btnSalvar.Image")));
-            this.btnSalvar.Location = new System.Drawing.Point(0, 276);
+            this.btnSalvar.Location = new System.Drawing.Point(0, 325);
             this.btnSalvar.Name = "btnSalvar";
             this.btnSalvar.Size = new System.Drawing.Size(446, 77);
             this.btnSalvar.TabIndex = 129;
@@ -251,12 +255,50 @@ namespace ControleVenda.Forms
             this.btnSalvar.UseVisualStyleBackColor = false;
             this.btnSalvar.Click += new System.EventHandler(this.btnSalvar_Click);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label6.Location = new System.Drawing.Point(16, 297);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(78, 18);
+            this.label6.TabIndex = 132;
+            this.label6.Text = "Whatsapp:";
+            this.toolTip.SetToolTip(this.label6, "Quantidade máxima de registros que as tabelas carregam por padrão");
+            // 
+            // rbWppWeb
+            // 
+            this.rbWppWeb.AutoSize = true;
+            this.rbWppWeb.Font = new System.Drawing.Font("Roboto", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.rbWppWeb.Location = new System.Drawing.Point(149, 296);
+            this.rbWppWeb.Name = "rbWppWeb";
+            this.rbWppWeb.Size = new System.Drawing.Size(53, 21);
+            this.rbWppWeb.TabIndex = 133;
+            this.rbWppWeb.TabStop = true;
+            this.rbWppWeb.Text = "Web";
+            this.rbWppWeb.UseVisualStyleBackColor = true;
+            // 
+            // rbWppDesktop
+            // 
+            this.rbWppDesktop.AutoSize = true;
+            this.rbWppDesktop.Font = new System.Drawing.Font("Roboto", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.rbWppDesktop.Location = new System.Drawing.Point(208, 296);
+            this.rbWppDesktop.Name = "rbWppDesktop";
+            this.rbWppDesktop.Size = new System.Drawing.Size(77, 21);
+            this.rbWppDesktop.TabIndex = 134;
+            this.rbWppDesktop.TabStop = true;
+            this.rbWppDesktop.Text = "Desktop";
+            this.rbWppDesktop.UseVisualStyleBackColor = true;
+            // 
             // ConfiguracaoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(446, 348);
+            this.ClientSize = new System.Drawing.Size(446, 402);
+            this.Controls.Add(this.rbWppDesktop);
+            this.Controls.Add(this.rbWppWeb);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.btnSalvar);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.pictureBox5);
@@ -316,5 +358,8 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.TextBox tbRegistros;
         private System.Windows.Forms.Button btnSalvar;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.RadioButton rbWppWeb;
+        private System.Windows.Forms.RadioButton rbWppDesktop;
     }
 }

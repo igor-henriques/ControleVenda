@@ -203,9 +203,29 @@ namespace ControleVenda.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap text_format__1_ {
+            get {
+                object obj = ResourceManager.GetObject("text-format (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap trash__1_ {
             get {
                 object obj = ResourceManager.GetObject("trash (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap whatsapp__3_ {
+            get {
+                object obj = ResourceManager.GetObject("whatsapp (3)", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

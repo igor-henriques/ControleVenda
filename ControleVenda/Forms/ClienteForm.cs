@@ -1,11 +1,16 @@
 ﻿using ControleVenda.Utility;
 using Domain.Interfaces;
 using Infra.Helpers;
+using Infra.Models;
 using Infra.Models.Table;
 using Infra.SMS;
 using Infra.SMS.Request;
+using SendSMS.Interfaces;
+using SendSMS.Models.Requests;
+using SendSMS.Repository;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -21,9 +26,15 @@ namespace ControleVenda.Forms
         private readonly IRelatorioRepository _relatorioContext;
         private readonly ILogRepository _log;
         private readonly ISMSRepository _smsContext;
-        public ClienteForm(IClienteRepository clienteContext, ILogRepository logContext, IRelatorioRepository relatorioContext, ISMSRepository smsContext)
+        private readonly IServiceSMS serviceSMS;
+        private readonly Settings settings;
+        public ClienteForm(IClienteRepository clienteContext, ILogRepository logContext, IRelatorioRepository relatorioContext, ISMSRepository smsContext, Settings settings)
         {
             InitializeComponent();
+
+            this.settings = settings;
+
+            this.serviceSMS = new ServiceSMS(settings.Key);
 
             this._clienteContext = clienteContext;
             this._log = logContext;
@@ -545,7 +556,7 @@ namespace ControleVenda.Forms
                             Type = 9,
                             Msg = mensagem.Value,
                             Number = mensagem.Key.Telefone
-                        });
+                        });                        
 
                         var situacao = await _smsContext.CheckSituationSMS(new()
                         {
@@ -556,7 +567,7 @@ namespace ControleVenda.Forms
                         {
                             Id = request.Id,
                             Descricao = situacao.Descricao,
-                            Mensagem = $"{mensagem.Value}...",
+                            Mensagem = $"{mensagem.Value}",
                             Situacao = situacao.Situacao,
                             Codigo = situacao.Codigo,
                             IdCliente = mensagem.Key.Id
@@ -618,6 +629,87 @@ namespace ControleVenda.Forms
                 MessageBox.Show(ex.ToString(), "ERRO", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 LogWriter.Write(ex.ToString());
             }
+        }
+
+        private async void ctxGerarTextoPendencia_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var clientes = GetSelectedClients();
+
+                if (clientes?.Count > 0)
+                {
+                    var sales = await _relatorioContext.RelatorioPorDataCliente(DateTime.Today.AddYears(-1), DateTime.Today, clientes, Infra.Models.Enum.EVendaEstado.Pendente);
+
+                    if (sales?.Count <= 0)
+                    {
+                        MessageBox.Show("Não há pendências aos clientes selecionados.", "Enviar SMS", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    var mensagensPorCliente = _smsContext.BuildMessageSMS(sales);
+
+                    if (mensagensPorCliente?.Count > 0)
+                        Infra.Helpers.Clipboard.SetText(mensagensPorCliente.FirstOrDefault().Value);
+                }                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "ERRO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogWriter.Write(ex.ToString());
+            }
+        }
+
+        private async void ctxEnviarWhatsapp_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var clientes = GetSelectedClients();
+
+                if (clientes?.Count > 0)
+                {
+                    var sales = await _relatorioContext.RelatorioPorDataCliente(DateTime.Today.AddYears(-1), DateTime.Today, clientes, Infra.Models.Enum.EVendaEstado.Pendente);
+
+                    if (sales?.Count <= 0)
+                    {
+                        MessageBox.Show("Não há pendências aos clientes selecionados.", "Enviar SMS", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    var mensagensPorCliente = _smsContext.BuildMessageSMS(sales);
+
+                    if (mensagensPorCliente?.Count > 0)
+                    {
+                        string url = $"{settings.ModoWhatsapp.GetDescription()}send?phone=55@phone&text=@text";
+
+                        string filteredText = mensagensPorCliente.FirstOrDefault().Value.Replace("\n", "%0D");
+
+                        string phoneNumber = mensagensPorCliente.FirstOrDefault().Key.Telefone;
+
+                        FilterPhoneNumber(ref phoneNumber);
+
+                        Process.Start(new ProcessStartInfo()
+                        {
+                            UseShellExecute = true,
+                            FileName = url.Replace("@phone", phoneNumber).Replace("@text", filteredText)
+                        });
+                    }                        
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "ERRO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogWriter.Write(ex.ToString());
+            }
+        }
+
+        private void FilterPhoneNumber(ref string number)
+        {
+            number  .Replace(" ", "")
+                    .Replace("(", "")
+                    .Replace(")", "")
+                    .Replace("-", "")
+                    .Trim();
         }
     }
 }

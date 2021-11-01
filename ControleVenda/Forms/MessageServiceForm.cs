@@ -101,14 +101,7 @@ namespace ControleVenda.Forms
                     }
                     else if (senderGrid.Columns[e.ColumnIndex].Name.Equals("Mensagem"))
                     {
-                        ProcessStartInfo pi = new ProcessStartInfo
-                        {
-                            Arguments = senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString(),
-                            FileName = Path.Combine(Directory.GetCurrentDirectory(), "ClipboardSetter.exe"),
-                            UseShellExecute = true,                            
-                        };
-
-                        Process.Start(pi);
+                        Infra.Helpers.Clipboard.SetText(senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
                     }
                 }
             }

@@ -18,8 +18,8 @@ namespace Infra.Models.Table
         public EModoVenda ModoVenda { get; init; }
         [ForeignKey("Cliente")]
         public int IdCliente { get; init; }
-        public Cliente Cliente { get; init; }
+        public virtual Cliente Cliente { get; init; }
         public bool VendaPaga { get; init; }
-        public List<ProdutoVenda> Produtos { get; init; }
+        public virtual List<ProdutoVenda> Produtos { get; init; }
     }
 }

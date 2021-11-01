@@ -1,4 +1,5 @@
 ﻿using Infra.Models;
+using Infra.Models.Enum;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -24,6 +25,8 @@ namespace ControleVenda.Forms
                 tbPIX.Text = settings.PIX;
                 tbSmsKey.Text = settings.Key;
                 tbRegistros.Text = settings.RegistrosEmTabela.ToString();
+
+                _ = settings.ModoWhatsapp.Equals(EModoWhatsapp.Desktop) ? rbWppDesktop.Checked = true : rbWppWeb.Checked = true;
             }
         }
 
@@ -79,7 +82,8 @@ namespace ControleVenda.Forms
                 NomeNegocio = tbNomeNegocio.Text,
                 PicPay = tbPicPay.Text,
                 PIX = tbPIX.Text,
-                RegistrosEmTabela = int.Parse(tbRegistros.Text)
+                RegistrosEmTabela = int.Parse(tbRegistros.Text),
+                ModoWhatsapp = rbWppDesktop.Checked ? Infra.Models.Enum.EModoWhatsapp.Desktop : Infra.Models.Enum.EModoWhatsapp.Web
             };
 
             await File.WriteAllTextAsync("./Configuração.json", JsonConvert.SerializeObject(config));

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Infra.Models.Enum;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
@@ -18,6 +19,8 @@ namespace Infra.Models
         public string PicPay { get; init; }
         [JsonProperty("REGISTROS EM TABELA")]
         public int RegistrosEmTabela { get; init; }
+        [JsonProperty("ENVIO DE MENSAGEM WHATSAPP")]
+        public EModoWhatsapp ModoWhatsapp { get; init; }
 
         public Settings()
         {
@@ -28,6 +31,7 @@ namespace Infra.Models
             this.PIX = settings["PIX"].ToObject<string>();
             this.PicPay = settings["PICPAY"].ToObject<string>();
             this.RegistrosEmTabela = settings["REGISTROS EM TABELA"].ToObject<int>();
+            this.ModoWhatsapp = settings["ENVIO DE MENSAGEM WHATSAPP"].ToObject<EModoWhatsapp>();
         }
     }
 }

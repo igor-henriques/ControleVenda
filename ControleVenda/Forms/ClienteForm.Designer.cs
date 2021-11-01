@@ -66,6 +66,8 @@ namespace ControleVenda.Forms
             this.ctxExportarPendencias = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxEnviarSMS = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxQuitarPendencia = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxGerarTextoPendencia = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxEnviarWhatsapp = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -437,9 +439,11 @@ namespace ControleVenda.Forms
             this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctxExportarPendencias,
             this.ctxEnviarSMS,
+            this.ctxEnviarWhatsapp,
+            this.ctxGerarTextoPendencia,
             this.ctxQuitarPendencia});
             this.ctxMenu.Name = "ctxMenu";
-            this.ctxMenu.Size = new System.Drawing.Size(269, 92);
+            this.ctxMenu.Size = new System.Drawing.Size(305, 114);
             this.ctxMenu.Text = "Menu";
             // 
             // ctxExportarPendencias
@@ -447,8 +451,8 @@ namespace ControleVenda.Forms
             this.ctxExportarPendencias.Image = global::ControleVenda.Properties.Resources.report;
             this.ctxExportarPendencias.Name = "ctxExportarPendencias";
             this.ctxExportarPendencias.ShowShortcutKeys = false;
-            this.ctxExportarPendencias.Size = new System.Drawing.Size(268, 22);
-            this.ctxExportarPendencias.Text = "Emitir Pendências";
+            this.ctxExportarPendencias.Size = new System.Drawing.Size(304, 22);
+            this.ctxExportarPendencias.Text = "Emitir Pendências em Relatório";
             this.ctxExportarPendencias.ToolTipText = "Exporta as linhas selecionadas em arquivo";
             this.ctxExportarPendencias.Click += new System.EventHandler(this.ctxExportarPendencias_Click);
             // 
@@ -456,15 +460,31 @@ namespace ControleVenda.Forms
             // 
             this.ctxEnviarSMS.Image = global::ControleVenda.Properties.Resources.sms;
             this.ctxEnviarSMS.Name = "ctxEnviarSMS";
-            this.ctxEnviarSMS.Size = new System.Drawing.Size(268, 22);
-            this.ctxEnviarSMS.Text = "Enviar SMS de Pendências";            
+            this.ctxEnviarSMS.Size = new System.Drawing.Size(304, 22);
+            this.ctxEnviarSMS.Text = "Enviar SMS de Pendências";
             // 
             // ctxQuitarPendencia
             // 
             this.ctxQuitarPendencia.Image = global::ControleVenda.Properties.Resources.money;
             this.ctxQuitarPendencia.Name = "ctxQuitarPendencia";
-            this.ctxQuitarPendencia.Size = new System.Drawing.Size(268, 22);
-            this.ctxQuitarPendencia.Text = "Quitar Pendências";            
+            this.ctxQuitarPendencia.Size = new System.Drawing.Size(304, 22);
+            this.ctxQuitarPendencia.Text = "Quitar Pendências";
+            // 
+            // ctxGerarTextoPendencia
+            // 
+            this.ctxGerarTextoPendencia.Image = global::ControleVenda.Properties.Resources.text_format__1_;
+            this.ctxGerarTextoPendencia.Name = "ctxGerarTextoPendencia";
+            this.ctxGerarTextoPendencia.Size = new System.Drawing.Size(304, 22);
+            this.ctxGerarTextoPendencia.Text = "Gerar Texto de Pendências";
+            this.ctxGerarTextoPendencia.Click += new System.EventHandler(this.ctxGerarTextoPendencia_Click);
+            // 
+            // ctxEnviarWhatsapp
+            // 
+            this.ctxEnviarWhatsapp.Image = global::ControleVenda.Properties.Resources.whatsapp__3_;
+            this.ctxEnviarWhatsapp.Name = "ctxEnviarWhatsapp";
+            this.ctxEnviarWhatsapp.Size = new System.Drawing.Size(304, 22);
+            this.ctxEnviarWhatsapp.Text = "Enviar Whatsapp de Pendências";
+            this.ctxEnviarWhatsapp.Click += new System.EventHandler(this.ctxEnviarWhatsapp_Click);
             // 
             // ClienteForm
             // 
@@ -558,5 +578,7 @@ namespace ControleVenda.Forms
         private System.Windows.Forms.ToolStripMenuItem ctxExportarPendencias;
         private System.Windows.Forms.ToolStripMenuItem ctxEnviarSMS;
         private System.Windows.Forms.ToolStripMenuItem ctxQuitarPendencia;
+        private System.Windows.Forms.ToolStripMenuItem ctxGerarTextoPendencia;
+        private System.Windows.Forms.ToolStripMenuItem ctxEnviarWhatsapp;
     }
 }

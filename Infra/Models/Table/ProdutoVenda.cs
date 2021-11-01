@@ -9,10 +9,10 @@ namespace Infra.Models.Table
         public int Id { get; init; }
         [ForeignKey("Venda")]
         public int IdVenda { get; init; }
-        public Venda Venda { get; init; }
+        public virtual Venda Venda { get; init; }
         [ForeignKey("Produto")]
         public int IdProduto { get; init; }
-        public Produto Produto { get; init; }
+        public virtual Produto Produto { get; init; }
         public int Quantidade { get; init; }
     }
 }

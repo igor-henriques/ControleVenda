@@ -22,9 +22,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClipboardSetter\ClipboardSetter.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Infra\Infra.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SendSMS">
+      <HintPath>..\..\SendSMS\SendSMS\bin\Release\net5.0\SendSMS.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

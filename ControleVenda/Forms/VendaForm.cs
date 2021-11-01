@@ -165,7 +165,7 @@ namespace ControleVenda.Forms
         {
             decimal total = 0M;
 
-            foreach (var produto in GetProdutosOnVenda(false))
+            foreach (var produto in GetProdutosOnVenda())
             {
                 total += produto.Quantidade * produto.Produto.Preco;
             }
@@ -175,7 +175,7 @@ namespace ControleVenda.Forms
 
             lblTotal.Text = total.ToString("c");
         }
-        private List<ProdutoVenda> GetProdutosOnVenda(bool querying)
+        private List<ProdutoVenda> GetProdutosOnVenda()
         {
             List<ProdutoVenda> produtosOnVenda = new();
 
@@ -195,7 +195,7 @@ namespace ControleVenda.Forms
                         IdProduto = rowId
                     };
 
-                    produtosOnVenda.Add(querying ? produtoVenda : produtoVenda with
+                    produtosOnVenda.Add(produtoVenda with
                     {
                         Produto = new()
                         {
@@ -203,6 +203,28 @@ namespace ControleVenda.Forms
                             Nome = rowName,
                             Preco = rowPrice
                         },
+                    });
+                }
+            }
+
+            return produtosOnVenda;
+        }
+        private List<ProdutoVenda> GetProdutosOnVendaQuerying()
+        {
+            List<ProdutoVenda> produtosOnVenda = new();
+
+            foreach (DataGridViewRow row in dgvProdutos.Rows)
+            {
+                var rowQuantia = row.Cells["Quantia"].Value?.ToString();
+
+                if (!string.IsNullOrEmpty(rowQuantia) & int.TryParse(rowQuantia, out int quantia) & quantia > 0)
+                {
+                    var rowId = int.Parse(row.Cells["Id"].Value.ToString());
+
+                    produtosOnVenda.Add(new()
+                    {
+                        Quantidade = quantia,
+                        IdProduto = rowId
                     });
                 }
             }
@@ -269,7 +291,7 @@ namespace ControleVenda.Forms
                 return;
             }
 
-            if (GetProdutosOnVenda(false).Count <= 0)
+            if (GetProdutosOnVenda().Count <= 0)
             {
                 MessageBox.Show("Não foi selecionado nenhum produto para venda", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -322,7 +344,7 @@ namespace ControleVenda.Forms
                         TotalVenda = totalVenda,
                         IdCliente = selectedClient.Id,
                         VendaPaga = cbVendaPaga.Checked,
-                        Produtos = GetProdutosOnVenda(true)
+                        Produtos = GetProdutosOnVendaQuerying()
                     };
 
                     var vendaProcessada = await _vendaContext.Add(venda);
@@ -361,7 +383,7 @@ namespace ControleVenda.Forms
                 return;
             }
 
-            if (GetProdutosOnVenda(false).Count <= 0)
+            if (GetProdutosOnVenda().Count <= 0)
             {
                 MessageBox.Show("Não foi selecionado nenhum produto para venda", "Finalizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -416,7 +438,7 @@ namespace ControleVenda.Forms
                             TotalVenda = totalVenda,
                             IdCliente = cliente.Id,
                             VendaPaga = cbVendaPaga.Checked,
-                            Produtos = GetProdutosOnVenda(true)
+                            Produtos = GetProdutosOnVendaQuerying()
                         });
                     }
 

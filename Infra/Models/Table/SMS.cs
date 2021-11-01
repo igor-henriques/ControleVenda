@@ -11,7 +11,7 @@ namespace Infra.Models.Table
         public ESituacaoResponseSMS Situacao { get; init; }
         [ForeignKey("Cliente")]
         public int IdCliente { get; init; }
-        public Cliente Cliente { get; init; }
+        public virtual Cliente Cliente { get; init; }
         public int Codigo { get; init; }        
         public string Descricao { get; init; }
         public string Mensagem { get; init; }

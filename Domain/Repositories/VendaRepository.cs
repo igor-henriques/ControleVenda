@@ -54,7 +54,7 @@ namespace Domain.Repositories
 
         public async Task<List<Venda>> Pay(List<Venda> vendas)
         {
-            var vendasParaProcessar = await _context.Venda.Where(x => vendas.Select(x => x.Id).Contains(x.Id)).ToListAsync();
+            var vendasParaProcessar = await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).ThenInclude(x => x.Produto).Where(x => vendas.Select(x => x.Id).Contains(x.Id)).ToListAsync();
 
             if (vendasParaProcessar?.Count > 0)
                 foreach (var venda in vendasParaProcessar.Where(x => !x.VendaPaga))
@@ -67,28 +67,24 @@ namespace Domain.Repositories
 
         public async Task<Venda> Get(int Id)
         {
-            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).AsNoTracking().Where(x => x.Id.Equals(Id)).FirstOrDefaultAsync();
+            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).ThenInclude(x => x.Produto).AsNoTracking().Where(x => x.Id.Equals(Id)).FirstOrDefaultAsync();
         }
 
         public async Task<List<Venda>> Get(List<int> idVendas)
         {
-            return await _context.Venda.Where(x => idVendas.Contains(x.Id)).ToListAsync();
+            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).ThenInclude(x => x.Produto).Where(x => idVendas.Contains(x.Id)).ToListAsync();
         }
 
         public async Task<List<ProdutoVenda>> GetProdutosPorVenda(int idVenda)
         {
-            var response = await _context.Venda.FindAsync(idVenda);
+            var response = await _context.Venda.Include(x => x.Produtos).ThenInclude(x => x.Produto).Where(x => x.Id.Equals(idVenda)).FirstOrDefaultAsync();
 
-            var produtosResponse = await (from i in _context.ProdutoVenda.Include(x => x.Produto)
-                                          where i.IdVenda.Equals(response.Id)
-                                          select new ProdutoVenda() { Produto = i.Produto, Quantidade = i.Quantidade }).ToListAsync();
-
-            return produtosResponse;
+            return response?.Produtos;
         }
 
         public async Task<List<Venda>> GetVendas()
         {
-            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).OrderByDescending(x => x.Data).ThenByDescending(x => x.Id).Take(_settings.RegistrosEmTabela).ToListAsync();
+            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).ThenInclude(x => x.Produto).OrderByDescending(x => x.Data).ThenByDescending(x => x.Id).Take(_settings.RegistrosEmTabela).ToListAsync();
         }
 
         public async Task Remove(List<Venda> vendas)
@@ -108,31 +104,31 @@ namespace Domain.Repositories
 
         public async Task<List<Venda>> SearchByCliente(Cliente cliente)
         {
-            return await _context.Venda.Include(x => x.Cliente).Where(x => x.IdCliente.Equals(cliente.Id)).ToListAsync();
+            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).ThenInclude(x => x.Produto).Where(x => x.IdCliente.Equals(cliente.Id)).ToListAsync();
         }
 
         public async Task<List<Venda>> SearchByDate(DateTime initialDate, DateTime finalDate)
         {
-            return await _context.Venda.Include(x => x.Cliente).Where(x => x.Data >= initialDate && x.Data <= finalDate).ToListAsync();
+            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).ThenInclude(x => x.Produto).Where(x => x.Data >= initialDate && x.Data <= finalDate).ToListAsync();
         }
         public async Task<List<Venda>> SearchByState(bool state)
         {
-            return await _context.Venda.Include(x => x.Cliente).Where(x => x.VendaPaga.Equals(state)).ToListAsync();
+            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).ThenInclude(x => x.Produto).Where(x => x.VendaPaga.Equals(state)).ToListAsync();
         }
 
         public async Task<Venda> SearchByDateAndMode(DateTime initialDate, DateTime finalDate, EModoVenda modoVenda)
         {
-            return await _context.Venda.Where(x => x.Data >= initialDate && x.Data <= finalDate && x.ModoVenda.Equals(modoVenda)).FirstOrDefaultAsync();
+            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).ThenInclude(x => x.Produto).Where(x => x.Data >= initialDate && x.Data <= finalDate && x.ModoVenda.Equals(modoVenda)).FirstOrDefaultAsync();
         }
 
         public async Task<List<Venda>> SearchExistingSale(DateTime initialDate, DateTime finalDate, EModoVenda modoVenda, List<int> clientes)
         {
-            return await _context.Venda.Include(x => x.Cliente).Where(x => x.Data >= initialDate && x.Data <= finalDate && x.ModoVenda.Equals(modoVenda) && clientes.Contains(x.IdCliente)).ToListAsync();
+            return await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).ThenInclude(x => x.Produto).Where(x => x.Data >= initialDate && x.Data <= finalDate && x.ModoVenda.Equals(modoVenda) && clientes.Contains(x.IdCliente)).ToListAsync();
         }
 
         public async Task SwitchSaleState(int idVenda, bool state)
         {
-            var venda = await _context.Venda.FindAsync(idVenda);
+            var venda = await _context.Venda.Include(x => x.Cliente).Include(x => x.Produtos).ThenInclude(x => x.Produto).Where(x => x.Id.Equals(idVenda)).FirstOrDefaultAsync();
 
             var vendaAlterada = venda with { VendaPaga = state };
 
